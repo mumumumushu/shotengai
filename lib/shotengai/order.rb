@@ -29,7 +29,7 @@ module Shotengai
       state :unpaid, initial: true
       state :paid, :delivering, :received, :evaluated
       {
-        pay: { from: :unpaid, to: :paid, after: :fill_snapshot },
+        pay: { from: :unpaid, to: :paid, after: [:fill_snapshot, :set_pay_time] },
         cancel: { from: :unpaid, to: :canceled },
         send_out: { from: :paid, to: :delivering, after: :set_delivery_time },
         get_it: { from: :delivering, to: :received, after: :set_receipt_time },
@@ -41,17 +41,22 @@ module Shotengai
     end
 
     def fill_snapshot
+      p 'cmm   222'
       ActiveRecord::Base.transaction {
         self.snapshots.each(&:copy_info)
       }
     end
 
+    def set_pay_time
+      self.update!(pay_time: Time.now)
+    end
+
     def set_delivery_time
-      update!(delivery_time: Time.zone.now)
+      update!(delivery_time: Time.now)
     end
 
     def set_receipt_time
-      update!(receipt_time: Time.zone.now)
+      update!(receipt_time: Time.now)
     end
 
     def total_price

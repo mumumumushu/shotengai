@@ -1,5 +1,4 @@
 class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
-   p 'fuck !'
   def change 
     create_table :shotengai_products do |t|
       t.string :title
