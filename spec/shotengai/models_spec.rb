@@ -269,8 +269,8 @@ RSpec.describe 'Shotengai Models' do
 
   after do
     ActiveRecord::Migration[5.1].subclasses.each do |migrate|
-  migrate.migrate(:down)
-end
+      migrate.migrate(:down)
+    end
   end
 end
 
