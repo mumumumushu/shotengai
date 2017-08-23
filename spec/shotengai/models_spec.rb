@@ -29,12 +29,12 @@ RSpec.describe 'Shotengai Models' do
       class OtherGood < Shotengai::Product; end
 
       class TestOrder < Shotengai::Order
-        can_buy ::TestGood
+        can_buy 'TestGood'
       end
 
       class TestBuyer < ActiveRecord::Base
         include Shotengai::Buyer
-        can_shopping_with ::TestOrder
+        can_shopping_with 'TestOrder'
         
         ActiveRecord::Base.connection.create_table(:test_buyers) unless ActiveRecord::Base.connection.table_exists?(:test_buyers)
       end
