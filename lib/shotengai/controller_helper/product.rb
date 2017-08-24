@@ -1,0 +1,77 @@
+module Shotengai
+  module ControllerHelper
+    module Product
+      included do
+        cattr_accessor :resource { 'Product' } # 默认值
+        # respond_with @products, template: "#{self.template_dir}/index"
+        cattr_accessor :template_dir { 'products/' }
+      end
+      
+      class_methods do
+        def resource= resource_name
+          klass = Object.const_get resource_name
+          raise ArgumentError.new(
+              'The resource of Product Controller should be a class inherited from Shotengai::Product'
+            ) unless Shotengai::Product === klass
+          @@resource = klass
+        end  
+
+        # def template_dir dir
+        #   self.template_dir = dir
+        # end
+      end
+
+      before_action :set_product, expect: [:index, :create]
+      respond_to :json
+
+      def index
+        @products = self.resource.all
+        respond_with @products, template: "#{self.template_dir}/index"
+      end
+
+      def show
+        @product = self.resource.find(params[:id])
+        respond_with @product, template: "#{self.template_dir}/show"
+        # need series list here
+      end
+
+      def create
+        self.resource.create!(product_params)
+        head 201
+      end
+
+      def update
+        self.resource.update!(product_params)
+        head 200
+      end
+
+      resource.aasm.state_machine.events.map(&:first).each do |event|
+        define_method(event) do
+          @product.send("#{event}!")
+          head 200
+        end 
+      end
+
+      private
+        def set_resource
+          @product = self.resource.find(params[:id])
+        end
+
+        def product_params 
+          resource_key = self.resource.model_name.singular.to_sym
+          # QUESTION: need these ?
+          spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)
+          datail = params.require(resource_key).fetch(:datail, nil).try(:permit!)
+          meta = params.require(resource_key).fetch(:meta, nil).try(:permit!)
+
+          params.requrie().permit(
+            :title, :default_series_id, 
+            :need_express, :need_time_attr, :cover_image, 
+            banners: []
+          ).merge(
+            { spec: spec, detail: detail, meta: meta }
+          )
+        end
+    end
+  end
+end
