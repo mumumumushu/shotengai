@@ -3,7 +3,7 @@ module Shotengai
     class ViewsGenerator < Rails::Generators::Base
       source_root File.expand_path("../../templates/views", __FILE__)
 
-      desc "Copy shotengai views to your application."
+      desc "Copy shotengai example views to your application."
       # hide!
 
       def copy_views

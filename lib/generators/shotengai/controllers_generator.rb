@@ -4,12 +4,15 @@ module Shotengai
   module Generators
     class ControllersGenerator < Rails::Generators::Base
       desc <<-DESC.strip_heredoc
-        Create inherited Devise controllers in your app/controllers folder.
+        Create inherited Shotengai controllers in your app/controllers folder.
 
         Use -n to add the namespec folder, default nil.
+        Use --produt to custom your own product class
+        Use --order to custom your own order class
+
         For example:
 
-          rails generate devise:controllers merchant -n store --product MyProduct --order MyOrder
+          rails generate shotengai:controllers merchant -n store --product MyProduct --order MyOrder
 
         This will create serveral controller classes inherited from merchant product and order class 
         For example:
