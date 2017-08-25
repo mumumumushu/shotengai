@@ -1,9 +1,8 @@
 require "shotengai/version"
 require 'rails'
-# require 'active_record'
+require 'active_record'
 
 module Shotengai
-  # Your code goes here...
   autoload :Product,         'shotengai/product'
   autoload :Series,          'shotengai/series'
   autoload :Snapshot,        'shotengai/snapshot'
@@ -16,6 +15,17 @@ module Shotengai
   autoload :Engine,          'shotengai/engine'
 
   module Controller
+    autoload :Base, 'shotengai/controllers/base'
 
+    module Merchant
+      autoload :ProductsController,          'shotengai/controllers/merchant/products_controller'
+      autoload :ProductSnapshotsController, 'shotengai/controllers/merchant/product_snapshots_controller'
+      autoload :ProductSeriesController,    'shotengai/controllers/merchant/product_series_controller'
+      autoload :OrdersController,           'shotengai/controllers/merchant/orders_controller'
+    end
+
+    module Customer
+
+    end
   end
 end
