@@ -3,8 +3,6 @@ require 'rails'
 require 'active_record'
 require 'shotengai'
 require 'support/factory_girl'
-# Dir['../support/**/*.rb'].each { |f| require f }
-
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

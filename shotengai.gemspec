@@ -33,6 +33,10 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'acts-as-taggable-on'
   spec.add_dependency 'rails'
 
+  # TODO: instead of gems below
+  spec.add_dependency 'jbuilder'
+  spec.add_dependency 'will_paginate', '~> 3.1.0'
+
   spec.add_development_dependency 'bundler', '~> 1.14'
   spec.add_development_dependency 'factory_girl_rails'
   spec.add_development_dependency 'rake', '~> 10.0'
