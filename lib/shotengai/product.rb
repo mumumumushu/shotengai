@@ -19,7 +19,7 @@ module Shotengai
   #  updated_at        :datetime         not null
 
   class Shotengai::Product < ActiveRecord::Base
-    require 'acts_as_taggable_on'
+    require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'
     validate :check_spec, if: :spec
 
