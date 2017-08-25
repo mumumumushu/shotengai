@@ -12,7 +12,7 @@ module Shotengai
 
         For example:
 
-          rails generate shotengai:controllers merchant -n store --product MyProduct --order MyOrder
+          rails generate shotengai:controllers merchant -n my_merchant --product MyProduct --order MyOrder
 
         This will create serveral controller classes inherited from merchant product and order class 
         For example:
@@ -40,13 +40,17 @@ module Shotengai
         { 
           'products' => options[:product],
           'orders' => options[:order],
-          'product_series' => "#{options[:product]}Series"
+          'product_series' => "#{options[:product]}Series",
+          
         }.each do |key, klass_name|
-          @key, @klass_name = key, klass_name
-          template "#{role}/#{@key}_controller.rb",
+          @key, @klass_name, @role = key, klass_name, role
+          template "template_controller.rb",
                    "app/controllers/#{options[:namespace]}/#{klass_name.underscore.pluralize}_controller.rb"
         end
       end
     end
   end
 end
+   
+      
+      

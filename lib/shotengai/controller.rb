@@ -1,9 +1,11 @@
 module Shotengai
   class Controller < ApplicationController
+    # The resources of this controller
     # ActiveRecord::Relation or ActiveRecord::Base
     cattr_accessor :resources
+    # The view template dir
     # respond_with @products, template: "#{self.class.template_dir}/index"
-    cattr_accessor :template_dir #{ 'shoutengai/merchant/product_series/' }
+    cattr_accessor :template_dir
     
     class << self
       # Add the index query to custom the @@index_resouces on the base of @@resources
@@ -25,6 +27,7 @@ module Shotengai
     end
     
     before_action :set_resource, except: [:index, :create]
+    respond_to :json
 
     def index
       page = params[:page] || 1
@@ -48,7 +51,7 @@ module Shotengai
     end
 
     def destroy
-      @resourc.destroy!
+      @resource.destroy!
       head 204
     end
 
@@ -61,12 +64,16 @@ module Shotengai
         self.class.resources
       end
 
+      def resource_key
+        (default_resources.try(:klass) || default_resources).model_name.singular.to_sym
+      end
+
       def set_resource
         @resource = default_resources.find(params[:id])
       end
 
       def resource_params
-        
+        params.requrie(resource_key)
       end
   end
 end
