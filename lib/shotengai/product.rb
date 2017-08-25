@@ -53,8 +53,8 @@ module Shotengai
           class ::#{subclass}Snapshot < Shotengai::Snapshot; end
         ")
         subclass.instance_eval do
-          def series_class;  Object.const_get "#{self.name}Series" ; end
-          def snapshot_class; Object.const_get "#{self.name}Snapshot"; end
+          def series_class;  "#{self.name}Series".constantize ; end
+          def snapshot_class; "#{self.name}Snapshot".constantize; end
         end
       end
 

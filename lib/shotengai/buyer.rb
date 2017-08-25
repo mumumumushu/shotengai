@@ -7,7 +7,7 @@ module Shotengai
 
     class_methods do
       def can_shopping_with klass_name, options={}
-        klass = Object.const_get(klass_name)
+        klass = klass_name.constantize
         unless Shotengai::Order <=> klass # 为子类
           raise ArgumentError.new('You can only buy the class inherit from Shotengai::Order') 
         end

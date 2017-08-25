@@ -15,7 +15,6 @@ c.exec_update('drop database if exists shotengai_test;')
 c.exec_update('create database shotengai_test')
 c.exec_update('use shotengai_test')
 
-# 如何通过activerecord 建database
 RSpec.describe 'Shotengai Models' do
   before do
     ActiveRecord::Migration[5.1].subclasses.each do |migrate|

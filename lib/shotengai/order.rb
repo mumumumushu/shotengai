@@ -84,7 +84,7 @@ module Shotengai
       end
 
       def can_buy *good_class_names
-        good_classes = good_class_names.map { |name| Object.const_get(name) }
+        good_classes = good_class_names.map(&:constantize)
         # 所有snapshot
         has_many :snapshots, -> { 
             where(type: good_classes.map { |good_class| "#{good_class.name}Snapshot" }) 
