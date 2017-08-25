@@ -17,7 +17,12 @@ module Shotengai
   #  meta              :json
   #  created_at        :datetime         not null
   #  updated_at        :datetime         not null
-
+  #
+  # Indexes
+  #
+  #  index_shotengai_products_on_type  (type)
+  #
+  
   class Shotengai::Product < ActiveRecord::Base
     require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'

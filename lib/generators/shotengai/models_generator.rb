@@ -20,11 +20,14 @@ module Shotengai
         desc: "Product class name"
       class_option :order, type: :string, default: 'Order',
         desc: "Order class name"
+      class_option :catalog, type: :string, default: 'Catalog',
+        desc: "Catalog class name"
       
       def copy_models
-        @product_name, @order_name = options.values_at(:product, :order)
+        @product_name, @order_name, @catalog_name = options.values_at(:product, :order, :catalog)
         template 'product.rb', "app/models/#{@product_name.underscore}.rb"
         template 'order.rb', "app/models/#{@order_name.underscore}.rb"
+        template 'catalog.rb', "app/models/#{@catalog_name.underscore}.rb"
       end
     end
   end

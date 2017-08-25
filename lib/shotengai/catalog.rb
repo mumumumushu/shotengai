@@ -12,6 +12,11 @@ module Shotengai
   #  created_at       :datetime         not null
   #  updated_at       :datetime         not null
   #
+  # Indexes
+  #
+  #  index_shotengai_catalogs_on_super_catalog_id  (super_catalog_id)
+  #  index_shotengai_catalogs_on_type              (type)
+  #
 
   class Catalog < ActiveRecord::Base
     self.table_name = 'shotengai_catalogs'

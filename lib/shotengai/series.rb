@@ -13,7 +13,13 @@ module Shotengai
   #  shotengai_products_id :integer
   #  created_at            :datetime         not null
   #  updated_at            :datetime         not null
-
+  #
+  # Indexes
+  #
+  #  index_shotengai_series_on_shotengai_products_id  (shotengai_products_id)
+  #  index_shotengai_series_on_type                   (type)
+  #
+  
   class Series < ActiveRecord::Base
     self.table_name = 'shotengai_series'
     validate :check_spec, if: :spec

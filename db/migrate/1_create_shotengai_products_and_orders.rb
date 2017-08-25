@@ -17,6 +17,8 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.timestamps
     end
 
+    add_index :shotengai_products, :type
+
     create_table :shotengai_series do |t|
       t.decimal :original_price, precision: 9, scale: 2
       t.decimal :price, precision: 9, scale: 2
@@ -30,6 +32,8 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
 
       t.timestamps
     end
+    
+    add_index :shotengai_series, :type
 
     create_table :shotengai_orders do |t|
       t.integer :seq
@@ -51,7 +55,8 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       
       t.timestamps
     end
-    
+
+    add_index :shotengai_orders, :type
     add_index :shotengai_orders, [:buyer_id, :buyer_type]
 
     create_table :shotengai_snapshots do |t|
@@ -72,5 +77,6 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.timestamps
     end
     
+    add_index :shotengai_snapshots, :type
   end
 end

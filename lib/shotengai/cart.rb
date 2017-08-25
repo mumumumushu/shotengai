@@ -18,7 +18,13 @@ module Shotengai
   #  buyer_type    :string(255)
   #  created_at    :datetime         not null
   #  updated_at    :datetime         not null
-
+  #
+  # Indexes
+  #
+  #  index_shotengai_orders_on_buyer_id_and_buyer_type  (buyer_id,buyer_type)
+  #  index_shotengai_orders_on_type                     (type)
+  #
+  
   class Cart < ::ActiveRecord::Base
     self.table_name = 'shotengai_orders'
     default_scope { where(status: 'cart') } 

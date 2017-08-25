@@ -7,7 +7,10 @@ class CreateShotengaiCatalogs < ActiveRecord::Migration[5.1]
       # STI
       t.string :type
       t.references :super_catalog, index: true
+      
       t.timestamps
     end
+
+    add_index :shotengai_catalogs, :type
   end
 end
