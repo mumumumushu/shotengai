@@ -41,6 +41,7 @@ module Shotengai
           'products' => options[:product],
           'orders' => options[:order],
           'product_series' => "#{options[:product]}Series",
+          'product_snapshots' => "#{options[:product]}Snapshots",
           
         }.each do |key, klass_name|
           @key, @klass_name, @role = key, klass_name, role
