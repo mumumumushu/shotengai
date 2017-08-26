@@ -1,0 +1,1 @@
+json.extract! product, :id, :title, :status, :need_express, :cover_image
