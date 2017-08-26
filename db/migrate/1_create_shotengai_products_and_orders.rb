@@ -28,7 +28,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.string :type
       t.json :meta
 
-      t.references :shotengai_products, foreign_key: true
+      t.references :shotengai_product, foreign_key: true
 
       t.timestamps
     end
@@ -72,7 +72,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.json :meta
 
       t.references :shotengai_series, foreign_key: true
-      t.references :shotengai_orders, foreign_key: true
+      t.references :shotengai_order, foreign_key: true
 
       t.timestamps
     end

@@ -10,7 +10,7 @@ module Shotengai
   #  spec                  :json
   #  type                  :string(255)
   #  meta                  :json
-  #  shotengai_products_id :integer
+  #  shotengai_product_id :integer
   #  created_at            :datetime         not null
   #  updated_at            :datetime         not null
   #
