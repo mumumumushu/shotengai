@@ -2,7 +2,7 @@ module Shotengai
   module Controller
     module Merchant
       class ProductsController < Shotengai::Controller::Base
-        self.resources = 'Product'
+        self.resources = Product
         self.template_dir = 'shotengai/merchant/products/'
 
         index_query do |resource, params|

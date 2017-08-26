@@ -12,6 +12,9 @@ module Shotengai
       #
       cattr_accessor :template_dir
       
+      @@index_query ||= nil
+      @@default_scope ||= nil
+
       class << self
         # Add the index query to custom the @@index_resouces on the base of @@resources
         # Foe example: 
@@ -25,22 +28,30 @@ module Shotengai
           @@index_query = block
         end
 
+        # @@default_query would be useful for create & set_resource
+        # Just like:
+        #   one_product.series.create! => default_query where(product_id: params[:product_id])
+        # 
+        def default_query &block
+          @@default_query = block
+        end
+
         def remove_methods *method_names
           method_names.each { |name| self.remove_method name }
         end
 
-        def resources= klass_name
-          retries ||= 1
-          @@resources = klass_name.constantize
-        rescue NameError
-          # If Product havent been load, ProductSeries or ProductSnapshot would not exists 
-          unless (retries =- 1) < 0
-            klass_name.remove('Series', 'Snapshot').constantize
-            retry
-          else
-            raise
-          end
-        end
+        # def resources= klass_name
+        #   retries ||= 1
+        #   @@resources = klass_name.constantize
+        # rescue NameError
+        #   # If Product havent been load, ProductSeries or ProductSnapshot would not exists 
+        #   unless (retries =- 1) < 0
+        #     klass_name.remove('Series', 'Snapshot').constantize
+        #     retry
+        #   else
+        #     raise
+        #   end
+        # end
       end
       
       before_action :set_resource, except: [:index, :create]
@@ -84,7 +95,7 @@ module Shotengai
         end
 
         def default_resources
-          self.class.resources
+          @@default_query&.call(self.class.resources, params) || self.class.resources
         end
 
         def resource_key

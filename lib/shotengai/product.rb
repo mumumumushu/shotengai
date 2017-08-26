@@ -64,7 +64,7 @@ module Shotengai
       end
 
       def add_associations subclass
-        subclass.has_many :series, class_name: subclass.series_class.name, foreign_key: 'shotengai_products_id'
+        subclass.has_many :series, class_name: subclass.series_class.name, foreign_key: 'shotengai_product_id'
         subclass.has_many :snapshots, class_name: subclass.snapshot_class.name, through: :series, source: :snapshots
       end
       

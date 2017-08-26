@@ -95,20 +95,20 @@ module Shotengai
         has_many :snapshots, -> { 
             where(type: good_classes.map { |good_class| "#{good_class.name}Snapshot" }) 
           }, class_name: 'Shotengai::Snapshot',
-          foreign_key: :shotengai_orders_id
+          foreign_key: :shotengai_order_id
 
         good_classes.each do |klass| 
           has_many(
             klass.snapshot_class.model_name.collection.to_sym, 
             class_name: klass.snapshot_class.name, 
-            foreign_key: :shotengai_orders_id
+            foreign_key: :shotengai_order_id
           )
           # optional: true 允许父对象不存在
           klass.snapshot_class.belongs_to(
             self.model_name.singular.to_sym, 
             class_name: self.name, 
             optional: true,
-            foreign_key: :shotengai_orders_id
+            foreign_key: :shotengai_order_id
           ) 
         end
 

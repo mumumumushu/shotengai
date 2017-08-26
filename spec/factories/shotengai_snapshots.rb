@@ -13,7 +13,7 @@
 #  type                :string(255)
 #  meta                :json
 #  shotengai_series_id :integer
-#  shotengai_orders_id :integer
+#  shotengai_order_id :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #

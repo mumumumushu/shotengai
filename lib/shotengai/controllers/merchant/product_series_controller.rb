@@ -2,23 +2,24 @@ module Shotengai
   module Controller
     module Merchant
       class ProductSeriesController < Shotengai::Controller::Base
-        self.resources = 'ProductSeries'
-        self.template_dir = 'shoutengai/merchant/product_series/'
+        self.resources = ProductSeries
+        self.template_dir = 'shotengai/merchant/series/'
+
+        default_query do |klass, params|
+          klass.where(shotengai_product_id: params)
+        end
 
         private
-
           def resource_params 
-            # resource_key = self.resource.model_name.singular.to_sym
-            # # QUESTION: need these ?
-            # spec = params.fetch(:spec, nil).try(:permit!)
-            # datail = params.fetch(:datail, nil).try(:permit!)
-            # meta = params.fetch(:meta, nil).try(:permit!)
-            
-            # params.permit(
-            #   :price, :original_price, 
-            # ).merge(
-            #   { spec: spec, detail: detail, meta: meta }
-            # )
+            spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)
+            meta = params.require(resource_key).fetch(:meta, nil).try(:permit!)
+            params.require(resource_key).permit(
+              :original_price, :price, :stock
+            ).merge(
+              { spec: spec, meta: meta }
+            ).merge(
+              other_resource_params
+            )
           end
       end
     end

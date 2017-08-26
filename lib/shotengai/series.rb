@@ -16,14 +16,14 @@ module Shotengai
   #
   # Indexes
   #
-  #  index_shotengai_series_on_shotengai_products_id  (shotengai_products_id)
+  #  index_shotengai_series_on_shotengai_product_id  (shotengai_product_id)
   #  index_shotengai_series_on_type                   (type)
   #
   
   class Series < ActiveRecord::Base
     self.table_name = 'shotengai_series'
     validate :check_spec, if: :spec
-    validates_uniqueness_of :spec, scope: :shotengai_products_id
+    validates_uniqueness_of :spec, scope: :shotengai_product_id
 
     delegate :detail, :banners, :cover_image, to: :product
 
@@ -37,8 +37,8 @@ module Shotengai
 
       def add_associations
         # belongs to Product
-        @subclass.belongs_to :product, foreign_key: :shotengai_products_id, class_name: @product_name
-        @subclass.belongs_to @product_name.underscore.to_sym, foreign_key: :shotengai_products_id, class_name: @product_name
+        @subclass.belongs_to :product, foreign_key: :shotengai_product_id, class_name: @product_name
+        @subclass.belongs_to @product_name.underscore.to_sym, foreign_key: :shotengai_product_id, class_name: @product_name
         # has many snapshot
         @subclass.has_many :snapshots, class_name: "#{@product_name}Snapshot", foreign_key: :shotengai_series_id
       end

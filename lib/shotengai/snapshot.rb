@@ -20,7 +20,7 @@ module Shotengai
   # 
   #  Indexes
   #
-  #  index_shotengai_snapshots_on_shotengai_orders_id  (shotengai_orders_id)
+  #  index_shotengai_snapshots_on_shotengai_order_id  (shotengai_order_id)
   #  index_shotengai_snapshots_on_shotengai_series_id  (shotengai_series_id)
   #  index_shotengai_snapshots_on_type                 (type)
   #
