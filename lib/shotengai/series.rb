@@ -23,6 +23,7 @@ module Shotengai
   class Series < ActiveRecord::Base
     self.table_name = 'shotengai_series'
     validate :check_spec, if: :spec
+    validates_uniqueness_of :spec, scope: :shotengai_products_id
 
     delegate :detail, :banners, :cover_image, to: :product
 

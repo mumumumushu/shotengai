@@ -43,11 +43,6 @@ module Shotengai
               other_resource_params
             )
           end
-          
-          # rewrite this to add more custom column
-          def other_resource_params
-            params.require(resource_key).permit()
-          end
       end
     end
   end
