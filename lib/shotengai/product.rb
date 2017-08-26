@@ -71,7 +71,8 @@ module Shotengai
       # Will get methods:
       # "#{tag_name}_list" tag_name is singular
       # tagger_with('xx', on: "#{tag_name}.to_sym): tag_name is plural
-      def join_catalog_system catalog_class, options={}
+      def join_catalog_system catalog_class_name, options={}
+        catalog_class = catalog_class_name.constantize
         tag_name = options[:as] || catalog_class.model_name.collection
         acts_as_taggable_on tag_name.to_sym
         # 只有完整替换(只属于一个分类)的时候才进行验证，add remove 暂时未添加

@@ -214,8 +214,8 @@ RSpec.describe 'Shotengai Models' do
     describe 'Catalog System With Product' do
       before do
         class TestGood < Shotengai::Product
-          join_catalog_system ClothingCatalog, as: :sort
-          join_catalog_system OtherCatalog
+          join_catalog_system 'ClothingCatalog', as: :sort
+          join_catalog_system 'OtherCatalog'
         end  
       end
       
