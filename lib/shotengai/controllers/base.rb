@@ -1,25 +1,28 @@
 module Shotengai
   module Controller
     class Base < ApplicationController
+      #
       # The resources of this controller
       # ActiveRecord::Relation or ActiveRecord::Base
+      #
       cattr_accessor :resources
+      #
       # The view template dir
       # respond_with @products, template: "#{self.class.template_dir}/index"
+      #
       cattr_accessor :template_dir
       
       class << self
         # Add the index query to custom the @@index_resouces on the base of @@resources
         # Foe example: 
         #
-        #   index_query do |klass|
+        #   index_query do |klass, params|
         #     klass.where(product: params[:product_id]).order('desc')
         #   end
         #
         def index_query &block
-          # 为了保证 self 为Controller instance variable ?? 才能有params 方法？？
+          # could not get params here
           @@index_query = block
-          # self.index_resouces = block.call(self.resources)
         end
 
         def remove_methods *method_names
@@ -42,6 +45,11 @@ module Shotengai
       
       before_action :set_resource, except: [:index, :create]
       respond_to :json
+      
+      # TODO: could not catch the exception
+      # rescue_from Shotengai::WebError do |e|
+      #   render json: { error: e.message }, status: e.status
+      # end
 
       def index
         page = params[:page] || 1
@@ -55,8 +63,9 @@ module Shotengai
       end
 
       def create
-        default_resources.create!(resource_params)
-        head 201
+        @resource = default_resources.create!(resource_params)
+        # head 201
+        respond_with @resource, template: "#{@@template_dir}/show", status: 201
       end
 
       def update
@@ -71,7 +80,7 @@ module Shotengai
 
       private
         def index_resources
-          @@index_query&.call(default_resources) || default_resources
+          @@index_query&.call(default_resources, params) || default_resources
         end
 
         def default_resources

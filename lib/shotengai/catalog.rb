@@ -35,6 +35,7 @@ module Shotengai
       end
 
       def validate_name_chain name_ary, order='desc'
+        return nil unless name_ary
         ary = order.downcase.eql?('asc') ? name_ary.reverse : name_ary
         where(name: ary.last).each do |bottom_catalog|
           return name_ary if bottom_catalog.name_chain.eql?(ary)

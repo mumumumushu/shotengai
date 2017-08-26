@@ -73,9 +73,10 @@ module Shotengai
       # tagger_with('xx', on: "#{tag_name}.to_sym): tag_name is plural
       def join_catalog_system catalog_class_name, options={}
         catalog_class = catalog_class_name.constantize
-        tag_name = options[:as] || catalog_class.model_name.collection
+        tag_name = options[:as] || catalog_class.model_name.singular
         acts_as_taggable_on tag_name.to_sym
         # 只有完整替换(只属于一个分类)的时候才进行验证，add remove 暂时未添加
+        # Just ctalogs_list = have a validation
         class_eval do
           define_method("#{tag_name}_list=") { |value|
             super catalog_class.validate_name_chain(value)
