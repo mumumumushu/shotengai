@@ -26,6 +26,8 @@ module Shotengai
       def copy_models
         @product_name, @order_name, @catalog_name = options.values_at(:product, :order, :catalog)
         template 'product.rb', "app/models/#{@product_name.underscore}.rb"
+        template 'product_series.rb', "app/models/#{@product_name.underscore}_series.rb"
+        template 'product_snapshot.rb', "app/models/#{@product_name.underscore}_snapshot.rb"
         template 'order.rb', "app/models/#{@order_name.underscore}.rb"
         template 'catalog.rb', "app/models/#{@catalog_name.underscore}.rb"
       end
