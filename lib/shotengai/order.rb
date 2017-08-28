@@ -56,7 +56,7 @@ module Shotengai
         delivering: '运送中', 
         received: '已收货', 
         evaluated: '已评价',
-      }[ status ]
+      }[ status.to_sym ]
     end
 
     def fill_snapshot

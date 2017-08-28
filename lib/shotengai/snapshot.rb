@@ -31,6 +31,8 @@ module Shotengai
     validate :check_spec, if: :spec
     validates :count, numericality: { only_integer: true, greater_than: 0 }
 
+    belongs_to :shotengai_order, optional: true
+
     class << self
       def inherited subclass
         product_name = /^(.+)Snapshot/.match(subclass.name)[1]
@@ -79,7 +81,7 @@ module Shotengai
     end
 
     def order_status_zh
-      order&.status_zh
+      shotengai_order&.status_zh
     end
 
     ######

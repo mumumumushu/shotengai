@@ -27,7 +27,7 @@ module Shotengai
     # Using validates_uniqueness_of do not work if the order of Hash is diff
     validate :uniq_spec
     
-    delegate :title, :detail, :banners, :cover_image, :status, to: :product
+    delegate :title, :detail, :banners, :cover_image, :status_zh, to: :product
 
     scope :query_spec_with_product, ->(val, product) { 
       return none unless val.keys.sort == product.spec.keys.sort 

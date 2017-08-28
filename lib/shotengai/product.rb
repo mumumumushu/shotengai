@@ -40,10 +40,10 @@ module Shotengai
 
     def status_zh
       {
-        on_on: '未上架',
+        no_on: '未上架',
         on_sale: '已上架',
         deleted: '已删除'
-      }[ status ]
+      }[ status.to_sym ]
     end
 
     def default_series
