@@ -6,7 +6,7 @@ module Shotengai
         self.template_dir = 'shotengai/merchant/series/'
 
         default_query do |klass, params|
-          klass.where(shotengai_product_id: params)
+          klass.where(shotengai_product_id: params[:product_id])
         end
 
         private
