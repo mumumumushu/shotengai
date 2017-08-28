@@ -5,6 +5,7 @@
 #  id                  :integer          not null, primary key
 #  original_price      :decimal(9, 2)
 #  price               :decimal(9, 2)
+#  revised_amount      :decimal(9, 2)
 #  count               :integer
 #  spec                :json
 #  banners             :json
