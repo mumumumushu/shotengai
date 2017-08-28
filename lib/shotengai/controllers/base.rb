@@ -13,7 +13,7 @@ module Shotengai
       cattr_accessor :template_dir
       
       @@index_query ||= nil
-      @@default_scope ||= nil
+      @@default_query ||= nil
 
       class << self
         # Add the index query to custom the @@index_resouces on the base of @@resources
@@ -35,9 +35,10 @@ module Shotengai
         def default_query &block
           @@default_query = block
         end
-
-        def remove_methods *method_names
-          method_names.each { |name| self.remove_method name }
+        
+        # Refuse to search methods in superclasses
+        def remove_actions *actions
+          actions.each { |name| remove_possible_method name }
         end
 
         # def resources= klass_name
