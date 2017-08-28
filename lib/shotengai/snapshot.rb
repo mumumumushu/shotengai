@@ -31,9 +31,6 @@ module Shotengai
     validate :check_spec, if: :spec
     validates :count, numericality: { only_integer: true, greater_than: 0 }
 
-    delegate :product_status_zh, to: :product
-    delegate :order_status_zh, to: :order
-
     class << self
       def inherited subclass
         product_name = /^(.+)Snapshot/.match(subclass.name)[1]
@@ -70,12 +67,21 @@ module Shotengai
 
     ###### view
     def total_price
-      count * price  
+      revised_amount || count * price  
     end
 
     def total_original_price
       count * original_price
     end
+
+    def product_status_zh
+      series.status_zh
+    end
+
+    def order_status_zh
+      order&.status_zh
+    end
+
     ######
 
     private 

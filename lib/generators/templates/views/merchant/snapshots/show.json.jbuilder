@@ -1,1 +1,1 @@
-json.partial! "shotengai/share/snaoshot", snaoshot: @resource
+json.partial! "shotengai/share/snapshot", snapshot: @resource
