@@ -5,8 +5,10 @@ module Shotengai
         self.resources = ProductSeries
         self.template_dir = 'shotengai/merchant/series/'
 
-        default_query do |klass, params|
-          klass.where(shotengai_product_id: params[:product_id])
+        default_query do |resource, params|
+          resource.where(
+            params[:product_id] && { shotengai_product_id: params[:product_id] }
+          )
         end
 
         private
