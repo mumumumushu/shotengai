@@ -28,7 +28,13 @@ module Shotengai
   class Cart < ::ActiveRecord::Base
     self.table_name = 'shotengai_orders'
     default_scope { where(status: 'cart') } 
-
+    #
+    #  class Order < Shotengai::Order
+    #     can_by 'Product'
+    #  end
+    #
+    #  Would let Product belongs to :order & order_cart
+    # 
     class << self
       def can_buy *good_class_names
         good_classes = good_class_names.map { |name| Object.const_get(name) }

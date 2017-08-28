@@ -30,7 +30,8 @@ module Shotengai
   
   class Order < ActiveRecord::Base
     self.table_name = 'shotengai_orders'
-    belongs_to :buyer, polymorphic: true
+    belongs_to :buyer, polymorphic: true, optional: true
+    
     default_scope { where.not(status: 'cart') } 
 
     include AASM_DLC

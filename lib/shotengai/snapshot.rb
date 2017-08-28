@@ -31,7 +31,23 @@ module Shotengai
     validate :check_spec, if: :spec
     validates :count, numericality: { only_integer: true, greater_than: 0 }
 
-    belongs_to :shotengai_order, optional: true
+    belongs_to :shotengai_order, foreign_key: :shotengai_order_id, 
+      class_name: 'Shotengai::Order', optional: true
+    
+    scope :in_order, ->{ 
+      joins("
+        INNER JOIN shotengai_orders ON 
+          shotengai_snapshots.shotengai_order_id = shotengai_orders.id AND 
+          shotengai_orders.status <> 'cart'
+      ")
+    }
+    scope :in_cart, ->{ 
+      joins("
+        INNER JOIN shotengai_orders ON 
+          shotengai_snapshots.shotengai_order_id = shotengai_orders.id AND 
+          shotengai_orders.status = 'cart'
+      ")
+    }
 
     class << self
       def inherited subclass
