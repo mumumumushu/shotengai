@@ -69,11 +69,11 @@ RSpec.describe 'Shotengai Models' do
         # 非法关键字
         expect{
           @series.update!(spec: {"颜色" => "红色", "大小" => 1111 })
-        }.to raise_error(Shotengai::WebError)
+        }.to raise_error(ActiveRecord::RecordInvalid)
         # 关键字缺失
         expect{ 
           @series.update!(spec: {"颜色" => "红色"})
-        }.to raise_error(Shotengai::WebError)
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it 'Associations' do

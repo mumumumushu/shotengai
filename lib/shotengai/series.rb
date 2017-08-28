@@ -22,10 +22,19 @@ module Shotengai
   
   class Series < ActiveRecord::Base
     self.table_name = 'shotengai_series'
-    validate :check_spec, if: :spec
-    validates_uniqueness_of :spec, scope: :shotengai_product_id
+    validates_presence_of :spec
+    validate :check_spec_value
+    # Using validates_uniqueness_of do not work if the order of Hash is diff
+    validate :uniq_spec
+    
+    delegate :title, :detail, :banners, :cover_image, to: :product
 
-    delegate :detail, :banners, :cover_image, to: :product
+    scope :query_spec_with_product, ->(val, product) { 
+      return none unless val.keys.sort == product.spec.keys.sort 
+      keys = []; values = []
+      val.map { |k, v| keys << "spec->'$.\"#{k}\"' = ? "; values << v }
+      where(keys.join(' and '), *values)
+    }
 
     class << self
       def inherited subclass
@@ -46,13 +55,18 @@ module Shotengai
 
     private 
       # spec 字段
-      def check_spec
-        raise Shotengai::WebError.new('spec 必须是个 Hash', '-1', 400) unless spec.is_a?(Hash) 
-        raise Shotengai::WebError.new('非法的关键字，或关键字缺失', '-1', 400) unless (product.spec.keys - spec.keys).empty?
+      def check_spec_value
+        errors.add(:spec, 'spec 必须是个 Hash') unless spec.is_a?(Hash) 
+        errors.add(:spec, '非法的关键字，或关键字缺失') unless (product.spec.keys - spec.keys).empty?
         illegal_values = {}
         spec.each { |key, value| illegal_values[key] = value unless value.in?(product.spec[key]) }
-        # p Shotengai::WebError.new("非法的值，#{illegal_values}", '-1', 422)
-        raise Shotengai::WebError.new("非法的值，#{illegal_values}", '-1', 400) unless illegal_values.empty?
+        errors.add(:spec, "非法的值，#{illegal_values}") unless illegal_values.empty?
+      end
+
+      def uniq_spec
+        self.product.series.each { |series| 
+          errors.add(:spec, 'Non uniq spec for the product.') if series.spec == spec
+        }
       end
   end
 end
