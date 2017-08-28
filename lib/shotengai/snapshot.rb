@@ -31,6 +31,9 @@ module Shotengai
     validate :check_spec, if: :spec
     validates :count, numericality: { only_integer: true, greater_than: 0 }
 
+    delegate :product_status_zh, to: :product
+    delegate :order_status_zh, to: :order
+
     class << self
       def inherited subclass
         product_name = /^(.+)Snapshot/.match(subclass.name)[1]

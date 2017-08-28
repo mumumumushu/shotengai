@@ -47,7 +47,16 @@ module Shotengai
       }.each { |name, options| 
         event(name) { transitions options }
       }
+    end
 
+    def status_zh
+      {
+        unpaid: '未支付', 
+        paid: '已支付', 
+        delivering: '运送中', 
+        received: '已收货', 
+        evaluated: '已评价',
+      }[ status ]
     end
 
     def fill_snapshot

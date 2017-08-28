@@ -38,6 +38,14 @@ module Shotengai
       event :soft_delete { transitions from: [:on_sale, :no_on], to: :deleted }
     end
 
+    def status_zh
+      {
+        on_on: '未上架',
+        on_sale: '已上架',
+        deleted: '已删除'
+      }[ status ]
+    end
+
     def default_series
       Shotengai::Series.find_by_id(default_series_id) || series.first
     end
