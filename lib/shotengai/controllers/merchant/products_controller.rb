@@ -5,8 +5,10 @@ module Shotengai
         self.resources = Product
         self.template_dir = 'shotengai/merchant/products/'
         
+        before_action :manager_auth
+
         default_query do |resource, params|
-          
+          resource.where(manager: @manager)
         end
 
         index_query do |resource, params|
@@ -31,6 +33,10 @@ module Shotengai
         end
 
         private
+          def manager_auth
+            @manager = params[:manager_type].constantize.find(params[:manager_id])
+          end
+
           def resource_params 
             # QUESTION: need these ?
             spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)
