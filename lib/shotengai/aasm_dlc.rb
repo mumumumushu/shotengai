@@ -27,18 +27,18 @@ module Shotengai
           # e.g. 
           # event :pay ---> :after_pay, after_commit_pay ...
           #
-          @valid_keys.each do |callback|  
+          # NOTE: QUESTION: add key :error would cancel all exception ?
+          (@valid_keys - [:error, :ensure]).each do |callback|  
             preset_methods << "#{callback}_#{@source.name}"
             @options[callback] = Array(@options[callback]) << "#{callback}_#{@source.name}"
           end
+
           # ignore the method missing if it was in preset_methods
           @source.class_eval("
             def invoke_callbacks(code, record, args)
-              case code
-              when String, Symbol
-                return true if record.respond_to?(code, true).! && code.to_s.in?(#{preset_methods})
-              end
               super(code, record, args)
+            rescue NoMethodError
+              code.to_s.in?(#{preset_methods}) ? true : raise
             end
           ")
         end

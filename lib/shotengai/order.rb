@@ -33,21 +33,28 @@ module Shotengai
     belongs_to :buyer, polymorphic: true, optional: true
     
     default_scope { where.not(status: 'cart') } 
-
+    scope :status_is, ->(status) { where(status.blank?.! && { status: status }) }
+    
     include AASM_DLC
     aasm column: :status do
       state :unpaid, initial: true
       state :paid, :delivering, :received, :evaluated
-      {
-        pay: { from: :unpaid, to: :paid, after: [:fill_snapshot, :set_pay_time] },
-        cancel: { from: :unpaid, to: :canceled },
-        send_out: { from: :paid, to: :delivering, after: :set_delivery_time },
-        get_it: { from: :delivering, to: :received, after: :set_receipt_time },
-        evaluate: { from: :received, to: :evaluated },
-        # soft_delete: { from: : to: :evaluated },
-      }.each { |name, options| 
-        event(name) { transitions options }
+      event :pay, after: [:fill_snapshot, :set_pay_time] { 
+        transitions from: :unpaid, to: :paid 
       }
+      event :cancel { 
+        transitions from: :unpaid, to: :canceled 
+      }
+      event :send_out, after: :set_delivery_time { 
+        transitions from: :paid, to: :delivering 
+      }
+      event :get_it, after: :set_receipt_time { 
+        transitions from: :delivering, to: :received 
+      }
+      event :evaluate { 
+        transitions from: :received, to: :evaluated 
+      }
+      # event :soft_delete
     end
 
     def status_zh
