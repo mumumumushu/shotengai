@@ -28,7 +28,7 @@ module Shotengai
           end
 
           def edit_only_unpaid
-            raise Shotengai::WebError.new('订单已支付，不可修改。', '-1', 403) unless @resource.order.unpaid?
+            raise Shotengai::WebError.new('订单已支付，不可修改该快照。', '-1', 403) unless @resource.order.unpaid?
           end
       end
     end

@@ -38,8 +38,9 @@ module Shotengai
     include AASM_DLC
     aasm column: :status do
       state :unpaid, initial: true
-      state :paid, :delivering, :received, :evaluated
-      event :pay, after: [:fill_snapshot, :set_pay_time] { 
+      state :paid, :delivering, :received, :canceled, :evaluated
+      
+      event :pay, before: [:fill_snapshot, :set_pay_time] { 
         transitions from: :unpaid, to: :paid 
       }
       event :cancel { 
@@ -51,9 +52,9 @@ module Shotengai
       event :get_it, after: :set_receipt_time { 
         transitions from: :delivering, to: :received 
       }
-      event :evaluate { 
-        transitions from: :received, to: :evaluated 
-      }
+      # event :evaluate { 
+      #   transitions from: :received, to: :evaluated 
+      # }
       # event :soft_delete
     end
 
@@ -91,6 +92,27 @@ module Shotengai
 
     def total_original_price
       snapshots.sum(&:total_original_price)
+    end
+    
+    # into order
+    def incr_snapshot_ids= ids
+      ActiveRecord::Base.transaction do
+        ids.each { |id| 
+          # using update(shotengai_order_id: id) can not get self.id before save
+          Shotengai::Snapshot.find(id).update!(shotengai_order: self)
+        }
+      end
+    end
+
+    # back to cart
+    def gone_snapshot_ids= ids
+      ActiveRecord::Base.transaction do
+        ids.each { |id| 
+          Shotengai::Snapshot.find(id).update!(
+            shotengai_order_id: self.class.cart_class.where(buyer: self.buyer).first.id
+          ) 
+        }
+      end
     end
 
     class << self

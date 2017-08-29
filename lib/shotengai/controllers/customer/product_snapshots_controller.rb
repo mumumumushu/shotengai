@@ -3,7 +3,7 @@ module Shotengai
     module Customer
       class ProductSnapshotsController < Shotengai::Controller::Base
         self.resources = ProductSnapshot
-        self.template_dir = 'shotengai/merchant/snapshots/'
+        self.template_dir = 'shotengai/customer/snapshots/'
         
         before_action :edit_only_unpaid, only: [:update, :destroy]
 

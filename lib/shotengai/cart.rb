@@ -27,14 +27,19 @@ module Shotengai
   
   class Cart < ::ActiveRecord::Base
     self.table_name = 'shotengai_orders'
+    belongs_to :buyer, polymorphic: true, optional: true
+
     default_scope { where(status: 'cart') } 
+
     #
     #  class Order < Shotengai::Order
     #     can_by 'Product'
     #  end
     #
-    #  Would let Product belongs to :order & order_cart
-    # 
+    #  Would let Product belongs to :order & order_cart.
+    #  And get cart_class Order::Cart
+    #
+
     class << self
       def can_buy *good_class_names
         good_classes = good_class_names.map { |name| Object.const_get(name) }
@@ -44,8 +49,8 @@ module Shotengai
           }, class_name: 'Shotengai::Snapshot', foreign_key: :shotengai_order_id
 
         good_classes.each do |klass| 
-          # cart has many good_class.collection
-          has_many klass.model_name.collection.to_sym, class_name: klass.name, foreign_key: :shotengai_order_id
+          # cart has many good_class_snapshot.collection
+          has_many "#{klass.model_name.singular}_snapshots".to_sym, class_name: "#{klass.snapshot_class}", foreign_key: :shotengai_order_id
           # belongs_to 本 Cart class
           # optional: true 允许父对象不存在
           klass.snapshot_class.belongs_to(

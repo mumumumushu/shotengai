@@ -4,7 +4,7 @@ module Shotengai
       class ProductsController < Shotengai::Controller::Base
         self.resources = Product
         self.template_dir = 'shotengai/merchant/products/'
-
+        
         index_query do |resource, params|
           params[:catalog_list] ? 
             resource.tagged_with(params[:catalog_list], on: :catalogs) :
