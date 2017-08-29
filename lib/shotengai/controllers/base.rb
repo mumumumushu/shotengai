@@ -59,9 +59,20 @@ module Shotengai
       respond_to :json
       
       # TODO: could not catch the exception
-      # rescue_from Shotengai::WebError do |e|
-      #   render json: { error: e.message }, status: e.status
-      # end
+      respond_to :json
+      
+      rescue_from ::Shotengai::WebError do |e|
+        render json: { error: e.message }, status: e.status
+      end
+
+      rescue_from ActiveRecord::RecordInvalid do |e|
+        render json: { error: e.message }, status: 400
+      end
+      
+      rescue_from AASM::InvalidTransition do |e|
+        render json: { error: e.message }, status: 400
+      end
+
 
       def index
         page = params[:page] || 1

@@ -12,7 +12,6 @@ module Shotengai
         end
 
         index_query do |resource, params|
-          # where(nil) will skip the where
           resource.where(
               params[:order_id] && { shotengai_order_id: params[:order_id] }
             ).where(

@@ -3,4 +3,4 @@ json.extract! order, :id, :seq, :status_zh, :address,
   :delivery_way, :delivery_cost, 
   :merchant_remark, :mark, :customer_remark, 
   :status, :status_zh, :meta
-json.snapshots, partial: 'shotengai/share/snapshot_simple', as: :series
+json.snapshots order.snapshots, partial: 'shotengai/share/snapshot_simple', as: :snapshot
