@@ -92,13 +92,11 @@ module Shotengai
       count * original_price
     end
 
-    def product_status_zh
-      series.status_zh
-    end
-
-    def order_status_zh
-      shotengai_order&.status_zh
-    end
+    def product_status; series.status end
+    def product_status_zh; series.status_zh end
+    
+    def order_status; shotengai_order&.status end
+    def order_status_zh; shotengai_order&.status_zh end
 
     ######
 
