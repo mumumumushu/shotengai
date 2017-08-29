@@ -1,0 +1,2891 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "E-Mall Draft API",
+    "version": "v1"
+  },
+  "host": "xxx.com",
+  "paths": {
+    "/user/orders/cart": {
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 8,
+                "snapshots": [
+                  {
+                    "id": 5,
+                    "shotengai_series_id": 11,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": null,
+                    "product_status": "no_on",
+                    "order_status": null,
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": true
+                  }
+                ]
+              }
+            },
+            "description": "cart"
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "用户 购物车",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/orders/add_to_cart": {
+      "post": {
+        "responses": {
+          "201": {
+            "examples": {
+              "application/json": {
+                "id": 14,
+                "shotengai_series_id": 15,
+                "original_price": "100.0",
+                "price": "80.0",
+                "count": 10,
+                "product_status_zh": "未上架",
+                "order_status_zh": null,
+                "product_status": "no_on",
+                "order_status": null,
+                "total_price": "800.0",
+                "total_original_price": "1000.0",
+                "revised_amount": null,
+                "spec": {
+                  "大小": "S",
+                  "颜色": "白色"
+                },
+                "cover_image": null,
+                "banners": null,
+                "detail": null,
+                "meta": {
+                  "meta1": "111",
+                  "meta2": "222",
+                  "series_meta1": "111",
+                  "series_meta2": "222"
+                },
+                "is_in_cart": true
+              }
+            },
+            "description": "Create snapshot and add it to the cart"
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "snapshot",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "snapshot": {
+                  "type": "object",
+                  "properties": {
+                    "shotengai_series_id": {
+                      "type": "integer"
+                    },
+                    "count": {
+                      "type": "integer"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "用户 添加快照至购物车( using series_id & count )",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/orders": {
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "total_pages": 1,
+                "orders": [
+                  {
+                    "id": 31,
+                    "seq": null,
+                    "address": null,
+                    "pay_time": "2017-08-29T11:40:50.000Z",
+                    "delivery_time": null,
+                    "receipt_time": null,
+                    "delivery_way": null,
+                    "delivery_cost": null,
+                    "merchant_remark": null,
+                    "mark": null,
+                    "customer_remark": null,
+                    "status": "paid",
+                    "status_zh": "已支付",
+                    "meta": null
+                  }
+                ]
+              }
+            },
+            "description": "filter by status"
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "用户 订单列表",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "examples": {
+              "application/json": {
+                "id": 42,
+                "seq": null,
+                "status_zh": "未支付",
+                "address": "This is an special address.",
+                "pay_time": null,
+                "delivery_time": null,
+                "receipt_time": null,
+                "delivery_way": null,
+                "delivery_cost": null,
+                "merchant_remark": null,
+                "mark": null,
+                "customer_remark": null,
+                "status": "unpaid",
+                "meta": null,
+                "snapshots": [
+                  {
+                    "id": 31,
+                    "shotengai_series_id": 27,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          },
+          "400": {
+            "examples": {
+              "application/json": {
+                "error": "Validation failed: Id 订单已支付，禁止修改商品快照。"
+              }
+            },
+            "description": "failed, Cannot edit a snapshot which order was already paid."
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "order",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "order": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    },
+                    "user_remark": {
+                      "type": "text"
+                    },
+                    "incr_snapshot_ids": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "用户 创建订单(using incr_snapshot_ids",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/orders/create_directly": {
+      "post": {
+        "responses": {
+          "201": {
+            "examples": {
+              "application/json": {
+                "id": 60,
+                "seq": null,
+                "status_zh": "未支付",
+                "address": "This is an special address.",
+                "pay_time": null,
+                "delivery_time": null,
+                "receipt_time": null,
+                "delivery_way": null,
+                "delivery_cost": null,
+                "merchant_remark": null,
+                "mark": null,
+                "customer_remark": null,
+                "status": "unpaid",
+                "meta": null,
+                "snapshots": [
+                  {
+                    "id": 46,
+                    "shotengai_series_id": 35,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 10,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "800.0",
+                    "total_original_price": "1000.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "白色"
+                    },
+                    "cover_image": null,
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222",
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "order_and_snapshot_params",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "order": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    },
+                    "user_remark": {
+                      "type": "text"
+                    }
+                  },
+                  "snapshot": {
+                    "type": "object",
+                    "properties": {
+                      "shotengai_series_id": {
+                        "type": "integer"
+                      },
+                      "count": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "create order",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/orders/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 65,
+                "seq": null,
+                "status_zh": "未支付",
+                "address": null,
+                "pay_time": null,
+                "delivery_time": null,
+                "receipt_time": null,
+                "delivery_way": null,
+                "delivery_cost": null,
+                "merchant_remark": null,
+                "mark": null,
+                "customer_remark": null,
+                "status": "unpaid",
+                "meta": null,
+                "snapshots": [
+                  {
+                    "id": 50,
+                    "shotengai_series_id": 39,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 2,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "160.0",
+                    "total_original_price": "200.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  },
+                  {
+                    "id": 52,
+                    "shotengai_series_id": 40,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "用户 订单详情",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": ""
+            },
+            "description": "successful"
+          },
+          "403": {
+            "examples": {
+              "application/json": {
+                "error": "订单已支付，不可修改。"
+              }
+            },
+            "description": "failed, Can edit a unpaid order only."
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "order",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "order": {
+                  "type": "object",
+                  "properties": {
+                    "address": {
+                      "type": "string"
+                    },
+                    "user_remark": {
+                      "type": "text"
+                    },
+                    "incr_snapshot_ids": {
+                      "type": "array"
+                    },
+                    "gone_snapshot_ids": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "update order\n        【 incr_snapshot_ids 移入该order的snapshot_id 数组，\n          gone_snapshot_ids 移入购物车的 snapshot_id 数组 】",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/orders/{id}/pay": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "post": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 89,
+                "seq": null,
+                "status_zh": "已支付",
+                "address": null,
+                "pay_time": "2017-08-29T11:40:51.000Z",
+                "delivery_time": null,
+                "receipt_time": null,
+                "delivery_way": null,
+                "delivery_cost": null,
+                "merchant_remark": null,
+                "mark": null,
+                "customer_remark": null,
+                "status": "paid",
+                "meta": null,
+                "snapshots": [
+                  {
+                    "id": 68,
+                    "shotengai_series_id": 51,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 2,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "已支付",
+                    "product_status": "no_on",
+                    "order_status": "paid",
+                    "total_price": "160.0",
+                    "total_original_price": "200.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "白色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222",
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "is_in_cart": false
+                  },
+                  {
+                    "id": 70,
+                    "shotengai_series_id": 52,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "已支付",
+                    "product_status": "no_on",
+                    "order_status": "paid",
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "黑色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222",
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "用户 支付订单",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/orders/{id}/cancel": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "post": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 97,
+                "seq": null,
+                "status_zh": null,
+                "address": null,
+                "pay_time": null,
+                "delivery_time": null,
+                "receipt_time": null,
+                "delivery_way": null,
+                "delivery_cost": null,
+                "merchant_remark": null,
+                "mark": null,
+                "customer_remark": null,
+                "status": "canceled",
+                "meta": null,
+                "snapshots": [
+                  {
+                    "id": 74,
+                    "shotengai_series_id": 55,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 2,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": null,
+                    "product_status": "no_on",
+                    "order_status": "canceled",
+                    "total_price": "160.0",
+                    "total_original_price": "200.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  },
+                  {
+                    "id": 76,
+                    "shotengai_series_id": 56,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": null,
+                    "product_status": "no_on",
+                    "order_status": "canceled",
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          },
+          "400": {
+            "examples": {
+              "application/json": {
+                "error": "Event 'cancel' cannot transition from 'paid'. "
+              }
+            },
+            "description": "failed , you can cancel a order which status is unpaid"
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "用户 取消未支付订单",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/orders/{id}/get_it": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "integer",
+          "required": true
+        }
+      ],
+      "post": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 113,
+                "seq": null,
+                "status_zh": "已收货",
+                "address": null,
+                "pay_time": null,
+                "delivery_time": null,
+                "receipt_time": "2017-08-29T11:40:52.000Z",
+                "delivery_way": null,
+                "delivery_cost": null,
+                "merchant_remark": null,
+                "mark": null,
+                "customer_remark": null,
+                "status": "received",
+                "meta": null,
+                "snapshots": [
+                  {
+                    "id": 86,
+                    "shotengai_series_id": 63,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 2,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "已收货",
+                    "product_status": "no_on",
+                    "order_status": "received",
+                    "total_price": "160.0",
+                    "total_original_price": "200.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  },
+                  {
+                    "id": 88,
+                    "shotengai_series_id": 64,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "已收货",
+                    "product_status": "no_on",
+                    "order_status": "received",
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "buyer_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "buyer_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "user API",
+          "order"
+        ],
+        "summary": "用户 确认收货",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/product_snapshots": {
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "total_pages": 1,
+                "product_snapshots": [
+                  {
+                    "id": 105,
+                    "shotengai_series_id": 75,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": null,
+                    "product_status": "no_on",
+                    "order_status": null,
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": true
+                  }
+                ]
+              }
+            },
+            "description": "successful, in_cart"
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "series_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "order_id",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "in_cart",
+            "in": "query",
+            "type": "boolean"
+          }
+        ],
+        "tags": [
+          "user API",
+          "product_snapshots"
+        ],
+        "summary": "用户 快照列表 三参数可仍以任意组合",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/product_snapshots/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 110,
+                "shotengai_series_id": 79,
+                "original_price": "100.0",
+                "price": "80.0",
+                "count": 2,
+                "product_status_zh": "未上架",
+                "order_status_zh": "未支付",
+                "product_status": "no_on",
+                "order_status": "unpaid",
+                "total_price": "160.0",
+                "total_original_price": "200.0",
+                "revised_amount": null,
+                "spec": {
+                  "大小": "S",
+                  "颜色": "红色"
+                },
+                "cover_image": "cover_image 1",
+                "banners": [
+                  "iamge 1",
+                  "iamge 2"
+                ],
+                "detail": {
+                  "产品参数": "参数 参数...",
+                  "使用说明": "xxxxxxxx..."
+                },
+                "meta": {
+                  "meta1": "111",
+                  "meta2": "222"
+                },
+                "is_in_cart": false
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "tags": [
+          "user API",
+          "product_snapshots"
+        ],
+        "summary": "商户 商品快照的详情",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/products": {
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "total_pages": 1,
+                "products": [
+                  {
+                    "id": 142,
+                    "title": "Test Product Title",
+                    "status": "no_on",
+                    "status_zh": "未上架",
+                    "need_express": true,
+                    "cover_image": "cover_image.image",
+                    "default_series": {
+                      "id": 84,
+                      "title": "Test Product Title",
+                      "original_price": "100.0",
+                      "price": "80.0",
+                      "stock": 10,
+                      "spec": {
+                        "大小": "S",
+                        "颜色": "红色"
+                      },
+                      "cover_image": "cover_image.image",
+                      "meta": {
+                        "series_meta1": "111",
+                        "series_meta2": "222"
+                      },
+                      "shotengai_product_id": 142
+                    }
+                  }
+                ]
+              }
+            },
+            "description": "filter by catalog"
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "catalog_list",
+            "in": "query",
+            "type": "array"
+          }
+        ],
+        "tags": [
+          "user API",
+          "product"
+        ],
+        "summary": "用户 商品列表",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/user/products/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 148,
+                "title": "Test Product Title",
+                "status": "no_on",
+                "status_zh": "未上架",
+                "need_express": true,
+                "need_time_attr": null,
+                "cover_image": "cover_image.image",
+                "banners": [
+                  "image1",
+                  "iamge2"
+                ],
+                "spec": {
+                  "大小": [
+                    "S",
+                    "M",
+                    "L"
+                  ],
+                  "颜色": [
+                    "黑色",
+                    "红色",
+                    "白色"
+                  ]
+                },
+                "detail": {
+                  "产品参数": "参数 参数...",
+                  "使用说明": "xxxxxxxx..."
+                },
+                "meta": {
+                  "meta1": "111",
+                  "meta2": "222"
+                },
+                "catalog_list": [
+                  "衣服"
+                ],
+                "default_series": {
+                  "id": 86,
+                  "title": "Test Product Title",
+                  "original_price": "100.0",
+                  "price": "80.0",
+                  "stock": 10,
+                  "spec": {
+                    "大小": "S",
+                    "颜色": "红色"
+                  },
+                  "cover_image": "cover_image.image",
+                  "meta": {
+                    "series_meta1": "111",
+                    "series_meta2": "222"
+                  },
+                  "shotengai_product_id": 148
+                },
+                "series": [
+                  {
+                    "id": 86,
+                    "title": "Test Product Title",
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "stock": 10,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "shotengai_product_id": 148
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "tags": [
+          "user API",
+          "product"
+        ],
+        "summary": "用户 商品详情",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/orders": {
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "total_pages": 1,
+                "orders": [
+                  {
+                    "id": 147,
+                    "seq": null,
+                    "address": null,
+                    "pay_time": "2017-08-29T11:40:53.000Z",
+                    "delivery_time": null,
+                    "receipt_time": null,
+                    "delivery_way": null,
+                    "delivery_cost": null,
+                    "merchant_remark": null,
+                    "mark": null,
+                    "customer_remark": null,
+                    "status": "paid",
+                    "status_zh": "已支付",
+                    "meta": null
+                  }
+                ]
+              }
+            },
+            "description": "filter by status"
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "order"
+        ],
+        "summary": "商家 订单列表",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/orders/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 153,
+                "seq": null,
+                "status_zh": "未支付",
+                "address": null,
+                "pay_time": null,
+                "delivery_time": null,
+                "receipt_time": null,
+                "delivery_way": null,
+                "delivery_cost": null,
+                "merchant_remark": null,
+                "mark": null,
+                "customer_remark": null,
+                "status": "unpaid",
+                "meta": null,
+                "snapshots": [
+                  {
+                    "id": 128,
+                    "shotengai_series_id": 97,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 2,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "160.0",
+                    "total_original_price": "200.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  },
+                  {
+                    "id": 130,
+                    "shotengai_series_id": 98,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "tags": [
+          "merchant API",
+          "order"
+        ],
+        "summary": "商户 订单详情",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": ""
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "order",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "order": {
+                  "type": "object",
+                  "properties": {
+                    "mark": {
+                      "type": "string"
+                    },
+                    "merchant_remark": {
+                      "type": "text"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "order"
+        ],
+        "summary": "update product",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/orders/{id}/send_out": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "post": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 169,
+                "seq": null,
+                "status_zh": "运送中",
+                "address": null,
+                "pay_time": "2017-08-29T11:40:54.000Z",
+                "delivery_time": "2017-08-29T11:40:54.000Z",
+                "receipt_time": null,
+                "delivery_way": null,
+                "delivery_cost": null,
+                "merchant_remark": null,
+                "mark": null,
+                "customer_remark": null,
+                "status": "delivering",
+                "meta": null,
+                "snapshots": [
+                  {
+                    "id": 140,
+                    "shotengai_series_id": 105,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 2,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "运送中",
+                    "product_status": "no_on",
+                    "order_status": "delivering",
+                    "total_price": "160.0",
+                    "total_original_price": "200.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "白色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222",
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "is_in_cart": false
+                  },
+                  {
+                    "id": 142,
+                    "shotengai_series_id": 106,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "运送中",
+                    "product_status": "no_on",
+                    "order_status": "delivering",
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "黑色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222",
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          },
+          "400": {
+            "examples": {
+              "application/json": {
+                "error": "Event 'send_out' cannot transition from 'unpaid'. "
+              }
+            },
+            "description": "failed wrong initial status"
+          }
+        },
+        "tags": [
+          "merchant API",
+          "order"
+        ],
+        "summary": "商户 确认订单开始配送",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/products/{product_id}/product_series": {
+      "parameters": [
+        {
+          "name": "product_id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "total_pages": 1,
+                "product_series": [
+                  {
+                    "id": 113,
+                    "title": "Test Product Title",
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "stock": 10,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "白色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "shotengai_product_id": 190
+                  },
+                  {
+                    "id": 114,
+                    "title": "Test Product Title",
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "stock": 10,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "黑色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "shotengai_product_id": 190
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product_series"
+        ],
+        "summary": "商家 某商品的 商品系列 列表",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "examples": {
+              "application/json": {
+                "id": 120,
+                "title": "Test Product Title",
+                "original_price": "100.0",
+                "price": "80.0",
+                "stock": 10,
+                "spec": {
+                  "颜色": "红色",
+                  "大小": "S"
+                },
+                "cover_image": "cover_image.image",
+                "banners": [
+                  "image1",
+                  "iamge2"
+                ],
+                "meta": {
+                  "series_meta1": "111",
+                  "series_meta2": "222"
+                },
+                "detail": {
+                  "产品参数": "参数 参数...",
+                  "使用说明": "xxxxxxxx..."
+                },
+                "shotengai_product_id": 196
+              }
+            },
+            "description": "successful"
+          },
+          "400": {
+            "examples": {
+              "application/json": {
+                "error": "Validation failed: Spec Non uniq spec for the product."
+              }
+            },
+            "description": "failed, duplicate spec"
+          }
+        },
+        "parameters": [
+          {
+            "name": "product_series",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product_series": {
+                  "type": "object",
+                  "properties": {
+                    "original_price": {
+                      "type": "decimal"
+                    },
+                    "price": {
+                      "type": "decimal"
+                    },
+                    "stock": {
+                      "type": "integer"
+                    },
+                    "spec": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "array"
+                        },
+                        "size": {
+                          "type": "array"
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "meta1": {
+                          "type": "string"
+                        },
+                        "meta2": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product_series"
+        ],
+        "summary": "管理员新建 商品系列",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/products/{product_id}/product_series/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "product_id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 125,
+                "title": "Test Product Title",
+                "original_price": "100.0",
+                "price": "80.0",
+                "stock": 10,
+                "spec": {
+                  "大小": "S",
+                  "颜色": "白色"
+                },
+                "cover_image": "cover_image.image",
+                "banners": [
+                  "image1",
+                  "iamge2"
+                ],
+                "meta": {
+                  "series_meta1": "111",
+                  "series_meta2": "222"
+                },
+                "detail": {
+                  "产品参数": "参数 参数...",
+                  "使用说明": "xxxxxxxx..."
+                },
+                "shotengai_product_id": 205
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "tags": [
+          "merchant API",
+          "product_series"
+        ],
+        "summary": "商户 商品系列的详情",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": ""
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "product_series",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product_series": {
+                  "type": "object",
+                  "properties": {
+                    "original_price": {
+                      "type": "decimal"
+                    },
+                    "price": {
+                      "type": "decimal"
+                    },
+                    "stock": {
+                      "type": "integer"
+                    },
+                    "spec": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "array"
+                        },
+                        "size": {
+                          "type": "array"
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "meta1": {
+                          "type": "string"
+                        },
+                        "meta2": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product_series"
+        ],
+        "summary": "update product_series",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "examples": {
+              "": ""
+            },
+            "description": "successful"
+          }
+        },
+        "tags": [
+          "merchant API",
+          "product_series"
+        ],
+        "summary": "delete product_series",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/product_series/{product_series_id}/product_snapshots": {
+      "parameters": [
+        {
+          "name": "product_id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "total_pages": 1,
+                "product_snapshots": [
+                  {
+                    "id": 152,
+                    "shotengai_series_id": 133,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 2,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "160.0",
+                    "total_original_price": "200.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product_snapshots"
+        ],
+        "summary": "商家 (某商品系列中) 的已“在订单中”的快照列表",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/orders/{order_id}/product_snapshots": {
+      "parameters": [
+        {
+          "name": "order_id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "total_pages": 1,
+                "product_snapshots": [
+                  {
+                    "id": 158,
+                    "shotengai_series_id": 137,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 2,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "160.0",
+                    "total_original_price": "200.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  },
+                  {
+                    "id": 160,
+                    "shotengai_series_id": 138,
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "count": 5,
+                    "product_status_zh": "未上架",
+                    "order_status_zh": "未支付",
+                    "product_status": "no_on",
+                    "order_status": "unpaid",
+                    "total_price": "400.0",
+                    "total_original_price": "500.0",
+                    "revised_amount": null,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image 1",
+                    "meta": {
+                      "meta1": "111",
+                      "meta2": "222"
+                    },
+                    "is_in_cart": false
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product_snapshots"
+        ],
+        "summary": "商家 (某订单中) 的快照列表",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/product_series/{product_series_id}/product_snapshots/{id}": {
+      "parameters": [
+        {
+          "name": "product_series_id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 164,
+                "shotengai_series_id": 141,
+                "original_price": "100.0",
+                "price": "80.0",
+                "count": 2,
+                "product_status_zh": "未上架",
+                "order_status_zh": "未支付",
+                "product_status": "no_on",
+                "order_status": "unpaid",
+                "total_price": "160.0",
+                "total_original_price": "200.0",
+                "revised_amount": null,
+                "spec": {
+                  "大小": "S",
+                  "颜色": "红色"
+                },
+                "cover_image": "cover_image 1",
+                "banners": [
+                  "iamge 1",
+                  "iamge 2"
+                ],
+                "detail": {
+                  "产品参数": "参数 参数...",
+                  "使用说明": "xxxxxxxx..."
+                },
+                "meta": {
+                  "meta1": "111",
+                  "meta2": "222"
+                },
+                "is_in_cart": false
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "tags": [
+          "merchant API",
+          "product_snapshots"
+        ],
+        "summary": "商户 商品快照的详情",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": ""
+            },
+            "description": "successful"
+          },
+          "403": {
+            "examples": {
+              "application/json": {
+                "error": "订单已支付，不可修改该快照。"
+              }
+            },
+            "description": "failed, can update a snapshot of unpaid order only "
+          }
+        },
+        "parameters": [
+          {
+            "name": "product_snapshot",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product_snapshot": {
+                  "type": "object",
+                  "properties": {
+                    "revised_amount": {
+                      "type": "decimal"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product_snapshots"
+        ],
+        "summary": "update product_snapshot 修改 revised_amount",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/products": {
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "current_page": 1,
+                "total_pages": 1,
+                "products": [
+                  {
+                    "id": 253,
+                    "title": "Test Product Title",
+                    "status": "no_on",
+                    "status_zh": "未上架",
+                    "need_express": true,
+                    "cover_image": "cover_image.image",
+                    "default_series": {
+                      "id": 154,
+                      "title": "Test Product Title",
+                      "original_price": "100.0",
+                      "price": "80.0",
+                      "stock": 10,
+                      "spec": {
+                        "大小": "S",
+                        "颜色": "红色"
+                      },
+                      "cover_image": "cover_image.image",
+                      "meta": {
+                        "series_meta1": "111",
+                        "series_meta2": "222"
+                      },
+                      "shotengai_product_id": 253
+                    }
+                  }
+                ]
+              }
+            },
+            "description": "filter by catalog"
+          }
+        },
+        "parameters": [
+          {
+            "name": "manager_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "manager_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "catalog_list",
+            "in": "query",
+            "type": "array"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product"
+        ],
+        "summary": "商家 商品列表",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "post": {
+        "responses": {
+          "201": {
+            "examples": {
+              "application/json": {
+                "id": 263,
+                "title": "Test Product Title",
+                "status": "no_on",
+                "status_zh": "未上架",
+                "need_express": true,
+                "need_time_attr": null,
+                "cover_image": "cover_image.image",
+                "banners": [
+                  "image1",
+                  "iamge2"
+                ],
+                "spec": {
+                  "颜色": [
+                    "黑色",
+                    "红色",
+                    "白色"
+                  ],
+                  "大小": [
+                    "S",
+                    "M",
+                    "L"
+                  ]
+                },
+                "detail": {
+                  "使用说明": "xxxxxxxx...",
+                  "产品参数": "参数 参数..."
+                },
+                "meta": {
+                  "meta1": "111",
+                  "meta2": "222"
+                },
+                "catalog_list": [
+                  "衣服",
+                  "上衣"
+                ],
+                "default_series": {
+                  "id": 156,
+                  "title": "Test Product Title",
+                  "original_price": "100.0",
+                  "price": "80.0",
+                  "stock": 10,
+                  "spec": {
+                    "大小": "S",
+                    "颜色": "红色"
+                  },
+                  "cover_image": "cover_image.image",
+                  "meta": {
+                    "series_meta1": "111",
+                    "series_meta2": "222"
+                  },
+                  "shotengai_product_id": 260
+                },
+                "series": []
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "manager_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "manager_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "product",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "default_series_id": {
+                      "type": "integer"
+                    },
+                    "need_express": {
+                      "type": "boolean"
+                    },
+                    "need_time_attr": {
+                      "type": "boolean"
+                    },
+                    "cover_image": {
+                      "type": "string"
+                    },
+                    "banners": {
+                      "type": "array"
+                    },
+                    "detail": {
+                      "type": "object",
+                      "properties": {
+                        "product_detail": {
+                          "type": "string"
+                        },
+                        "notice": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "spec": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "array"
+                        },
+                        "size": {
+                          "type": "array"
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "meta1": {
+                          "type": "string"
+                        },
+                        "meta2": {
+                          "type": "ineteger"
+                        }
+                      }
+                    },
+                    "catalog_list": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product"
+        ],
+        "summary": "管理员新建商品",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/products/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 267,
+                "title": "Test Product Title",
+                "status": "no_on",
+                "status_zh": "未上架",
+                "need_express": true,
+                "need_time_attr": null,
+                "cover_image": "cover_image.image",
+                "banners": [
+                  "image1",
+                  "iamge2"
+                ],
+                "spec": {
+                  "大小": [
+                    "S",
+                    "M",
+                    "L"
+                  ],
+                  "颜色": [
+                    "黑色",
+                    "红色",
+                    "白色"
+                  ]
+                },
+                "detail": {
+                  "产品参数": "参数 参数...",
+                  "使用说明": "xxxxxxxx..."
+                },
+                "meta": {
+                  "meta1": "111",
+                  "meta2": "222"
+                },
+                "catalog_list": [
+                  "衣服"
+                ],
+                "default_series": {
+                  "id": 158,
+                  "title": "Test Product Title",
+                  "original_price": "100.0",
+                  "price": "80.0",
+                  "stock": 10,
+                  "spec": {
+                    "大小": "S",
+                    "颜色": "红色"
+                  },
+                  "cover_image": "cover_image.image",
+                  "meta": {
+                    "series_meta1": "111",
+                    "series_meta2": "222"
+                  },
+                  "shotengai_product_id": 267
+                },
+                "series": [
+                  {
+                    "id": 158,
+                    "title": "Test Product Title",
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "stock": 10,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "shotengai_product_id": 267
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "manager_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "manager_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product"
+        ],
+        "summary": "商户 商品详情",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "patch": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": ""
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "manager_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "manager_id",
+            "in": "query",
+            "type": "integer"
+          },
+          {
+            "name": "product",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "product": {
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string"
+                    },
+                    "default_series_id": {
+                      "type": "integer"
+                    },
+                    "need_express": {
+                      "type": "boolean"
+                    },
+                    "need_time_attr": {
+                      "type": "boolean"
+                    },
+                    "cover_image": {
+                      "type": "string"
+                    },
+                    "banners": {
+                      "type": "array"
+                    },
+                    "detail": {
+                      "type": "object",
+                      "properties": {
+                        "product_detail": {
+                          "type": "string"
+                        },
+                        "notice": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "spec": {
+                      "type": "object",
+                      "properties": {
+                        "color": {
+                          "type": "array"
+                        },
+                        "size": {
+                          "type": "array"
+                        }
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "meta1": {
+                          "type": "string"
+                        },
+                        "meta2": {
+                          "type": "ineteger"
+                        }
+                      }
+                    },
+                    "catalog_list": {
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product"
+        ],
+        "summary": "update product",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "examples": {
+              "": ""
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "manager_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "manager_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product"
+        ],
+        "summary": "delete product",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/products/{id}/put_on_shelf": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "post": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 276,
+                "title": "Test Product Title",
+                "status": "on_sale",
+                "status_zh": "已上架",
+                "need_express": true,
+                "need_time_attr": null,
+                "cover_image": "cover_image.image",
+                "banners": [
+                  "image1",
+                  "iamge2"
+                ],
+                "spec": {
+                  "大小": [
+                    "S",
+                    "M",
+                    "L"
+                  ],
+                  "颜色": [
+                    "黑色",
+                    "红色",
+                    "白色"
+                  ]
+                },
+                "detail": {
+                  "产品参数": "参数 参数...",
+                  "使用说明": "xxxxxxxx..."
+                },
+                "meta": {
+                  "meta1": "111",
+                  "meta2": "222"
+                },
+                "catalog_list": [
+                  "衣服"
+                ],
+                "default_series": {
+                  "id": 161,
+                  "title": "Test Product Title",
+                  "original_price": "100.0",
+                  "price": "80.0",
+                  "stock": 10,
+                  "spec": {
+                    "大小": "S",
+                    "颜色": "红色"
+                  },
+                  "cover_image": "cover_image.image",
+                  "meta": {
+                    "series_meta1": "111",
+                    "series_meta2": "222"
+                  },
+                  "shotengai_product_id": 276
+                },
+                "series": [
+                  {
+                    "id": 161,
+                    "title": "Test Product Title",
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "stock": 10,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "shotengai_product_id": 276
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "manager_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "manager_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product"
+        ],
+        "summary": "商户 上架商品",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    },
+    "/merchant/products/{id}/sold_out": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "post": {
+        "responses": {
+          "200": {
+            "examples": {
+              "application/json": {
+                "id": 279,
+                "title": "Test Product Title",
+                "status": "no_on",
+                "status_zh": "未上架",
+                "need_express": true,
+                "need_time_attr": null,
+                "cover_image": "cover_image.image",
+                "banners": [
+                  "image1",
+                  "iamge2"
+                ],
+                "spec": {
+                  "大小": [
+                    "S",
+                    "M",
+                    "L"
+                  ],
+                  "颜色": [
+                    "黑色",
+                    "红色",
+                    "白色"
+                  ]
+                },
+                "detail": {
+                  "产品参数": "参数 参数...",
+                  "使用说明": "xxxxxxxx..."
+                },
+                "meta": {
+                  "meta1": "111",
+                  "meta2": "222"
+                },
+                "catalog_list": [
+                  "衣服"
+                ],
+                "default_series": {
+                  "id": 162,
+                  "title": "Test Product Title",
+                  "original_price": "100.0",
+                  "price": "80.0",
+                  "stock": 10,
+                  "spec": {
+                    "大小": "S",
+                    "颜色": "红色"
+                  },
+                  "cover_image": "cover_image.image",
+                  "meta": {
+                    "series_meta1": "111",
+                    "series_meta2": "222"
+                  },
+                  "shotengai_product_id": 279
+                },
+                "series": [
+                  {
+                    "id": 162,
+                    "title": "Test Product Title",
+                    "original_price": "100.0",
+                    "price": "80.0",
+                    "stock": 10,
+                    "spec": {
+                      "大小": "S",
+                      "颜色": "红色"
+                    },
+                    "cover_image": "cover_image.image",
+                    "meta": {
+                      "series_meta1": "111",
+                      "series_meta2": "222"
+                    },
+                    "shotengai_product_id": 279
+                  }
+                ]
+              }
+            },
+            "description": "successful"
+          }
+        },
+        "parameters": [
+          {
+            "name": "manager_type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "manager_id",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "tags": [
+          "merchant API",
+          "product"
+        ],
+        "summary": "商户 下架商品",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ]
+      }
+    }
+  }
+}
