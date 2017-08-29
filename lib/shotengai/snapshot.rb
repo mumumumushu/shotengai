@@ -31,6 +31,8 @@ module Shotengai
     validate :check_spec, if: :spec
     validates :count, numericality: { only_integer: true, greater_than: 0 }
 
+    validate :cannot_edit_if_order_is_paid
+
     belongs_to :shotengai_order, foreign_key: :shotengai_order_id, 
       class_name: 'Shotengai::Order', optional: true
     belongs_to :shotengai_cart, foreign_key: :shotengai_order_id, 
@@ -109,12 +111,18 @@ module Shotengai
     private 
       # spec 字段
       def check_spec
-        raise Shotengai::WebError.new('spec 必须是个 Hash', '-1', 400) unless spec.is_a?(Hash) 
-        raise Shotengai::WebError.new('非法的关键字，或关键字缺失', '-1', 400) unless (series.product.spec.keys - spec.keys).empty?
+        errors.add(:spec, 'spec 必须是个 Hash') unless spec.is_a?(Hash) 
+        errors.add(:spec, '非法的关键字，或关键字缺失') unless (series.product.spec.keys - spec.keys).empty?
         illegal_values = {}
         spec.each { |key, value| illegal_values[key] = value unless value.in?(series.product.spec[key]) }
-        # p Shotengai::WebError.new("非法的值，#{illegal_values}", '-1', 422)
-        raise Shotengai::WebError.new("非法的值，#{illegal_values}", '-1', 400) unless illegal_values.empty?
+        errors.add(:spec, "非法的值，#{illegal_values}") unless illegal_values.empty?
+      end
+
+      # NOTE: Shotengai::Snapshot.find_by_id(self.id) to get the self before changed
+      def cannot_edit_if_order_is_paid
+        unless Shotengai::Snapshot.find_by_id(self.id)&.order_status.in?(['unpaid', 'cart', nil])
+          errors.add(:id, '订单已支付，禁止修改商品快照。') 
+        end
       end
   end
 
