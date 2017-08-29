@@ -33,6 +33,8 @@ module Shotengai
 
     belongs_to :shotengai_order, foreign_key: :shotengai_order_id, 
       class_name: 'Shotengai::Order', optional: true
+    belongs_to :shotengai_cart, foreign_key: :shotengai_order_id, 
+      class_name: 'Shotengai::Cart', optional: true
     
     scope :in_order, ->{ 
       joins("
@@ -90,6 +92,10 @@ module Shotengai
 
     def total_original_price
       count * original_price
+    end
+
+    def is_in_cart
+      shotengai_cart&.status == 'cart'
     end
 
     def product_status; series.status end

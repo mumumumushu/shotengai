@@ -6,7 +6,8 @@ module Shotengai
         self.template_dir = 'shotengai/merchant/snapshots/'
         
         remove_actions :create, :destroy
-
+        before_action :edit_only_unpaid, only: :update
+        
         default_query do |resource, params|
           resource.in_order  
         end
@@ -19,16 +20,15 @@ module Shotengai
             )
         end
 
-        def update
-          raise Shotengai::WebError.new('订单已支付，不可修改。', '-1', 403) unless @resource.order.unpaid?
-          super
-        end
-
         private
           def resource_params
             params.require(resource_key).permit(
               :revised_amount
             )
+          end
+
+          def edit_only_unpaid
+            raise Shotengai::WebError.new('订单已支付，不可修改。', '-1', 403) unless @resource.order.unpaid?
           end
       end
     end
