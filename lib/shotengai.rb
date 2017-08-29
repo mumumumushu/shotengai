@@ -23,9 +23,12 @@ module Shotengai
       autoload :ProductSeriesController,    'shotengai/controllers/merchant/product_series_controller'
       autoload :OrdersController,           'shotengai/controllers/merchant/orders_controller'
     end
-
+    
     module Customer
-
+      autoload :ProductsController,          'shotengai/controllers/customer/products_controller'
+      autoload :ProductSnapshotsController, 'shotengai/controllers/customer/product_snapshots_controller'
+      autoload :ProductSeriesController,    'shotengai/controllers/customer/product_series_controller'
+      autoload :OrdersController,           'shotengai/controllers/customer/orders_controller'
     end
   end
 end
