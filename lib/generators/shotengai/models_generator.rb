@@ -8,12 +8,16 @@ module Shotengai
         
         Use --produt to custom your own product class
         Use --order to custom your own order class
+        Use --catalog to custom your own catalog class
 
         For example:
           rails g shotengai:models --product MyProduct --order MyOrder
-        This will create two model file:
+        This will create some model file:
               create  app/models/my_product.rb
+              create  app/models/my_product_series.rb
+              create  app/models/my_product_snapshot.rb
               create  app/models/my_order.rb
+              create  app/models/my_catalog.rb
       DESC
 
       class_option :product, type: :string, default: 'Product',

@@ -20,9 +20,51 @@ Or install it yourself as:
 
     $ gem install shotengai
 
-## Usage
+## Rails Generators
+#Model Generator:
+```ruby
+    # options:
+    #   --produt           custom your own product class
+    #   --order            custom your own order class
+```
+For example:
+```shell
+    $ rails g shotengai:models --product MyProduct --order MyOrder
+```
+    This will create two model file:
+        create  app/models/my_product.rb
+        create  app/models/my_product_series.rb
+        create  app/models/my_product_snapshot.rb
+        create  app/models/my_order.rb
+        create  app/models/my_catalog.rb
 
-TODO: Write usage instructions here
+#Controller Generator:
+```ruby
+    # attr: 
+    #   role ( merchant | customer )
+    # options:
+    #   -n, --namespace    add the namespec folder, default nil.
+    #   --product          custom your own product class, default Product
+    #   --order            custom your own order class, default Order
+```
+ For example:
+```shell
+    $ rails g shotengai:controllers merchant -n my_merchant --product MyProduct --order MyOrder
+```
+This will create serveral controller classes inherited from merchant product and order class 
+    
+    For example:
+        app/controllers/store/product_controller.rb like this:
+
+        class Store::MyProductsController < Shotengai::Merchant::ProductsController
+        content...
+        end
+#Views Generator:
+```shell
+    $ rails g shotengai:views -f
+```
+This will copy shotengai example views to your application under 'app/views/shotengai/'.
+
 
 ## Development
 
