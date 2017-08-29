@@ -15,17 +15,22 @@ module Shotengai
   #  detail            :json
   #  type              :string(255)
   #  meta              :json
+  #  manager_id        :integer
+  #  manager_type      :string(255)
   #  created_at        :datetime         not null
   #  updated_at        :datetime         not null
   #
   # Indexes
   #
-  #  index_shotengai_products_on_type  (type)
+  #  index_shotengai_products_on_manager_id_and_manager_type  (manager_id,manager_type)
+  #  index_shotengai_products_on_type                         (type)
   #
-  
+
   class Shotengai::Product < ActiveRecord::Base
     require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'
+    
+    belongs_to :manager, polymorphic: true, optional: true
     validate :check_spec, if: :spec
 
     include AASM_DLC

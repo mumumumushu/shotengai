@@ -14,8 +14,15 @@
 #  detail            :json
 #  type              :string(255)
 #  meta              :json
+#  manager_id        :integer
+#  manager_type      :string(255)
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
+#
+# Indexes
+#
+#  index_shotengai_products_on_manager_id_and_manager_type  (manager_id,manager_type)
+#  index_shotengai_products_on_type                         (type)
 #
 
 FactoryGirl.define do

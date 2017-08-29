@@ -13,10 +13,14 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       # Single Table Inheritance
       t.string :type
       t.json :meta
+      
+      t.integer :manager_id 
+      t.string :manager_type 
 
       t.timestamps
     end
 
+    add_index :shotengai_products, [:manager_id, :manager_type]    
     add_index :shotengai_products, :type
 
     create_table :shotengai_series do |t|
