@@ -6,6 +6,9 @@ module Shotengai
         self.template_dir = 'shotengai/customer/products/'
         
         remove_actions :create, :update, :destroy
+        default_query do |resource, params|
+          
+        end
 
         index_query do |resource, params|
           params[:catalog_list] ? 

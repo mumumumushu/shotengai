@@ -11,8 +11,9 @@ module Shotengai
             params[:product_id] && { shotengai_product_id: params[:product_id] }
           )
         end
-
-        private
+        
+        index_query do |resource, params|
+        end
       end
     end
   end

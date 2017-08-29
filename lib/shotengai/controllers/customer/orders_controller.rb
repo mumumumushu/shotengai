@@ -11,7 +11,10 @@ module Shotengai
         skip_before_action :set_resource, only: [:cart, :add_to_cart, :create_directly]
 
         remove_actions :destroy
-
+        
+        default_query do |resource, params|  
+        end
+        
         index_query do |resource, params|
           resource.status_is(params[:status])
         end

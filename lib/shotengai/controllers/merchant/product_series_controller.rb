@@ -11,6 +11,10 @@ module Shotengai
           )
         end
 
+        index_query do |resource, params|
+        
+        end
+
         private
           def resource_params 
             spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)

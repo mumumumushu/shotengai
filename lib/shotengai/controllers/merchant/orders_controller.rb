@@ -6,7 +6,11 @@ module Shotengai
         self.template_dir = 'shotengai/merchant/orders/'
         
         remove_actions :create, :destroy
-
+        
+        default_query do |resource, params|
+          
+        end
+        
         index_query do |resource, params|
           resource.status_is(params[:status])
         end
