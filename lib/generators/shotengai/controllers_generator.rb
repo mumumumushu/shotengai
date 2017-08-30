@@ -36,17 +36,19 @@ module Shotengai
 
       def create_controllers
         raise 'Illegal role. Only merchant or customer' unless role.in?(['merchant', 'customer'])
-        @controller_prefix = options[:namespace].blank? ? '' : (options[:namespace].camelize + '::')
+        @role = role
+        @namespace, @product, @order = options.values_at(:namespace, :product, :order)
+        @controller_prefix = @namespace.blank? ? '' : (@namespace.camelize + '::')
         { 
-          'products' => options[:product],
-          'orders' => options[:order],
-          'product_series' => "#{options[:product]}Series",
-          'product_snapshots' => "#{options[:product]}Snapshot",
+          'products' => @product,
+          'orders' => @order,
+          'product_series' => "#{@product}Series",
+          'product_snapshots' => "#{@product}Snapshot",
           
         }.each do |key, klass_name|
-          @key, @klass_name, @role = key, klass_name, role
+          @key, @klass_name = key, klass_name
           template "template_controller.rb",
-                   "app/controllers/#{options[:namespace]}/#{klass_name.underscore.pluralize}_controller.rb"
+                   "app/controllers/#{@namespace}/#{@klass_name.underscore.pluralize}_controller.rb"
         end
       end
     end
