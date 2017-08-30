@@ -59,12 +59,18 @@ This will create serveral controller classes inherited from merchant product and
         class Store::MyProductsController < Shotengai::Merchant::ProductsController
         content...
         end
+        
 #Views Generator:
 ```shell
     $ rails g shotengai:views -f
 ```
 This will copy shotengai example views to your application under 'app/views/shotengai/'.
 
+#Spec Generator:
+```shell
+    $ rails g shotengai:spec --customer User --merchant Merchant --product MyProduct --order Myorder
+```
+This will create all request swagger spec & factory files to your application under 'app/spec/shotengai/'.
 
 ## Development
 
