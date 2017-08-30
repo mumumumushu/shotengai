@@ -5,6 +5,7 @@ module Shotengai
     class ControllersGenerator < Rails::Generators::Base
       desc <<-DESC.strip_heredoc
         Create inherited Shotengai controllers in your app/controllers folder.
+        And add routes to your config/routes.rb.
 
         Use -n to add the namespec folder, default nil.
         Use --produt to custom your own product class
@@ -14,7 +15,9 @@ module Shotengai
 
           rails generate shotengai:controllers merchant -n my_merchant --product MyProduct --order MyOrder
 
-        This will create serveral controller classes inherited from merchant product and order class 
+        This will create serveral controller classes inherited from merchant product and order class, 
+          and add all routes about merchant.
+          
         For example:
           app/controllers/store/product_controller.rb like this:
 
@@ -50,6 +53,59 @@ module Shotengai
           template "template_controller.rb",
                    "app/controllers/#{@namespace}/#{@klass_name.underscore.pluralize}_controller.rb"
         end
+        create_routes
+      end
+
+      def create_routes
+        route (@role == 'merchant' ? merchant_routes : customer_routes)
+      end
+
+      def merchant_routes
+        product, order = @product.underscore, @order.underscore
+  "
+  namespace :#{@namespace.to_sym} do
+    resources :#{product.pluralize} do
+      member do
+        post :put_on_shelf
+        post :sold_out
+      end
+      resources :#{product}_series
+    end
+    resources :#{order.pluralize}, only: [:index, :show, :update] do
+      member do
+        post :send_out
+      end
+      resources :#{product}_snapshots, only: [:index, :show, :update]
+    end
+    resources :#{product}_series do #, excpet: :index
+      resources :#{product}_snapshots, only: [:index, :show, :update]
+    end
+  end
+  "
+      end
+
+      def customer_routes
+        product, order = @product.underscore, @order.underscore        
+  "
+  namespace :#{@namespace.to_sym} do        
+    resources :#{product.pluralize}, only: [:index, :show] do
+      resources :#{product}_series, only: [:index, :show]
+    end
+    resources :#{product}_snapshots, only: [:index, :show]
+    resources :#{order.pluralize} do
+      member do
+        post :pay
+        post :cancel
+        post :get_it
+      end
+      collection do
+        get :cart
+        post :create_directly
+        post :add_to_cart
+      end
+      resources :#{product}_snapshots, only: [:index, :create]
+    end
+  end"
       end
     end
   end

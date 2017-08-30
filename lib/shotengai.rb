@@ -12,7 +12,6 @@ module Shotengai
   autoload :Catalog,         'shotengai/catalog'
   autoload :AASM_DLC,        'shotengai/aasm_dlc'
   autoload :WebError,        'shotengai/web_error'
-  autoload :Engine,          'shotengai/engine'
 
   module Controller
     autoload :Base, 'shotengai/controllers/base'

@@ -38,7 +38,7 @@ For example:
         create  app/models/my_order.rb
         create  app/models/my_catalog.rb
 
-#Controller Generator:
+#Controller & Routes Generator:
 ```ruby
     # attr: 
     #   role ( merchant | customer )
@@ -51,7 +51,8 @@ For example:
 ```shell
     $ rails g shotengai:controllers merchant -n my_merchant --product MyProduct --order MyOrder
 ```
-This will create serveral controller classes inherited from merchant product and order class 
+This will create serveral controller classes inherited from merchant product and order class,
+    and add routes to your config/routes.rb.
     
     For example:
         app/controllers/store/product_controller.rb like this:
@@ -59,7 +60,7 @@ This will create serveral controller classes inherited from merchant product and
         class Store::MyProductsController < Shotengai::Merchant::ProductsController
         content...
         end
-        
+
 #Views Generator:
 ```shell
     $ rails g shotengai:views -f
