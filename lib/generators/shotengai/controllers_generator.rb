@@ -57,7 +57,6 @@ module Shotengai
         end
         create_routes
         create_factory
-
         create_request_spec
       end
 
@@ -67,7 +66,7 @@ module Shotengai
 
       def create_factory
         Dir["#{self.class.source_root}/../spec/factories/*.rb"].each do |path|
-          template path, "spec/shotengai/#{path.match(/(.*)\/spec\/(.*)/)[2]}"
+          template path, "spec/#{path.match(/(.*)\/spec\/(.*)/)[2]}"
         end
       end
 
