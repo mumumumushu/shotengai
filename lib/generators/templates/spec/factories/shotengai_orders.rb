@@ -28,7 +28,7 @@
 #
 
 FactoryGirl.define do
-  factory :order, class_name: '<%= @order %>' do
+  factory :order, class: '<%= @order %>' do
 
   end
 end
