@@ -57,8 +57,6 @@ module Shotengai
         create_factory
 
         create_request_spec
-                require 'irb'
-        binding.irb
       end
 
       def create_routes
