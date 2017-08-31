@@ -11,7 +11,7 @@ module Shotengai
         Use --catalog to custom your own catalog class
 
         For example:
-          rails g shotengai:models --product MyProduct --order MyOrder
+          rails g shotengai:models --product MyProduct --order MyOrder --catalog Catalog
         This will create some model file:
               create  app/models/my_product.rb
               create  app/models/my_product_series.rb

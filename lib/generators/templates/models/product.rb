@@ -1,3 +1,3 @@
 class <%= @product_name %> < Shotengai::Product
-  join_catalog_system 'Cataglog'
+  join_catalog_system 'Catalog'
 end

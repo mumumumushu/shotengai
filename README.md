@@ -36,7 +36,7 @@ For example:
 ```shell
     $ rails g shotengai:models --product MyProduct --order MyOrder
 ```
-    This will create two model file:
+    This will create several model files:
         create  app/models/my_product.rb
         create  app/models/my_product_series.rb
         create  app/models/my_product_snapshot.rb
