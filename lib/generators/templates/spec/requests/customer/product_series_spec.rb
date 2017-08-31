@@ -46,11 +46,9 @@ RSpec.describe "#{namespace}/products/:product_id/product_series", type: :reques
     end
   end
 
-  path "/#{namespace}/products/{product_id}/product_series/{id}" do
+  path "/#{namespace}/product_series/{id}" do
     parameter :id, in: :path, type: :string
-    parameter :product_id, in: :path, type: :string
 
-    let(:product_id) { @product_1.id }
     let(:id) { @series_1.id }
 
     get(summary: '用户 商品系列的详情') do

@@ -18,7 +18,7 @@ module Shotengai
           options.values_at(:customer, :merchant, :product, :order)
         Dir["#{self.class.source_root}/**/*.rb"].each do |path|
           relative_path = path.gsub(self.class.source_root, '')
-          template path, "app/spec/shotengai/#{relative_path}"
+          template path, "spec/shotengai/#{relative_path}"
         end
       end
     end

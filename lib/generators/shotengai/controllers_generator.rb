@@ -64,20 +64,20 @@ module Shotengai
         product, order = @product.underscore, @order.underscore
   "
   namespace :#{@namespace.to_sym} do
-    resources :#{product.pluralize} do
+    resources :#{product.pluralize}, shallow: true do
       member do
         post :put_on_shelf
         post :sold_out
       end
       resources :#{product}_series
     end
-    resources :#{order.pluralize}, only: [:index, :show, :update] do
+    resources :#{order.pluralize}, only: [:index, :show, :update], shallow: true do
       member do
         post :send_out
       end
       resources :#{product}_snapshots, only: [:index, :show, :update]
     end
-    resources :#{product}_series do #, excpet: :index
+    resources :#{product}_series, shallow: true do #, excpet: :index
       resources :#{product}_snapshots, only: [:index, :show, :update]
     end
   end
@@ -88,11 +88,11 @@ module Shotengai
         product, order = @product.underscore, @order.underscore        
   "
   namespace :#{@namespace.to_sym} do        
-    resources :#{product.pluralize}, only: [:index, :show] do
+    resources :#{product.pluralize}, shallow: true, only: [:index, :show] do
       resources :#{product}_series, only: [:index, :show]
     end
     resources :#{product}_snapshots, only: [:index, :show]
-    resources :#{order.pluralize} do
+    resources :#{order.pluralize}, shallow: true do
       member do
         post :pay
         post :cancel

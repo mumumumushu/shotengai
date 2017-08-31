@@ -8,3 +8,4 @@
 /spec/reports/
 /tmp/
 /mysql.yml
+/.rspec_status

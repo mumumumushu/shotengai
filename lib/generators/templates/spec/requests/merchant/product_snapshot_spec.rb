@@ -77,11 +77,8 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
     end
   end
 
-  path "/#{namespace}/product_series/{product_series_id}/product_snapshots/{id}" do
-    parameter :product_series_id, in: :path, type: :string
+  path "/#{namespace}/product_snapshots/{id}" do
     parameter :id, in: :path, type: :string
-
-    let(:product_series_id) { @series_1.id }
     let(:id) { @snapshot_1.id }
 
     get(summary: '商户 商品快照的详情') do
