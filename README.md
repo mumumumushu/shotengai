@@ -21,10 +21,15 @@ Or install it yourself as:
     $ gem install shotengai
 
 ## Rails Generators
-#Model Generator:
+# Migration Generator
+```shell
+    $ rails g shotengai:migrations
+```
+
+# Model Generator:
 ```ruby
     # options:
-    #   --produt           custom your own product class
+    #   --product           custom your own product class
     #   --order            custom your own order class
 ```
 For example:
@@ -38,7 +43,7 @@ For example:
         create  app/models/my_order.rb
         create  app/models/my_catalog.rb
 
-#Controller & Routes Generator:
+# Controller & Routes Generator:
 ```ruby
     # attr: 
     #   role ( merchant | customer )
@@ -61,13 +66,13 @@ This will create serveral controller classes inherited from merchant product and
         content...
         end
 
-#Views Generator:
+# Views Generator:
 ```shell
     $ rails g shotengai:views -f
 ```
 This will copy shotengai example views to your application under 'app/views/shotengai/'.
 
-#Spec Generator:
+# Spec Generator:
 ```shell
     $ rails g shotengai:spec --customer User --merchant Merchant --product MyProduct --order Myorder
 ```
