@@ -1,5 +1,5 @@
 require 'swagger_helper'
-namespace = '<%= @customer_class_name.underscore %>'
+namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, tags: ["#{namespace} API", "order"] do
   before do
     @user = create(:user)

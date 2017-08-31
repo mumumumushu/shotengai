@@ -26,7 +26,7 @@
 #
 
 FactoryGirl.define do
-  factory :product, class: '<%= @product_class_name %>' do
+  factory :product, class: '<%= @product %>' do
     title 'Test Product Title'
     # status
     spec {

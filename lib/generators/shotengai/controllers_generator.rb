@@ -54,10 +54,27 @@ module Shotengai
                    "app/controllers/#{@namespace}/#{@klass_name.underscore.pluralize}_controller.rb"
         end
         create_routes
+        create_factory
+
+        create_request_spec
+                require 'irb'
+        binding.irb
       end
 
       def create_routes
         route (@role == 'merchant' ? merchant_routes : customer_routes)
+      end
+
+      def create_factory
+        Dir["#{self.class.source_root}/../spec/factories/*.rb"].each do |path|
+          template path, "spec/shotengai/#{path.match(/(.*)\/spec\/(.*)/)[2]}"
+        end
+      end
+
+      def create_request_spec
+        Dir["#{self.class.source_root}/../spec/requests/#{@role}/*.rb"].each do |path|
+          template path, "spec/shotengai/#{path.match(/(.*)\/spec\/(.*)/)[2]}"
+        end
       end
 
       def merchant_routes

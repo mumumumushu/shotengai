@@ -20,7 +20,7 @@
 #
 
 FactoryGirl.define do
-  factory :product_series, class: '<%= "#{@product_class_name}Series" %>' do
+  factory :product_series, class: '<%= "#{@product}Series" %>' do
     original_price 100
     price 80
     stock 10

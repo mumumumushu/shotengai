@@ -27,7 +27,7 @@
 
 FactoryGirl.define do
 
-  factory :product_snapshot, class: '<%= "#{@product_class_name}Snapshot" %>' do
+  factory :product_snapshot, class: '<%= "#{@product}Snapshot" %>' do
     original_price 100
     price 80
     count 2

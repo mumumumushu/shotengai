@@ -1,5 +1,5 @@
 require 'swagger_helper'
-namespace = '<%= @customer_class_name.underscore %>'
+namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, tags: ["#{namespace} API", "product"] do
   before do
     class Catalog < Shotengai::Catalog; end

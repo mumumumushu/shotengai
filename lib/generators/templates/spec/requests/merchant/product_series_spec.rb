@@ -1,5 +1,5 @@
 require 'swagger_helper'
-namespace = '<%= @merchant_class_name.underscore %>'
+namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/products/:product_id/product_series", type: :request, capture_examples: true, tags: ["#{namespace} API", "product_series"] do
   before do
     @clothes = Catalog.create!(name: '衣服')

@@ -1,5 +1,5 @@
 require 'swagger_helper'
-namespace = '<%= @customer_class_name.underscore %>'
+namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/products/:product_id/product_series", type: :request, capture_examples: true, tags: ["#{namespace} API", "product_series"] do
   before do
     @products = create_list(:product, 3)
