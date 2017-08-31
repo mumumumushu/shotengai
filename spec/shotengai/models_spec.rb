@@ -156,7 +156,7 @@ RSpec.describe 'Shotengai Models' do
           @order.pay!
           expect(@order.reload.pay_time).not_to be_nil
           # copy snapshot info from series
-          expect(@snapshot_1.reload.attributes.values.include?(nil)).to eq(false)
+          expect(@snapshot_1.reload.attributes.values.expect(:revised_amount).include?(nil)).to eq(false)
           @order.send_out!
           # set delivery_time
           expect(@order.reload.delivery_time).not_to be_nil
