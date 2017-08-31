@@ -15,8 +15,10 @@ module Shotengai
 
           rails generate shotengai:controllers merchant -n my_merchant --product MyProduct --order MyOrder
 
-        This will create serveral controller classes inherited from merchant product and order class, 
-          and add all routes about merchant.
+        This will 
+          1. Create serveral controller classes inherited from merchant product and order class.
+          2. Create swagger requests spec for those controllers and all factories files.
+          3. Add all routes about merchant to your config/routes.rb.
           
         For example:
           app/controllers/store/product_controller.rb like this:
