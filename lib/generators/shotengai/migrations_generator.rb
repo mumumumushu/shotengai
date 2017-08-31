@@ -8,6 +8,7 @@
         desc 'Copy shotengai migrations to your application.'
 
         def self.next_migration_number(dir)
+          sleep 1
           Time.now.utc.strftime("%Y%m%d%H%M%S")
         end
 
