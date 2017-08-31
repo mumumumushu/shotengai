@@ -1,5 +1,12 @@
 class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
   def change 
+    create_product
+    create_series
+    create_order
+    create_snapshot
+  end
+
+  def create_product
     create_table :shotengai_products do |t|
       t.string :title
       t.string :status
@@ -18,11 +25,13 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.string :manager_type 
 
       t.timestamps
-    end
+    end   
 
     add_index :shotengai_products, [:manager_id, :manager_type]    
     add_index :shotengai_products, :type
-
+  end
+  
+  def create_series
     create_table :shotengai_series do |t|
       t.decimal :original_price, precision: 9, scale: 2
       t.decimal :price, precision: 9, scale: 2
@@ -38,7 +47,9 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
     end
     
     add_index :shotengai_series, :type
+  end
 
+  def create_order
     create_table :shotengai_orders do |t|
       t.integer :seq
       t.string :address
@@ -62,7 +73,9 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
 
     add_index :shotengai_orders, :type
     add_index :shotengai_orders, [:buyer_id, :buyer_type]
+  end
 
+  def create_snapshot
     create_table :shotengai_snapshots do |t|
       t.decimal :original_price, precision: 9, scale: 2
       t.decimal :price, precision: 9, scale: 2
