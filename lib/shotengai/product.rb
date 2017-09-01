@@ -38,9 +38,17 @@ module Shotengai
       state :no_on, initial: true
       state :on_sale, :deleted
 
-      event :put_on_shelf { transitions from: :no_on, to: :on_sale }
-      event :sold_out { transitions from: :on_sale, to: :no_on }
-      event :soft_delete { transitions from: [:on_sale, :no_on], to: :deleted }
+      event :put_on_shelf do
+        transitions from: :no_on, to: :on_sale 
+      end
+      
+      event :sold_out do
+        transitions from: :on_sale, to: :no_on 
+      end
+      
+      event :soft_delete do
+        transitions from: [:on_sale, :no_on], to: :deleted 
+      end
     end
 
     def status_zh

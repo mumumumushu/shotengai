@@ -40,18 +40,21 @@ module Shotengai
       state :unpaid, initial: true
       state :paid, :delivering, :received, :canceled, :evaluated
       
-      event :pay, before: [:fill_snapshot, :set_pay_time] { 
+      event :pay, before: [:fill_snapshot, :set_pay_time] do
         transitions from: :unpaid, to: :paid 
-      }
-      event :cancel { 
+      end
+
+      event :cancel do
         transitions from: :unpaid, to: :canceled 
-      }
-      event :send_out, after: :set_delivery_time { 
+      end
+
+      event :send_out, after: :set_delivery_time do 
         transitions from: :paid, to: :delivering 
-      }
-      event :get_it, after: :set_receipt_time { 
+      end
+      
+      event :get_it, after: :set_receipt_time do
         transitions from: :delivering, to: :received 
-      }
+      end
       # event :evaluate { 
       #   transitions from: :received, to: :evaluated 
       # }
