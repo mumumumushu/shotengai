@@ -64,6 +64,13 @@ module Shotengai
     end
 
     class << self
+      def series_class
+        Shotengai::Series
+      end
+
+      def snapshot_class
+        Shotengai::Snapshot
+      end
       # TODO:  ::#{subclass}Series 增加命名规则定义 降低耦合性？？
       def inherited(subclass)
         # 创建相关 series 与 snapshot
@@ -75,8 +82,8 @@ module Shotengai
       def define_related_class subclass
         # Useing Class.new could not get class_name in self.inherited
         class_eval("
-          class ::#{subclass}Series < Shotengai::Series; end;
-          class ::#{subclass}Snapshot < Shotengai::Snapshot; end
+          class ::#{subclass}Series < #{self.series_class}; end;
+          class ::#{subclass}Snapshot < #{self.snapshot_class}; end
         ")
         subclass.instance_eval do
           def series_class;  "#{self.name}Series".constantize ; end

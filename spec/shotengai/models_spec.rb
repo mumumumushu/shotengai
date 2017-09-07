@@ -266,6 +266,29 @@ RSpec.describe 'Shotengai Models' do
     end
   end
 
+
+  describe 'Nested Inherited' do
+    before do
+      class Good < Shotengai::Product; end
+      class NestedGood < Good; end
+      class GoodSeries
+        def a
+          'outside a'
+        end
+      end
+      class NestedGoodSeries < GoodSeries
+        def a
+          'nested a'
+        end
+      end
+    end
+
+    it 'does something' do
+      expect(GoodSeries.new.a).to eq('outside a')
+      expect(NestedGoodSeries.new.a).to eq('nested a')
+    end
+  end
+
   after do
     ActiveRecord::Migration[5.1].subclasses.each do |migrate|
       migrate.migrate(:down)
@@ -273,6 +296,3 @@ RSpec.describe 'Shotengai Models' do
   end
 end
 
-# ActiveRecord::Migration[5.1].subclasses.each do |migrate|
-#   migrate.migrate(:down)
-# end
