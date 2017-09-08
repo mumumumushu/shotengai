@@ -72,6 +72,18 @@ This will create serveral controller classes inherited from merchant product and
 ```
 This will copy shotengai example views to your application under 'app/views/shotengai/'.
 
+## Methods
+
+### Order
+Add snapshots into order:
+``` ruby
+ Order.create.incr_snapshot_ids= [ some_snapshot_ids ]
+```
+Add snapshot into cart (a new snapshot or a snapshot in order):
+``` ruby
+ Order.create.gone_snapshot_ids= [ some_snapshot_ids ]
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
