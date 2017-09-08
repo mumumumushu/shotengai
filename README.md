@@ -77,30 +77,30 @@ This will copy shotengai example views to your application under 'app/views/shot
 ### Buy Product with Order
 Use methods in buyer model with series_id:
     Add into cart:
-    ``` ruby
+```ruby
         # snapshot_params = params.require(:snapshot).permit(
         #   :shotengai_series_id, :count, # .. and so on
         # )
         @user.add_to_order_cart(snapshot_params)
-    ```
+```
     Create order by series_id immediately:
-    ```
+```ruby
         @user.buy_it_immediately(snapshot_params, order_params)
-    ```
+```
     You can also use methods in order model here by adding params like 
-    ``` ruby
+```ruby
     { incr_snapshot_ids: [1, 2, 3] } 
-    ```
+```
 
 Or use methods in order model with snapshot_id
     Add snapshots into order:
-    ``` ruby
+```ruby
     Order.create.incr_snapshot_ids= [ some_snapshot_ids ]
-    ```
+```
     Add snapshots into cart (a new snapshot or snapshots in order unpaid):
-    ``` ruby
+```ruby
     Order.create.gone_snapshot_ids= [ some_snapshot_ids ]
-    ```
+```
 
 
 ## Development
