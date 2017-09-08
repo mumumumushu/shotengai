@@ -102,7 +102,8 @@ module Shotengai
       ActiveRecord::Base.transaction do
         ids.each { |id| 
           # using update(shotengai_order_id: id) can not get self.id before save
-          Shotengai::Snapshot.find(id).update!(shotengai_order: self)
+          Shotengai::Snapshot.find(id).update!(shotengai_order_id: self.id)
+          
         }
       end
     end

@@ -25,18 +25,12 @@ module Shotengai
         end
 
         def add_to_cart
-          snapshot = @buyer.order_cart.product_snapshots.create!(snapshot_params)
+          snapshot = @buyer.add_to_order_cart(snapshot_params) 
           respond_with @resource = snapshot, template: 'shotengai/customer/snapshots/show', status: 201
         end
 
         def create_directly # using :series_id & :count
-          ActiveRecord::Base.transaction do
-            @resource = @buyer.orders.create!(resource_params)
-            Shotengai::Series.find(snapshot_params[:shotengai_series_id]).snapshots.create!(
-                count: snapshot_params[:count],
-                shotengai_order: @resource
-              )
-          end
+          @resource = @buyer.buy_it_immediately(snapshot_params, resource_params)
           respond_with @resource, template: "#{@@template_dir}/show", status: 201
         end
 
