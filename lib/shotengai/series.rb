@@ -55,6 +55,11 @@ module Shotengai
       end
     end
 
+    def cut_stock count
+      self.stock -= count
+      self.save!
+    end
+
     private 
       # spec 字段
       def check_spec_value
@@ -66,7 +71,7 @@ module Shotengai
       end
 
       def uniq_spec
-        errors.add(:spec, 'Non uniq spec for the product.') if self.class.where(self.spec, self.product).any?
+        errors.add(:spec, 'Non uniq spec for the product.') if self.class.query_spec_with_product(self.spec, self.product).any?
       end
 
       def validate_stock
