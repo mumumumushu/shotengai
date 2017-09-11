@@ -72,6 +72,7 @@ module Shotengai
 
     # 订单支付后 存储当时信息快照
     def copy_info
+      # cut_stock
       self.update!(
         original_price: series.original_price,
         price: series.price,
@@ -81,6 +82,10 @@ module Shotengai
         detail: series.detail,
         meta: series.product.meta.merge(series.meta)
       )
+    end
+
+    def cut_stock
+      self.series.cut_stock
     end
 
     def meta

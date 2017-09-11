@@ -30,7 +30,8 @@ module Shotengai
     belongs_to :buyer, polymorphic: true, optional: true
 
     default_scope { where(status: 'cart') } 
-
+    validates_uniqueness_of :buyer_id, scope: [:buyer_type]
+    
     #
     #  class Order < Shotengai::Order
     #     can_by 'Product'

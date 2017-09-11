@@ -6,7 +6,7 @@ module Shotengai
   #  id                    :integer          not null, primary key
   #  original_price        :decimal(9, 2)
   #  price                 :decimal(9, 2)
-  #  stock                 :integer
+  #  stock                 :integer          default(-1)
   #  spec                  :json
   #  type                  :string(255)
   #  meta                  :json
@@ -32,10 +32,13 @@ module Shotengai
     
     # where(spec->'$.\"颜色\"' = ?  and spec->'$.\"大小\"' = ? ,红色,S)
     scope :query_spec_with_product, ->(val, product) { 
-      return none unless val.keys.sort == product.spec.keys.sort 
-      keys = []; values = []
-      val.map { |k, v| keys << "spec->'$.\"#{k}\"' = ? "; values << v }
-      where(keys.join(' and '), *values)
+      if val.keys.sort == product.spec.keys.sort 
+        keys = []; values = []
+        val.map { |k, v| keys << "spec->'$.\"#{k}\"' = ? "; values << v }
+        where(keys.join(' and '), *values)
+      else
+        self.none 
+      end
     }
 
     class << self
@@ -56,8 +59,7 @@ module Shotengai
     end
 
     def cut_stock count
-      self.stock -= count
-      self.save!
+      self.stock.eql?(-1) || self.update!(stock: self.stock - count)
     end
 
     private 
@@ -71,7 +73,9 @@ module Shotengai
       end
 
       def uniq_spec
-        errors.add(:spec, 'Non uniq spec for the product.') if self.class.query_spec_with_product(self.spec, self.product).any?
+        if self.class.query_spec_with_product(self.spec, self.product).where.not(id: self.id).any?
+          errors.add(:spec, 'Non uniq spec for the product.') 
+        end
       end
 
       def validate_stock

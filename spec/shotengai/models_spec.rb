@@ -67,20 +67,36 @@ RSpec.describe 'Shotengai Models' do
       it 'validate' do
         expect(@series.spec.class).to eq(Hash)
         # 非法关键字
-        expect{
+        expect {
           @series.update!(spec: {"颜色" => "红色", "大小" => 1111 })
         }.to raise_error(ActiveRecord::RecordInvalid)
         # 关键字缺失
+        # require 'irb'
+        # binding.irb
         expect{ 
           @series.update!(spec: {"颜色" => "红色"})
         }.to raise_error(ActiveRecord::RecordInvalid)
         # uniq validate about spec
-        TestGoodSeries.create!(
-          FactoryGirl.attribute_for(:test_series).merge(
-            {test_good: @good}
+        expect {
+          TestGoodSeries.create!(
+            FactoryGirl.attributes_for(:test_series).merge(
+              {test_good: @good}
+            )
           )
-        )
+        }.to raise_error(ActiveRecord::RecordInvalid)
+      end
 
+      it 'About Stock' do
+        # 默认为 -1 （无限库存）
+        @series.cut_stock(1000)
+        expect(@series.reload.stock).to eq(-1)
+        # 非无限库存
+        @series.update!(stock: 10)
+        @series.cut_stock(10)
+        expect(@series.reload.stock).to eq(0)
+        expect { 
+          @series.cut_stock(20)
+        }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it 'Associations' do

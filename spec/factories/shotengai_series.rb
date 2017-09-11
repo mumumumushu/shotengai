@@ -5,7 +5,7 @@
 #  id                    :integer          not null, primary key
 #  original_price        :decimal(9, 2)
 #  price                 :decimal(9, 2)
-#  stock                 :integer
+#  stock                 :integer          default(-1)
 #  spec                  :json
 #  type                  :string(255)
 #  meta                  :json
@@ -18,7 +18,7 @@ FactoryGirl.define do
   factory :test_series, class: 'TestGoodSeries' do
     original_price 100
     price 80
-    stock 10
+    # stock 10
     spec {
       {
         "颜色" => "红色",
@@ -41,7 +41,7 @@ FactoryGirl.define do
     spec {
       {
         "颜色" => "红色",
-        "大小" => "S",
+        "大小" => "L",
       }
     }
     # type 

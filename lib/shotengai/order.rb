@@ -40,7 +40,7 @@ module Shotengai
       state :unpaid, initial: true
       state :paid, :delivering, :received, :canceled, :evaluated
       
-      event :pay, before: [:fill_snapshot, :set_pay_time] do
+      event :pay, before: [:fill_snapshot, :cut_stock, :set_pay_time] do
         transitions from: :unpaid, to: :paid 
       end
 
@@ -74,6 +74,12 @@ module Shotengai
     def fill_snapshot
       ActiveRecord::Base.transaction {
         self.snapshots.each(&:copy_info)
+      }
+    end
+
+    def cut_stock
+      ActiveRecord::Base.transaction {
+        self.snapshots.each(&:cut_stock)
       }
     end
 
