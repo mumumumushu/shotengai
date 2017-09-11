@@ -5,8 +5,8 @@ module Shotengai
         self.resources = ProductSnapshot
         self.template_dir = 'shotengai/customer/snapshots/'
         
-        before_action :edit_only_unpaid, only: [:update, :destroy]
-
+        before_action :buyer_auth
+        before_action :edit_only_unpaid, except: [:index, :show, :create]
         default_query do |resource, params|
           # /orders/:order_id/snapshots
           # /series/:series_id/snapshots
@@ -21,19 +21,22 @@ module Shotengai
           params[:in_cart] ? resource.in_cart : resource.in_order
         end
 
+        # 不指定 order 时，默认创建在 cart 中
+        # TODO: WARNING: snapshots
         def create
-          buyer_type, buyer_id = resource_params.values_at(:buy_type, :buyer_id)
-          @buyer = buyer_type.constantize.find(buyer_id) if buyer_type && buyer_id
-          @resource = default_resources.create!(
-            resource_params.merge(buyer: buyer)
-          )
+          order_or_cart = Shotengai::Order.find_by_id(params[:order_id]) || @buyer.order_cart
+          @resource = order_or_cart.product_snapshots.create!(resource_params)
           respond_with @resource, template: "#{@@template_dir}/show", status: 201
         end
 
         private
+          def buyer_auth
+            @buyer = params[:buyer_type].constantize.find(params[:buyer_id])
+          end
+
           def resource_params
             params.require(resource_key).permit(
-              :count, :shotengai_series_id, :buyer_id, :buy_type
+              :count, :shotengai_series_id
             )
           end
 

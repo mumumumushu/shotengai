@@ -79,7 +79,7 @@ module Shotengai
       def merchant_routes
         product, order = @product.underscore, @order.underscore
   "
-  namespace :#{@namespace.to_sym} do
+  namespace :#{@namespace} do
     resources :#{product.pluralize}, shallow: true do
       member do
         post :put_on_shelf
@@ -103,29 +103,26 @@ module Shotengai
       def customer_routes
         product, order = @product.underscore, @order.underscore        
   "
-  namespace :#{@namespace.to_sym} do        
+  namespace :#{@namespace} do        
     resources :#{product.pluralize}, shallow: true, only: [:index, :show] do
-      resources :#{product}_series, only: [:index, :show]
+      resources :product_series, only: [:index, :show]
     end
     resources :#{product}_snapshots, only: [:index, :show]
-    resources :#{order.pluralize}, shallow: true do
+    # order_cart
+    resource :cart, only: [:show, :update] do
+      resources :#{product}_snapshots 
+    end
+
+    resources :#{order.pluralize} do
+      resources :#{product}_snapshots
       member do
         post :pay
-        post :cancel
-        post :get_it
+        post :confirm
       end
-      collection do
-        get :cart
-        post :create_directly
-        post :add_to_cart
-      end
-      resources :#{product}_snapshots, only: [:index, :create]
     end
-  end"
+  end
+  "
       end
     end
   end
 end
-   
-      
-      

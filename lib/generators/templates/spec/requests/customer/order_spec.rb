@@ -29,14 +29,14 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
 
     @orders = create_list(:order, 3, buyer: @user)
     @order_1 = @orders.first
-    @cart = @order_1.class.cart_class.create!(buyer: @user)
+    @cart = @user.order_cart
 
     @snapshot_1.update!(order: @order_1)
     @snapshot_other.update!(order: @order_1)
     @snapshot_2.update!(order_cart: @cart)
   end
 
-  path "/#{namespace}/orders/cart" do
+  path "/#{namespace}/cart" do
     
     get(summary: '用户 购物车') do
       produces 'application/json'
@@ -52,7 +52,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
     end
   end
 
-  path "/#{namespace}/orders/add_to_cart" do
+  path "/#{namespace}/cart/product_snapshots" do
     
     post(summary: '用户 添加快照至购物车( using series_id & count )') do
       produces 'application/json'
@@ -63,9 +63,9 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
       let(:buyer_type) { @user.class.name }
 
 
-      parameter :snapshot, in: :body, schema: {
+      parameter :product_snapshot, in: :body, schema: {
         type: :object, properties: {
-          snapshot: {
+          product_snapshot: {
             type: :object, properties: {
               shotengai_series_id: { type: :integer },
               count: { type: :integer },
@@ -75,9 +75,9 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
       }
 
       response(201, description: 'Create snapshot and add it to the cart') do
-        let(:snapshot) { 
+        let(:product_snapshot) { 
           {
-            snapshot: { 
+            product_snapshot: { 
               shotengai_series_id: @series_1.id,
               count: 10,
             }
@@ -177,7 +177,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
   end
 
 
-  path "/#{namespace}/orders/create_directly" do
+  path "/#{namespace}/orders" do
     post(summary: 'create order') do
       produces 'application/json'
       consumes 'application/json'
@@ -193,7 +193,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
               address: { type: :string },
               user_remark: { type: :text },
             },
-          snapshot: {
+          snapshots: {
             type: :object, properties: {
               shotengai_series_id: { type: :integer },
               count: { type: :integer },
@@ -210,7 +210,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
               address: 'This is an special address.',
               user_remark: 'user remark ...'
             },
-            snapshot: { 
+            snapshots: { 
               shotengai_series_id: @series_1.id,
               count: 10,
             }
@@ -303,6 +303,20 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
         }
       end
     end
+
+    delete(summary: '用户 取消未支付订单') do
+      produces 'application/json'
+      consumes 'application/json'
+      parameter :buyer_type, in: :query, type: :string
+      parameter :buyer_id, in: :query, type: :integer
+      let(:buyer_id) { @user.id }
+      let(:buyer_type) { @user.class.name }
+
+      produces 'application/json'
+      consumes 'application/json'
+      response(204, description: 'successful') do
+      end
+    end
   end
 
   path "/#{namespace}/orders/{id}/pay" do
@@ -326,33 +340,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
     end
   end
 
-  path "/#{namespace}/orders/{id}/cancel" do
-    parameter :id, in: :path, type: :integer
-
-    let(:id) { @order_1.id }
-
-    post(summary: '用户 取消未支付订单') do
-      produces 'application/json'
-      consumes 'application/json'
-      parameter :buyer_type, in: :query, type: :string
-      parameter :buyer_id, in: :query, type: :integer
-      let(:buyer_id) { @user.id }
-      let(:buyer_type) { @user.class.name }
-
-      produces 'application/json'
-      consumes 'application/json'
-      response(200, description: 'successful') do
-        it { expect(JSON.parse(response.body)['status']).to eq('canceled') }
-      end
-
-      response(400, description: 'failed , you can cancel a order which status is unpaid') do
-        before { @order_1.pay! }
-        it { expect(response.status).to eq(400) }
-      end
-    end
-  end
-
-  path "/#{namespace}/orders/{id}/get_it" do
+  path "/#{namespace}/orders/{id}/confirm" do
     parameter :id, in: :path, type: :integer
 
     let(:id) { @order_1.id }

@@ -7,8 +7,6 @@ module Shotengai
         
         before_action :buyer_auth
         before_action :edit_only_unpaid, only: [:update]
-        # before_action would not keep the super methods' "only" condition
-        skip_before_action :set_resource, only: [:cart, :add_to_cart, :create_directly]
 
         remove_actions :destroy
         
@@ -18,19 +16,9 @@ module Shotengai
         index_query do |resource, params|
           resource.status_is(params[:status])
         end
-        
-        def cart
-          @resource = @buyer.order_cart  
-          respond_with @resource, template: "shotengai/customer/cart/show"
-        end
 
-        def add_to_cart
-          snapshot = @buyer.add_to_order_cart(snapshot_params) 
-          respond_with @resource = snapshot, template: 'shotengai/customer/snapshots/show', status: 201
-        end
-
-        def create_directly # using :series_id & :count
-          @resource = @buyer.buy_it_immediately(snapshot_params, resource_params)
+        def create # Use :series_id & :count
+          @resource = @buyer.buy_it_immediately(snapshots_params, resource_params)
           respond_with @resource, template: "#{@@template_dir}/show", status: 201
         end
 
@@ -39,13 +27,13 @@ module Shotengai
           respond_with @resource, template: "#{@@template_dir}/show"
         end
 
-        def cancel
+        def destroy
           @resource.cancel!
-          respond_with @resource, template: "#{@@template_dir}/show"
+          head 204
         end
 
-        def get_it
-          @resource.get_it
+        def confirm
+          @resource.confirm!
           respond_with @resource, template: "#{@@template_dir}/show"
         end
 
@@ -55,14 +43,14 @@ module Shotengai
           end
 
           def resource_params
-            params.require(resource_key).permit(
+            params[resource_key] && params.require(resource_key).permit(
               :address, :customer_remark, 
               incr_snapshot_ids: [], gone_snapshot_ids: []
             )
           end
 
-          def snapshot_params
-            params.require(:snapshot).permit(
+          def snapshots_params
+            params[:snapshots] && params.require(:snapshots).permit(
               :shotengai_series_id, :count
             )
           end

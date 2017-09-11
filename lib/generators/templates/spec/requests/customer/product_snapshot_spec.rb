@@ -2,6 +2,7 @@ require 'swagger_helper'
 namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_examples: true, tags: ["#{namespace} API", "product_snapshots"] do
   before do
+    @user = create(:user)
     @products = create_list(:product, 3)
     @product_1 = @products.first
 
@@ -27,7 +28,7 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
     @snapshot_other = create(:product_snapshot, series: @series_2, count: 5)
 
     @order = create(:order)
-    @cart = Order::Cart.create!
+    @cart = @user.order_cart
     @snapshot_1.update!(order: @order)
     @snapshot_other.update!(order: @order)
     @snapshot_2.update!(order_cart: @cart)
@@ -36,7 +37,11 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
   path "/#{namespace}/product_snapshots" do
 
     get(summary: '用户 快照列表 三参数可仍以任意组合') do
-      
+      parameter :buyer_type, in: :query, type: :string
+      parameter :buyer_id, in: :query, type: :integer
+      let(:buyer_id) { @user.id }
+      let(:buyer_type) { @user.class.name }
+
       parameter :page, in: :query, type: :string
       parameter :per_page, in: :query, type: :string      
       parameter :series_id, in: :query, type: :integer
@@ -73,6 +78,11 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
   end
 
   path "/#{namespace}/product_snapshots/{id}" do
+    parameter :buyer_type, in: :query, type: :string
+    parameter :buyer_id, in: :query, type: :integer
+    let(:buyer_id) { @user.id }
+    let(:buyer_type) { @user.class.name }
+    
     let(:id) { @snapshot_1.id }
 
     get(summary: '商户 商品快照的详情') do

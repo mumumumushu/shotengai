@@ -52,7 +52,7 @@ module Shotengai
         transitions from: :paid, to: :delivering 
       end
       
-      event :get_it, after: :set_receipt_time do
+      event :confirm, after: :set_receipt_time do
         transitions from: :delivering, to: :received 
       end
       # event :evaluate { 
@@ -102,8 +102,7 @@ module Shotengai
       ActiveRecord::Base.transaction do
         ids.each { |id| 
           # using update(shotengai_order_id: id) can not get self.id before save
-          Shotengai::Snapshot.find(id).update!(shotengai_order_id: self.id)
-          
+          Shotengai::Snapshot.find(id).update!(shotengai_order: self)
         }
       end
     end
