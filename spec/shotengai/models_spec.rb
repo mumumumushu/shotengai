@@ -74,6 +74,13 @@ RSpec.describe 'Shotengai Models' do
         expect{ 
           @series.update!(spec: {"颜色" => "红色"})
         }.to raise_error(ActiveRecord::RecordInvalid)
+        # uniq validate about spec
+        TestGoodSeries.create!(
+          FactoryGirl.attribute_for(:test_series).merge(
+            {test_good: @good}
+          )
+        )
+
       end
 
       it 'Associations' do
@@ -86,6 +93,8 @@ RSpec.describe 'Shotengai Models' do
 
       it 'methods' do
         expect(@good.default_series).to eq(@series)
+        # scope :query_spec_with_product
+        expect(TestGoodSeries.query_spec_with_product(@series.spec, @series.product).first).to eq(@series)
       end
     end
 
@@ -160,7 +169,7 @@ RSpec.describe 'Shotengai Models' do
           @order.send_out!
           # set delivery_time
           expect(@order.reload.delivery_time).not_to be_nil
-          @order.get_it!
+          @order.confirm!
           # set receipt_time
           expect(@order.reload.receipt_time).not_to be_nil
         end

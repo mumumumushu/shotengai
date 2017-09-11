@@ -26,9 +26,11 @@ module Shotengai
     validate :check_spec_value
     # Using validates_uniqueness_of do not work if the order of Hash is diff
     validate :uniq_spec
+    validate :validate_stock
     
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, to: :product
-
+    
+    # where(spec->'$.\"颜色\"' = ?  and spec->'$.\"大小\"' = ? ,红色,S)
     scope :query_spec_with_product, ->(val, product) { 
       return none unless val.keys.sort == product.spec.keys.sort 
       keys = []; values = []
@@ -64,9 +66,11 @@ module Shotengai
       end
 
       def uniq_spec
-        self.product.series.each { |series| 
-          errors.add(:spec, 'Non uniq spec for the product.') if series.spec == spec
-        }
+        errors.add(:spec, 'Non uniq spec for the product.') if self.class.where(self.spec, self.product).any?
+      end
+
+      def validate_stock
+        errors.add(:stock, '该商品系列库存不足.') unless self.stock_was.eql?(-1) || self.stock >=0
       end
   end
 end

@@ -19,8 +19,8 @@ module Shotengai
         has_one cart_name.to_sym, class_name: klass.cart_class.name, as: :buyer
         # User.new Cart 相关
         class_eval("
-          after_create :create_#{cart_name}
-          
+          after_create :#{cart_name}
+
           def #{cart_name}
             super || create_#{cart_name}
           end
