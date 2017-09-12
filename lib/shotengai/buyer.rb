@@ -26,11 +26,16 @@ module Shotengai
           end
           
           def add_to_#{cart_name} snapshot_params
-            Shotengai::Series.find(snapshot_params[:shotengai_series_id]).snapshots.create!(
-                snapshot_params.merge({
-                  shotengai_order_id: self.#{cart_name}.id,
-                })
-              )
+            if Shotengai::Snapshot === snapshot_params
+              # snapshot_params is a snapshot object
+              snapshot_params.update!(#{cart_name}: self.#{cart_name})
+            else
+              Shotengai::Series.find(snapshot_params[:shotengai_series_id]).snapshots.create!(
+                  snapshot_params.merge({
+                    shotengai_order_id: self.#{cart_name}.id,
+                  })
+                )
+            end
           end
 
           def buy_it_immediately snapshots_params, order_params
