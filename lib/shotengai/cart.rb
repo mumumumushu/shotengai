@@ -58,7 +58,8 @@ module Shotengai
             self.model_name.singular.to_sym, 
             class_name: self.name, 
             optional: true, 
-            foreign_key: :shotengai_order_id
+            foreign_key: :shotengai_order_id,
+            touch: true,
           )
         end
       end

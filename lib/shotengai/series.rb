@@ -51,8 +51,8 @@ module Shotengai
 
       def add_associations
         # belongs to Product
-        @subclass.belongs_to :product, foreign_key: :shotengai_product_id, class_name: @product_name
-        @subclass.belongs_to @product_name.underscore.to_sym, foreign_key: :shotengai_product_id, class_name: @product_name
+        @subclass.belongs_to :product, foreign_key: :shotengai_product_id, class_name: @product_name, touch: true
+        @subclass.belongs_to @product_name.underscore.to_sym, foreign_key: :shotengai_product_id, class_name: @product_name, touch: true
         # has many snapshot
         @subclass.has_many :snapshots, class_name: "#{@product_name}Snapshot", foreign_key: :shotengai_series_id
       end

@@ -34,9 +34,9 @@ module Shotengai
     validate :cannot_edit_if_order_is_paid
 
     belongs_to :shotengai_order, foreign_key: :shotengai_order_id, 
-      class_name: 'Shotengai::Order', optional: true
+      class_name: 'Shotengai::Order', optional: true, touch: true
     belongs_to :shotengai_cart, foreign_key: :shotengai_order_id, 
-      class_name: 'Shotengai::Cart', optional: true
+      class_name: 'Shotengai::Cart', optional: true, touch: true
     
     scope :in_order, ->{ 
       joins("
@@ -58,8 +58,8 @@ module Shotengai
         product_name = /^(.+)Snapshot/.match(subclass.name)[1]
         series_name = "#{product_name}Series"
         # belongs to Series
-        subclass.belongs_to :series, foreign_key: :shotengai_series_id, class_name: series_name
-        subclass.belongs_to series_name.underscore.to_sym, foreign_key: :shotengai_series_id, class_name: series_name
+        subclass.belongs_to :series, foreign_key: :shotengai_series_id, class_name: series_name, touch: true
+        subclass.belongs_to series_name.underscore.to_sym, foreign_key: :shotengai_series_id, class_name: series_name, touch: true
         super
       end
     end
@@ -85,7 +85,7 @@ module Shotengai
     end
 
     def cut_stock
-      self.series.cut_stock
+      self.series.cut_stock(self.count)
     end
 
     def meta
