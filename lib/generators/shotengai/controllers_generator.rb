@@ -49,7 +49,7 @@ module Shotengai
           'orders' => @order,
           'product_series' => "#{@product}Series",
           'product_snapshots' => "#{@product}Snapshot",
-          'carts' => '::Order::Cart',
+          'carts' => 'Order::Cart',
           
         }.each do |key, klass_name|
           @key, @klass_name = key, klass_name
