@@ -8,11 +8,11 @@ module Shotengai
         remove_actions :create, :destroy
         before_action :edit_only_unpaid, only: :update
         
-        default_query do |resource, params|
+        default_query  do |resource, params, request|
           resource.in_order  
         end
 
-        index_query do |resource, params|
+        index_query  do |resource, params, request|
           resource.where(
               params[:order_id] && { shotengai_order_id: params[:order_id] }
             ).where(

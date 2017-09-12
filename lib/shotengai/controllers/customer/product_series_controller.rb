@@ -6,13 +6,13 @@ module Shotengai
         self.template_dir = 'shotengai/customer/series/'
         remove_actions :create, :update, :destroy
 
-        default_query do |resource, params|
+        default_query  do |resource, params, request|
           resource.where(
             params[:product_id] && { shotengai_product_id: params[:product_id] }
           )
         end
         
-        index_query do |resource, params|
+        index_query  do |resource, params, request|
         end
       end
     end

@@ -10,10 +10,11 @@ module Shotengai
 
         remove_actions :destroy
         
-        default_query do |resource, params|  
+        default_query  do |resource, params, request|  
         end
         
-        index_query do |resource, params|
+        index_query  do |resource, params, request|
+          request.params
           resource.status_is(params[:status])
         end
 

@@ -91,6 +91,39 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
     end
   end
 
+  path "/#{namespace}/orders/{id}/product_snapshots" do
+    get(summary: '某订单的 order 所有snapshots') do
+      produces 'application/json'
+      consumes 'application/json'
+      parameter :buyer_type, in: :query, type: :string
+      parameter :buyer_id, in: :query, type: :integer
+      let(:buyer_id) { @user.id }
+      let(:buyer_type) { @user.class.name }
+
+      parameter :id, in: :path, type: :integer
+
+      parameter :page, in: :query, type: :string
+      parameter :per_page, in: :query, type: :string
+      
+      let(:page) { 1 }
+      let(:per_page) { 100 }
+      let(:id) { @order_1.id }
+      
+      before do
+        @orders.last.product_snapshots.create!(
+          product_series: @series_1,
+          count: 100
+        )
+      end
+
+      response(200, description: 'successful') do
+        it {
+          body = JSON.parse(response.body)
+          expect(body['product_snapshots'].count).to eq(@order_1.snapshots.count)
+        }
+      end
+    end
+  end
 
   path "/#{namespace}/orders" do
 
@@ -122,62 +155,6 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
       end
     end
 
-    post(summary: '用户 创建订单(using incr_snapshot_ids') do
-      produces 'application/json'
-      consumes 'application/json'
-      parameter :buyer_type, in: :query, type: :string
-      parameter :buyer_id, in: :query, type: :integer
-      let(:buyer_id) { @user.id }
-      let(:buyer_type) { @user.class.name }
-
-      parameter :order, in: :body, schema: {
-        type: :object, properties: {
-          order: {
-            type: :object, properties: {
-              address: { type: :string },
-              user_remark: { type: :text },
-              incr_snapshot_ids: { type: :array },
-              # gone_snapshot_ids: { type: :array },
-            }
-          }
-        }
-      }
-      response(201, description: 'successful') do
-        let(:order) {{
-              order:  {
-                address: 'This is an special address.',
-                user_remark: 'user remark ...',
-                incr_snapshot_ids: [ @snapshot_2.id ],
-              }
-           }}
-        it {
-          body = JSON.parse(response.body)
-          expect(body['snapshots'].count).to eq(1)
-          expect(body['snapshots'].first['id']).to eq(@snapshot_2.id)
-          expect(@snapshot_2.reload.is_in_cart).to eq(false)
-        }
-      end
-
-      response(400, description: 'failed, Cannot edit a snapshot which order was already paid.') do
-  
-        let(:order) {{
-              order:  {
-                incr_snapshot_ids: [ @snapshot_1.id ],
-              }
-           }}
-        before { 
-          @order_1.pay!
-      }
-        it {
-          expect(response.status).to eq(400)
-        }
-      end
-      
-    end
-  end
-
-
-  path "/#{namespace}/orders" do
     post(summary: 'create order') do
       produces 'application/json'
       consumes 'application/json'
@@ -192,6 +169,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
             type: :object, properties: {
               address: { type: :string },
               user_remark: { type: :text },
+              incr_snapshot_ids: { type: :array },
             },
           snapshots: {
             type: :object, properties: {
@@ -208,7 +186,8 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
           {
             order:  {
               address: 'This is an special address.',
-              user_remark: 'user remark ...'
+              user_remark: 'user remark ...',
+              incr_snapshot_ids: [ @snapshot_2.id ],              
             },
             snapshots: { 
               shotengai_series_id: @series_1.id,
@@ -218,14 +197,14 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
         }
 
         it {
-          body = JSON.parse(response.body)
-          expect(body['snapshots'].count).to eq(1)
-          expect(body['snapshots'].first['shotengai_series_id']).to eq(@series_1.id)
+          expect(Order.last.snapshots.count).to eq(2)
+          expect(Order.last.snapshots.map(&:shotengai_series_id).sort).to eq([@series_1.id, @snapshot_2.series.id].sort)
+          expect(Order.last.snapshots.map(&:id).sort.include?(@snapshot_2.id)).to eq(true)
+          expect(@snapshot_2.reload.is_in_cart).to eq(false)
         }
       end
     end
   end
-
 
   path "/#{namespace}/orders/{id}" do
     parameter :id, in: :path, type: :integer
@@ -242,7 +221,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
       
       response(200, description: 'successful') do
         it {
-           expect(JSON.parse(response.body)['snapshots'].count).to eq(@order_1.snapshots.count)
+          #  expect(JSON.parse(response.body)['snapshots'].count).to eq(@order_1.snapshots.count)
         }
       end
     end

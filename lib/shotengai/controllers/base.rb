@@ -11,9 +11,9 @@ module Shotengai
       # respond_with @products, template: "#{self.class.template_dir}/index"
       #
       cattr_accessor :template_dir
-      
-      @@index_query ||= nil
-      @@default_query ||= nil
+
+      @@index_query = nil
+      @@default_query = nil
 
       class << self
         # Add the index query to custom the @@index_resouces on the base of @@resources
@@ -100,14 +100,14 @@ module Shotengai
         @resource.destroy!
         head 204
       end
-
+      
       private
         def index_resources
-          @@index_query&.call(default_resources, params) || default_resources
+          @@index_query&.call(default_resources, params, request) || default_resources
         end
 
         def default_resources
-          @@default_query&.call(self.class.resources, params) || self.class.resources
+          @@default_query&.call(self.class.resources, params, request) || self.class.resources
         end
 
         def resource_key
@@ -119,7 +119,7 @@ module Shotengai
         end
 
         def resource_params
-          params.requrie(resource_key).permit!.merge other_resource_params
+          params.require(resource_key).permit!.merge other_resource_params
         end
 
         # rewrite this to add more custom column

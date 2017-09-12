@@ -6,11 +6,11 @@ module Shotengai
         self.template_dir = 'shotengai/customer/products/'
         
         remove_actions :create, :update, :destroy
-        default_query do |resource, params|
+        default_query  do |resource, params, request|
           
         end
 
-        index_query do |resource, params|
+        index_query  do |resource, params, request|
           params[:catalog_list] ? 
             resource.tagged_with(params[:catalog_list], on: :catalogs) :
             resource

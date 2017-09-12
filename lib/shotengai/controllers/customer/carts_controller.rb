@@ -11,10 +11,10 @@ module Shotengai
 
         remove_actions :index, :create, :destroy
         
-        default_query do |resource, params|  
+        default_query  do |resource, params, request|  
         end
         
-        index_query do |resource, params|
+        index_query  do |resource, params, request|
         end
 
         private

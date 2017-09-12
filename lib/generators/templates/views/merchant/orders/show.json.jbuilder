@@ -1,1 +1,1 @@
-json.partial! "shotengai/share/order", order: @resource
+json.partial! "shotengai/share/merchant_order", order: @resource

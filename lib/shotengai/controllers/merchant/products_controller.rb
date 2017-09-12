@@ -7,11 +7,11 @@ module Shotengai
         
         before_action :manager_auth
 
-        default_query do |resource, params|
+        default_query  do |resource, params, request|
           resource.where(manager: @manager)
         end
 
-        index_query do |resource, params|
+        index_query  do |resource, params, request|
           params[:catalog_list] ? 
             resource.tagged_with(params[:catalog_list], on: :catalogs) :
             resource
