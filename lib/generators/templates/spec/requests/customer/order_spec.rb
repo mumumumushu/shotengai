@@ -82,7 +82,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
               count: 10,
             }
           }
-         }
+        }
         it { 
           expect(JSON.parse(response.body)['count']).to eq(10) 
           expect(@cart.snapshots.count).to eq(2) 
@@ -153,7 +153,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
               count: 10,
             }
           }
-         }
+        }
         it { 
           expect(JSON.parse(response.body)['count']).to eq(10) 
           expect(@order_1.snapshots.count).to eq(@order_1_snapshots_count_was + 1)
