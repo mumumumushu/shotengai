@@ -49,11 +49,12 @@ module Shotengai
           'orders' => @order,
           'product_series' => "#{@product}Series",
           'product_snapshots' => "#{@product}Snapshot",
+          'carts' => '::Order::Cart',
           
         }.each do |key, klass_name|
           @key, @klass_name = key, klass_name
           template "template_controller.rb",
-                   "app/controllers/#{@namespace}/#{@klass_name.underscore.pluralize}_controller.rb"
+                   "app/controllers/#{@namespace}/#{@key}_controller.rb"
         end
         create_routes
         create_factory
