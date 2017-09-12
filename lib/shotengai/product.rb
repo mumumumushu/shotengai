@@ -82,7 +82,7 @@ module Shotengai
       def define_related_class subclass
         # Useing Class.new could not get class_name in self.inherited
         class_eval("
-          class ::#{subclass}Series < #{self.series_class}; end;
+          class ::#{subclass}Series < #{self.series_class}; end
           class ::#{subclass}Snapshot < #{self.snapshot_class}; end
         ")
         subclass.instance_eval do

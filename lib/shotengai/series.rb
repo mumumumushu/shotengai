@@ -43,18 +43,24 @@ module Shotengai
 
     class << self
       def inherited subclass
-        @subclass = subclass
-        @product_name = /^(.+)Series$/.match(subclass.name)[1]
-        add_associations
+        product_name = /^(.+)Series$/.match(subclass.name)[1]
+        add_associations(subclass, product_name)
+        # 加载自定义文件
+        require_custom_file(product_name) if Rails.root
         super
       end
 
-      def add_associations
+      def add_associations subclass, product_name
         # belongs to Product
-        @subclass.belongs_to :product, foreign_key: :shotengai_product_id, class_name: @product_name, touch: true
-        @subclass.belongs_to @product_name.underscore.to_sym, foreign_key: :shotengai_product_id, class_name: @product_name, touch: true
+        subclass.belongs_to :product, foreign_key: :shotengai_product_id, class_name: product_name, touch: true
+        subclass.belongs_to product_name.underscore.to_sym, foreign_key: :shotengai_product_id, class_name: product_name, touch: true
         # has many snapshot
-        @subclass.has_many :snapshots, class_name: "#{@product_name}Snapshot", foreign_key: :shotengai_series_id
+        subclass.has_many :snapshots, class_name: "#{product_name}Snapshot", foreign_key: :shotengai_series_id
+      end
+
+      def require_custom_file product_name
+        file_path = Rails.root.join('app', 'models', "#{product_name}_series.rb")
+        require file_path if File.exist?(file_path)
       end
     end
 

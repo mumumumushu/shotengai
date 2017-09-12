@@ -60,7 +60,14 @@ module Shotengai
         # belongs to Series
         subclass.belongs_to :series, foreign_key: :shotengai_series_id, class_name: series_name, touch: true
         subclass.belongs_to series_name.underscore.to_sym, foreign_key: :shotengai_series_id, class_name: series_name, touch: true
+        # 加载自定义文件
+        require_custom_file(product_name) if Rails.root
         super
+      end
+      
+      def require_custom_file product_name
+        file_path = Rails.root.join('app', 'models', "#{product_name}_snapshot.rb")
+        require file_path if File.exist?(file_path)
       end
     end
     
