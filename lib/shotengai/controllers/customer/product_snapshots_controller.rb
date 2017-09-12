@@ -28,8 +28,7 @@ module Shotengai
         # 不指定 order 时，默认创建在 cart 中
         # TODO: WARNING: snapshots
         def create
-          order_or_cart = Shotengai::Order.find_by_id(params[:order_id]) || @buyer.order_cart
-          @resource = order_or_cart.product_snapshots.create!(resource_params)
+          @resource = default_resources.create!(resource_params)
           respond_with @resource, template: "#{@@template_dir}/show", status: 201
         end
 
