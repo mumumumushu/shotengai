@@ -54,7 +54,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
 
   path "/#{namespace}/cart/product_snapshots" do
     
-    post(summary: '用户 添加快照至购物车( using series_id & count )') do
+    post(summary: '用户 添加快照至购物车( using shotengai_series_id & count )') do
       produces 'application/json'
       consumes 'application/json'
       parameter :buyer_type, in: :query, type: :string
@@ -92,6 +92,9 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
   end
 
   path "/#{namespace}/orders/{id}/product_snapshots" do
+    parameter :id, in: :path, type: :integer
+    let(:id) { @order_1.id }
+
     get(summary: '某订单的 order 所有snapshots') do
       produces 'application/json'
       consumes 'application/json'
@@ -100,14 +103,12 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
       let(:buyer_id) { @user.id }
       let(:buyer_type) { @user.class.name }
 
-      parameter :id, in: :path, type: :integer
-
       parameter :page, in: :query, type: :string
       parameter :per_page, in: :query, type: :string
       
       let(:page) { 1 }
       let(:per_page) { 100 }
-      let(:id) { @order_1.id }
+      
       
       before do
         @orders.last.product_snapshots.create!(
@@ -120,6 +121,42 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
         it {
           body = JSON.parse(response.body)
           expect(body['product_snapshots'].count).to eq(@order_1.snapshots.count)
+        }
+      end
+    end
+
+    post(summary: '用户 添加快照至订单( using shotengai_series_id & count )') do
+      produces 'application/json'
+      consumes 'application/json'
+      parameter :buyer_type, in: :query, type: :string
+      parameter :buyer_id, in: :query, type: :integer
+      let(:buyer_id) { @user.id }
+      let(:buyer_type) { @user.class.name }
+
+      parameter :product_snapshot, in: :body, schema: {
+        type: :object, properties: {
+          product_snapshot: {
+            type: :object, properties: {
+              shotengai_series_id: { type: :integer },
+              count: { type: :integer },
+            }
+          }
+        }
+      }
+      before { @order_1_snapshots_count_was = @order_1.snapshots.count }
+      
+      response(201, description: 'Create snapshot and add it to the cart') do
+        let(:product_snapshot) { 
+          {
+            product_snapshot: { 
+              shotengai_series_id: @series_1.id,
+              count: 10,
+            }
+          }
+         }
+        it { 
+          expect(JSON.parse(response.body)['count']).to eq(10) 
+          expect(@order_1.snapshots.count).to eq(@order_1_snapshots_count_was + 1)
         }
       end
     end

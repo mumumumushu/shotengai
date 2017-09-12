@@ -27,7 +27,7 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
     @snapshot_other = create(:product_snapshot, series: @series_2, count: 5)
 
     @order = create(:order)
-    @cart = Order::Cart.create!
+    @cart = create(:user).order_cart
     @snapshot_1.update!(order: @order)
     @snapshot_other.update!(order: @order)
     @snapshot_2.update!(order_cart: @cart)
