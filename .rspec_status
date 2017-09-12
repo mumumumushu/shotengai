@@ -1,19 +1,20 @@
-example_id                                 | status | run_time        |
------------------------------------------- | ------ | --------------- |
-./spec/shotengai/models_spec.rb[1:1:1:1]   | passed | 0.58762 seconds |
-./spec/shotengai/models_spec.rb[1:1:1:2]   | passed | 0.3368 seconds  |
-./spec/shotengai/models_spec.rb[1:1:2:1]   | passed | 0.32969 seconds |
-./spec/shotengai/models_spec.rb[1:1:2:2]   | passed | 0.32811 seconds |
-./spec/shotengai/models_spec.rb[1:1:2:3]   | passed | 0.34035 seconds |
-./spec/shotengai/models_spec.rb[1:1:3:1]   | passed | 0.32973 seconds |
-./spec/shotengai/models_spec.rb[1:1:3:2]   | passed | 0.33056 seconds |
-./spec/shotengai/models_spec.rb[1:1:3:3]   | passed | 0.33828 seconds |
-./spec/shotengai/models_spec.rb[1:1:4:1]   | passed | 0.35822 seconds |
-./spec/shotengai/models_spec.rb[1:1:5:1]   | passed | 0.33872 seconds |
-./spec/shotengai/models_spec.rb[1:1:5:2:1] | passed | 0.36586 seconds |
-./spec/shotengai/models_spec.rb[1:1:5:2:2] | passed | 0.36069 seconds |
-./spec/shotengai/models_spec.rb[1:2:1:1]   | passed | 0.34614 seconds |
-./spec/shotengai/models_spec.rb[1:2:1:2]   | passed | 0.3256 seconds  |
-./spec/shotengai/models_spec.rb[1:2:2:1]   | passed | 0.62601 seconds |
-./spec/shotengai/models_spec.rb[1:2:2:2]   | passed | 0.45201 seconds |
-./spec/shotengai/models_spec.rb[1:3:1]     | passed | 0.48308 seconds |
+example_id                                 | status  | run_time        |
+------------------------------------------ | ------- | --------------- |
+./spec/shotengai/models_spec.rb[1:1:1:1]   | passed  | 0.58762 seconds |
+./spec/shotengai/models_spec.rb[1:1:1:2]   | passed  | 0.3368 seconds  |
+./spec/shotengai/models_spec.rb[1:1:2:1]   | failed  | 0.68851 seconds |
+./spec/shotengai/models_spec.rb[1:1:2:2]   | passed  | 0.70395 seconds |
+./spec/shotengai/models_spec.rb[1:1:2:3]   | passed  | 0.6569 seconds  |
+./spec/shotengai/models_spec.rb[1:1:2:4]   | unknown |                 |
+./spec/shotengai/models_spec.rb[1:1:3:1]   | passed  | 0.32973 seconds |
+./spec/shotengai/models_spec.rb[1:1:3:2]   | passed  | 0.33056 seconds |
+./spec/shotengai/models_spec.rb[1:1:3:3]   | passed  | 0.33828 seconds |
+./spec/shotengai/models_spec.rb[1:1:4:1]   | passed  | 0.35822 seconds |
+./spec/shotengai/models_spec.rb[1:1:5:1]   | passed  | 0.33872 seconds |
+./spec/shotengai/models_spec.rb[1:1:5:2:1] | passed  | 0.36586 seconds |
+./spec/shotengai/models_spec.rb[1:1:5:2:2] | passed  | 0.36069 seconds |
+./spec/shotengai/models_spec.rb[1:2:1:1]   | passed  | 0.34614 seconds |
+./spec/shotengai/models_spec.rb[1:2:1:2]   | passed  | 0.3256 seconds  |
+./spec/shotengai/models_spec.rb[1:2:2:1]   | passed  | 0.62601 seconds |
+./spec/shotengai/models_spec.rb[1:2:2:2]   | passed  | 0.45201 seconds |
+./spec/shotengai/models_spec.rb[1:3:1]     | passed  | 0.48308 seconds |
