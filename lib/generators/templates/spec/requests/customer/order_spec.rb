@@ -206,6 +206,10 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
             type: :object, properties: {
               address: { type: :string },
               user_remark: { type: :text },
+              address: { type: :string },
+              delivery_way: { type: :string },
+              delivery_cost: { type: :string },
+              meta: { type: :object },
               incr_snapshot_ids: { type: :array },
             },
           snapshots: {
@@ -281,6 +285,10 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
             type: :object, properties: {
               address: { type: :string },
               user_remark: { type: :text },
+              address: { type: :string },
+              delivery_way: { type: :string },
+              delivery_cost: { type: :string },
+              meta: { type: :object },
               incr_snapshot_ids: { type: :array },
               gone_snapshot_ids: { type: :array },
             }

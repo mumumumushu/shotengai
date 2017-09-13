@@ -14,7 +14,7 @@ module Shotengai
         collection_name = klass.model_name.collection || options[:as]
         cart_name = "#{klass.model_name.singular}_cart"
         # has many Order
-        has_many collection_name.to_sym, class_name: klass.name, as: :buyer
+        has_many collection_name.to_sym, class_name: klass_name, as: :buyer
         # has one Cart
         has_one cart_name.to_sym, class_name: klass.cart_class.name, as: :buyer
         # User.new Cart 相关
