@@ -206,7 +206,6 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
             type: :object, properties: {
               address: { type: :string },
               user_remark: { type: :text },
-              address: { type: :string },
               delivery_way: { type: :string },
               delivery_cost: { type: :string },
               meta: { type: :object },
@@ -285,7 +284,6 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
             type: :object, properties: {
               address: { type: :string },
               user_remark: { type: :text },
-              address: { type: :string },
               delivery_way: { type: :string },
               delivery_cost: { type: :string },
               meta: { type: :object },
