@@ -120,7 +120,7 @@ module Shotengai
         
         # If you want to add custome columns, you can do just like:
         #   def resource_params
-        #     super.merge params.require(:some_key)
+        #     super&.merge params.require(:some_key)
         #   end
         def resource_params
           params.require(resource_key).permit!

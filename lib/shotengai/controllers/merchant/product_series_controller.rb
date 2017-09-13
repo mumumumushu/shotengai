@@ -23,8 +23,6 @@ module Shotengai
               :original_price, :price, :stock
             ).merge(
               { spec: spec, meta: meta }
-            ).merge(
-              other_resource_params
             )
           end
       end
