@@ -74,11 +74,11 @@ module Shotengai
     # QUESTION: spec 赋值是在 after pay 合理？
     # 支付前 信息 delegate to series
     [:original_price, :price, :spec, :banners, :cover_image, :detail].each do |column|
-      define_method(column) { read_attribute(column) || self.series.read_attribute(column) }
+      define_method(column) { read_attribute(column) || self.series.send(column) }
     end
 
     def meta
-      read_attribute(column) || series.product.meta.merge(series.meta)
+      read_attribute(:meta) || (series.product.meta || {} ).merge(series.meta || {})
     end
 
     # 订单支付后 存储当时信息快照
@@ -91,7 +91,7 @@ module Shotengai
         banners: series.banners,
         cover_image: series.cover_image,
         detail: series.detail,
-        meta: series.product.meta.merge(series.meta)
+        meta: (series.product.meta || {} ).merge(series.meta || {})
       )
     end
 
@@ -99,13 +99,9 @@ module Shotengai
       self.series.cut_stock(self.count)
     end
 
-    def meta
-      read_attribute(:meta) || series.product.meta.merge(series.meta)
-    end
-
     ###### view
     def total_price
-      revised_amount || count * price  
+      revised_amount || count * self.price  
     end
 
     def total_original_price

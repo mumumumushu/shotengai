@@ -68,6 +68,10 @@ module Shotengai
       self.stock.eql?(-1) || self.update!(stock: self.stock - count)
     end
 
+    def original_price
+      read_attribute(:original_price) || price
+    end
+
     private 
       # spec 字段
       def check_spec_value
