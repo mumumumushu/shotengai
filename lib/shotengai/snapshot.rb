@@ -77,6 +77,10 @@ module Shotengai
       define_method(column) { read_attribute(column) || self.series.read_attribute(column) }
     end
 
+    def meta
+      read_attribute(column) || series.product.meta.merge(series.meta)
+    end
+
     # 订单支付后 存储当时信息快照
     def copy_info
       # cut_stock
