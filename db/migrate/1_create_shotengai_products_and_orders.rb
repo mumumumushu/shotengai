@@ -57,7 +57,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.datetime :delivery_time
       t.datetime :receipt_time
       t.string :delivery_way
-      t.string :delivery_cost
+      t.integer :delivery_cost
       t.text :merchant_remark
       t.string :mark # merchant mark, like red, blue ..
       t.text :customer_remark
