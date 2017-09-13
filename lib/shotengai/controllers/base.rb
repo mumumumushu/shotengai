@@ -123,7 +123,7 @@ module Shotengai
         #     super.merge params.require(:some_key)
         #   end
         def resource_params
-          params.require(resource_key).permit!.merge other_resource_params
+          params.require(resource_key).permit!
         end
     end
   end

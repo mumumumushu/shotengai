@@ -49,8 +49,6 @@ module Shotengai
               banners: []
             ).merge(
               { spec: spec, detail: detail, meta: meta }
-            ).merge(
-              other_resource_params
             )
           end
       end
