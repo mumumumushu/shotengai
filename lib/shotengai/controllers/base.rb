@@ -117,14 +117,13 @@ module Shotengai
         def set_resource
           @resource = default_resources.find(params[:id])
         end
-
+        
+        # If you want to add custome columns, you can do just like:
+        #   def resource_params
+        #     super.merge params.require(:some_key)
+        #   end
         def resource_params
           params.require(resource_key).permit!.merge other_resource_params
-        end
-
-        # rewrite this to add more custom column
-        def other_resource_params
-          params.require(resource_key).permit!
         end
     end
   end
