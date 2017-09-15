@@ -1,4 +1,5 @@
-json.extract! order, :id, :seq, :total_price, :total_original_price, 
+json.extract! order, :id, :seq, :amount,
+  :product_amount, :product_original_amount, 
   :status_zh, :address,
   :pay_time, :delivery_time, :receipt_time, 
   :delivery_way, :delivery_cost, :customer_remark, 

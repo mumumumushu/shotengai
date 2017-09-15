@@ -98,10 +98,6 @@ module Shotengai
       update!(receipt_time: Time.now)
     end
 
-    def set_amount
-      self.update!(amount: product_amount + delivery_cost)
-    end
-
     def set_seq
       timestamp = Time.now.strftime("%Y%m%d-%H%M")
       no_length = 4
@@ -109,6 +105,14 @@ module Shotengai
       self.update!(seq: "#{timestamp}-#{no}}")
     end
 
+    def set_amount
+      self.update!(amount: product_amount + delivery_cost)
+    end
+    
+    def amount
+      read_attribute(:amount) || product_amount + delivery_cost
+    end
+    
     def product_amount
       snapshots.sum(&:total_price)
     end
@@ -116,6 +120,8 @@ module Shotengai
     def product_original_amount
       snapshots.sum(&:total_original_price)
     end
+
+
     
     # into order
     def incr_snapshot_ids= ids
