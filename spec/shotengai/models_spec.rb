@@ -156,9 +156,23 @@ RSpec.describe 'Shotengai Models' do
         #   shotengai_series_id: @series.id,
         #   count: 10
         # )
-        expect(@snapshot.test_order_cart).to eq(@buyer.test_order_cart)
       end
-      
+      describe 'With snapshot' do
+        # Add Snapshot to Cart
+        # TODO: test successfully in e-mall-draft 
+        # @buyer.add_to_test_order_cart(@snapshot)
+        # @buyer.add_to_test_order_cart(
+        #   shotengai_series_id: @series.id,
+        #   count: 10
+        # )
+        before do
+          @snapshot.update(shotengai_order_id: @buyer.test_order_cart.id)
+        end
+
+        it '' do
+          expect(@snapshot.test_order_cart).to eq(@buyer.test_order_cart)
+        end
+      end
     end
 
     describe 'About Order' do
