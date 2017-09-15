@@ -2,17 +2,13 @@ module Shotengai
   module Controller
     module Merchant
       class ProductSeriesController < Shotengai::Controller::Base
-        self.resources = ProductSeries
+        self.base_resources = ProductSeries
         self.template_dir = 'shotengai/merchant/series/'
 
-        default_query  do |resource, params, request|
-          resource.where(
+        def default_query resources
+          resources.where(
             params[:product_id] && { shotengai_product_id: params[:product_id] }
           )
-        end
-
-        index_query  do |resource, params, request|
-        
         end
 
         private

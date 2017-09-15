@@ -2,29 +2,29 @@ module Shotengai
   module Controller
     module Merchant
       class ProductsController < Shotengai::Controller::Base
-        self.resources = Product
+        self.base_resources = Product
         self.template_dir = 'shotengai/merchant/products/'
         
         before_action :manager_auth
 
-        default_query  do |resource, params, request|
-          resource.where(manager: @manager)
+        def default_query resources
+          resources.where(@manager && { manager: @manager })
         end
 
-        index_query  do |resource, params, request|
+        def index_query resources
           params[:catalog_list] ? 
-            resource.tagged_with(params[:catalog_list], on: :catalogs) :
-            resource
+            resources.tagged_with(params[:catalog_list], on: :catalogs) :
+            resources
         end
 
         def put_on_shelf
           @resource.put_on_shelf!
-          respond_with @resource, template: "#{@@template_dir}/show", status: 200
+          respond_with @resource, template: "#{@template_dir}/show", status: 200
         end
 
         def sold_out
           @resource.sold_out!
-          respond_with @resource, template: "#{@@template_dir}/show", status: 200
+          respond_with @resource, template: "#{@template_dir}/show", status: 200
         end
 
         def destroy

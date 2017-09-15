@@ -2,7 +2,7 @@ module Shotengai
   module Controller
     module Customer
       class CartsController < Shotengai::Controller::Base
-        self.resources = Cart
+        self.base_resources = Cart
         self.template_dir = 'shotengai/customer/cart'
         
         before_action :buyer_auth
@@ -11,12 +11,6 @@ module Shotengai
 
         remove_actions :index, :create, :destroy
         
-        default_query  do |resource, params, request|  
-        end
-        
-        index_query  do |resource, params, request|
-        end
-
         private
           def buyer_auth
             @buyer = params[:buyer_type].constantize.find(params[:buyer_id])

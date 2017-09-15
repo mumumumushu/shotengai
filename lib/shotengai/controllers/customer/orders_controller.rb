@@ -2,7 +2,7 @@ module Shotengai
   module Controller
     module Customer
       class OrdersController < Shotengai::Controller::Base
-        self.resources = Order
+        self.base_resources = Order
         self.template_dir = 'shotengai/customer/orders/'
         
         before_action :buyer_auth
@@ -10,21 +10,22 @@ module Shotengai
 
         remove_actions :destroy
         
-        default_query  do |resource, params, request|  
+        def default_query resources
+          resources.where(buyer: @buyer)
         end
-        
-        index_query do |resource, params, request|
-          resource.status_is(params[:status])
+
+        def index_query resources
+          resources.status_is(params[:status])
         end
 
         def create # Use :series_id & :count
           @resource = @buyer.buy_it_immediately(snapshot_params, resource_params)
-          respond_with @resource, template: "#{@@template_dir}/show", status: 201
+          respond_with @resource, template: "#{@template_dir}/show", status: 201
         end
 
         def pay
           @resource.pay!
-          respond_with @resource, template: "#{@@template_dir}/show"
+          respond_with @resource, template: "#{@template_dir}/show"
         end
 
         def destroy
@@ -34,7 +35,7 @@ module Shotengai
 
         def confirm
           @resource.confirm!
-          respond_with @resource, template: "#{@@template_dir}/show"
+          respond_with @resource, template: "#{@template_dir}/show"
         end
 
         private
