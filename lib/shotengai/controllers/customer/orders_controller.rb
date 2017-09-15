@@ -13,13 +13,12 @@ module Shotengai
         default_query  do |resource, params, request|  
         end
         
-        index_query  do |resource, params, request|
-          request.params
+        index_query do |resource, params, request|
           resource.status_is(params[:status])
         end
 
         def create # Use :series_id & :count
-          @resource = @buyer.buy_it_immediately(snapshots_params, resource_params)
+          @resource = @buyer.buy_it_immediately(snapshot_params, resource_params)
           respond_with @resource, template: "#{@@template_dir}/show", status: 201
         end
 
@@ -50,8 +49,8 @@ module Shotengai
             )
           end
 
-          def snapshots_params
-            params[:snapshots] && params.require(:snapshots).permit(
+          def snapshot_params
+            params[:snapshot] && params.require(:snapshot).permit(
               :shotengai_series_id, :count
             )
           end
