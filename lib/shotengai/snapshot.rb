@@ -119,6 +119,10 @@ module Shotengai
     def order_status_zh; shotengai_order&.status_zh end
 
     ######
+    
+    def meta
+      super || {}
+    end
 
     private 
       # spec 字段

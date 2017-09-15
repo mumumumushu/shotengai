@@ -124,6 +124,10 @@ module Shotengai
       end
     end
 
+    def meta
+      super || {}
+    end
+    
     class << self
       def inherited subclass
         # define Cart class

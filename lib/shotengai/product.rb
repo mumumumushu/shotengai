@@ -63,6 +63,10 @@ module Shotengai
       Shotengai::Series.find_by_id(default_series_id) || series.first
     end
 
+    def meta
+      super || {}
+    end
+
     class << self
       def series_class
         Shotengai::Series

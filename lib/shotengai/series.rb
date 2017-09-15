@@ -30,7 +30,7 @@ module Shotengai
     
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, to: :product
     
-    # where(spec->'$.\"颜色\"' = ?  and spec->'$.\"大小\"' = ? ,红色,S)
+    # where("spec->'$.\"颜色\"' = ?  and spec->'$.\"大小\"' = ?" ,红色,S)
     scope :query_spec_with_product, ->(val, product) { 
       if val.keys.sort == product.spec.keys.sort 
         keys = []; values = []
@@ -70,6 +70,10 @@ module Shotengai
 
     def original_price
       read_attribute(:original_price) || price
+    end
+
+    def meta
+      super || {}
     end
 
     private 
