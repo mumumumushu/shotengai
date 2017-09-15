@@ -102,7 +102,7 @@ module Shotengai
       timestamp = Time.now.strftime("%Y%m%d-%H%M")
       no_length = 4
       no = ("%0#{no_length}d" % id).last no_length
-      self.update!(seq: "#{timestamp}-#{no}}")
+      self.update!(seq: "#{timestamp}-#{no}")
     end
 
     def set_amount
