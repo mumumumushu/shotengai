@@ -176,16 +176,24 @@ RSpec.describe 'Shotengai Models' do
 
         it 'Methods' do
           # total_price
-          expect(@order.total_price).to eq(@snapshot_1.total_price + @snapshot_2.total_price)
-          expect(@order.total_original_price).to eq(@snapshot_1.total_original_price + @snapshot_2.total_original_price)
+          expect(@order.product_amount).to eq(@snapshot_1.total_price + @snapshot_2.total_price)
+          expect(@order.product_original_amount).to eq(@snapshot_1.total_original_price + @snapshot_2.total_original_price)
         end
 
         it 'About state machine' do
           expect(@snapshot_1.reload.attributes.values.include?(nil)).to eq(true)
           @order.pay!
+          expect(@order.seq).not_to be_nil
           expect(@order.reload.pay_time).not_to be_nil
+          # set amount
+          expect(@order.reload.amount).to eq(@order.snapshots.map(&:total_price).reduce(:+) + @order.delivery_cost)
+          # cannot edit or destroy snapshot unless the order is unpaid
+          # TODO:
+          # expect {
+          #   @order.snapshots.first.destroy!
+          # }.to raise_error(ActiveRecord::RecordInvalid)
           # copy snapshot info from series
-          expect(@snapshot_1.reload.attributes.values.-([:revised_amount]).include?(nil)).to eq(false)
+          expect(@snapshot_1.reload.attributes.except('revised_amount').values.include?(nil)).to eq(false)
           @order.send_out!
           # set delivery_time
           expect(@order.reload.delivery_time).not_to be_nil

@@ -4,13 +4,14 @@ module Shotengai
   # Table name: shotengai_orders
   #
   #  id              :integer          not null, primary key
-  #  seq             :integer
+  #  seq             :string(255)
   #  address         :string(255)
+  #  amount          :decimal(9, 2)
   #  pay_time        :datetime
   #  delivery_time   :datetime
   #  receipt_time    :datetime
   #  delivery_way    :string(255)
-  #  delivery_cost   :string(255)
+  #  delivery_cost   :integer          default(0)
   #  merchant_remark :text(65535)
   #  mark            :string(255)
   #  customer_remark :text(65535)
@@ -35,12 +36,14 @@ module Shotengai
     default_scope { where.not(status: 'cart') } 
     scope :status_is, ->(status) { where(status.blank?.! && { status: status }) }
     
+    after_create :set_seq
+
     include AASM_DLC
     aasm column: :status do
       state :unpaid, initial: true
       state :paid, :delivering, :received, :canceled, :evaluated
       
-      event :pay, before: [:fill_snapshot, :cut_stock, :set_pay_time] do
+      event :pay, before: [:set_amount, :fill_snapshot, :cut_stock, :set_pay_time] do
         transitions from: :unpaid, to: :paid 
       end
 
@@ -95,11 +98,22 @@ module Shotengai
       update!(receipt_time: Time.now)
     end
 
-    def total_price
+    def set_amount
+      self.update!(amount: product_amount + delivery_cost)
+    end
+
+    def set_seq
+      timestamp = Time.now.strftime("%Y%m%d-%H%M")
+      no_length = 4
+      no = ("%0#{no_length}d" % id).last no_length
+      self.update!(seq: "#{timestamp}-#{no}}")
+    end
+
+    def product_amount
       snapshots.sum(&:total_price)
     end
 
-    def total_original_price
+    def product_original_amount
       snapshots.sum(&:total_original_price)
     end
     

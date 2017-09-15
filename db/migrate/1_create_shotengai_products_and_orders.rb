@@ -51,13 +51,14 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
 
   def create_order
     create_table :shotengai_orders do |t|
-      t.integer :seq
+      t.string :seq
       t.string :address
+      t.decimal :amount, precision: 9, scale: 2      
       t.datetime :pay_time 
       t.datetime :delivery_time
       t.datetime :receipt_time
       t.string :delivery_way
-      t.integer :delivery_cost
+      t.integer :delivery_cost, default: 0
       t.text :merchant_remark
       t.string :mark # merchant mark, like red, blue ..
       t.text :customer_remark
