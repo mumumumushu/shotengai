@@ -77,6 +77,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
 
   def create_snapshot
     create_table :shotengai_snapshots do |t|
+      t.string :title
       t.decimal :original_price, precision: 9, scale: 2
       t.decimal :price, precision: 9, scale: 2
       # Merchant can change the amount of snapshot

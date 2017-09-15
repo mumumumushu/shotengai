@@ -75,7 +75,7 @@ module Shotengai
     def meta
       super || {}
     end
-
+    
     private 
       # spec 字段
       def check_spec_value

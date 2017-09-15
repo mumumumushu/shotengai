@@ -3,6 +3,7 @@
 # Table name: shotengai_snapshots
 #
 #  id                  :integer          not null, primary key
+#  title               :string(255)
 #  original_price      :decimal(9, 2)
 #  price               :decimal(9, 2)
 #  revised_amount      :decimal(9, 2)
@@ -17,7 +18,14 @@
 #  shotengai_order_id :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
+# 
+#  Indexes
 #
+#  index_shotengai_snapshots_on_shotengai_order_id  (shotengai_order_id)
+#  index_shotengai_snapshots_on_shotengai_series_id  (shotengai_series_id)
+#  index_shotengai_snapshots_on_type                 (type)
+#
+
 
 FactoryGirl.define do
   factory :test_snapshot, class: 'TestGoodSnapshot' do

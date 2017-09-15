@@ -4,6 +4,7 @@ module Shotengai
   # Table name: shotengai_snapshots
   #
   #  id                  :integer          not null, primary key
+  #  title               :string(255)
   #  original_price      :decimal(9, 2)
   #  price               :decimal(9, 2)
   #  revised_amount      :decimal(9, 2)
@@ -71,9 +72,11 @@ module Shotengai
       end
     end
     
-    # QUESTION: spec 赋值是在 after pay 合理？
     # 支付前 信息 delegate to series
-    [:original_price, :price, :spec, :banners, :cover_image, :detail].each do |column|
+    %i{
+        original_price price spec banners 
+        cover_image detail title
+      }.each do |column|
       define_method(column) { read_attribute(column) || self.series.send(column) }
     end
 
@@ -85,6 +88,7 @@ module Shotengai
     def copy_info
       # cut_stock
       self.update!(
+        title: series.title,
         original_price: series.original_price,
         price: series.price,
         spec: series.spec,
