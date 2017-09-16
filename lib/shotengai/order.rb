@@ -106,22 +106,20 @@ module Shotengai
     end
 
     def set_amount
-      self.update!(amount: product_amount + delivery_cost)
+      self.update!(amount: (product_amount + delivery_cost).round(2))
     end
     
     def amount
-      read_attribute(:amount) || product_amount + delivery_cost
+      read_attribute(:amount) || (product_amount + delivery_cost).round(2)
     end
     
     def product_amount
-      snapshots.sum(&:total_price)
+      snapshots.sum(&:total_price).round(2)
     end
 
     def product_original_amount
-      snapshots.sum(&:total_original_price)
+      snapshots.sum(&:total_original_price).round(2)
     end
-
-
     
     # into order
     def incr_snapshot_ids= ids
