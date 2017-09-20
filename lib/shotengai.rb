@@ -17,6 +17,7 @@ module Shotengai
     autoload :Base, 'shotengai/controllers/base'
 
     module Merchant
+      autoload :Base,                       'shotengai/controllers/merchant/base'
       autoload :ProductsController,         'shotengai/controllers/merchant/products_controller'
       autoload :ProductSnapshotsController, 'shotengai/controllers/merchant/product_snapshots_controller'
       autoload :ProductSeriesController,    'shotengai/controllers/merchant/product_series_controller'
@@ -24,6 +25,7 @@ module Shotengai
     end
     
     module Customer
+      autoload :Base,                       'shotengai/controllers/customer/base'      
       autoload :ProductsController,         'shotengai/controllers/customer/products_controller'
       autoload :ProductSnapshotsController, 'shotengai/controllers/customer/product_snapshots_controller'
       autoload :ProductSeriesController,    'shotengai/controllers/customer/product_series_controller'

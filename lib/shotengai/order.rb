@@ -114,7 +114,7 @@ module Shotengai
     end
     
     def product_amount
-      snapshots.sum(&:total_price).round(2)
+      snapshots.sum(&:total_price).round(2) || 0
     end
 
     def product_original_amount

@@ -1,21 +1,16 @@
 module Shotengai
   module Controller
     module Customer
-      class CartsController < Shotengai::Controller::Base
+      class CartsController < Shotengai::Controller::Customer::Base
         self.base_resources = Cart
         self.template_dir = 'shotengai/customer/cart'
         
-        before_action :buyer_auth
         before_action :set_resource
         # NOTE: before_action would not keep the super methods' "only" condition
 
         remove_actions :index, :create, :destroy
         
         private
-          def buyer_auth
-            @buyer = params[:buyer_type].constantize.find(params[:buyer_id])
-          end
-
           def set_resource
             @resource = @buyer.order_cart
           end

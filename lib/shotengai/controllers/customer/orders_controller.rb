@@ -1,13 +1,12 @@
 module Shotengai
   module Controller
     module Customer
-      class OrdersController < Shotengai::Controller::Base
+      class OrdersController < Shotengai::Controller::Customer::Base
         self.base_resources = Order
         self.template_dir = 'shotengai/customer/orders/'
         
-        before_action :buyer_auth
         before_action :edit_only_unpaid, only: [:update]
-
+        
         remove_actions :destroy
         
         def default_query resources
@@ -39,10 +38,6 @@ module Shotengai
         end
 
         private
-          def buyer_auth
-            @buyer = params[:buyer_type].constantize.find(params[:buyer_id])
-          end
-
           def resource_params
             params[resource_key] && params.require(resource_key).permit(
               :address, :customer_remark, 

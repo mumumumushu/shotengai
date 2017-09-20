@@ -1,9 +1,11 @@
 module Shotengai
   module Controller
     module Merchant
-      class ProductSeriesController < Shotengai::Controller::Base
+      class ProductSeriesController < Shotengai::Controller::Merchant::Base
         self.base_resources = ProductSeries
         self.template_dir = 'shotengai/merchant/series/'
+
+        before_action :manager_auth
 
         def default_query resources
           resources.where(
@@ -20,6 +22,10 @@ module Shotengai
             ).merge(
               { spec: spec, meta: meta }
             )
+          end
+
+          def manager_auth
+            @manager = params[:manager_type].constantize.find(params[:manager_id])
           end
       end
     end

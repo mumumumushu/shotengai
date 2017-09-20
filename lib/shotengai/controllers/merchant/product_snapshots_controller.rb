@@ -1,13 +1,13 @@
 module Shotengai
   module Controller
     module Merchant
-      class ProductSnapshotsController < Shotengai::Controller::Base
+      class ProductSnapshotsController < Shotengai::Controller::Merchant::Base
         self.base_resources = ProductSnapshot
         self.template_dir = 'shotengai/merchant/snapshots/'
         
         remove_actions :create, :destroy
         before_action :edit_only_unpaid, only: :update
-        
+
         def default_query resources
           resources.in_order  
         end
@@ -29,6 +29,10 @@ module Shotengai
 
           def edit_only_unpaid
             raise Shotengai::WebError.new('订单已支付，不可修改该快照。', '-1', 403) unless @resource.order.unpaid?
+          end
+
+          def manager_auth
+            @manager = params[:manager_type].constantize.find(params[:manager_id])
           end
       end
     end

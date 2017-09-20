@@ -1,9 +1,11 @@
 module Shotengai
   module Controller
     module Customer
-      class ProductSeriesController < Shotengai::Controller::Base
+      class ProductSeriesController < Shotengai::Controller::Customer::Base
         self.base_resources = ProductSeries
         self.template_dir = 'shotengai/customer/series/'
+
+        skip_before_action :buyer_auth
 
         remove_actions :create, :update, :destroy
 
