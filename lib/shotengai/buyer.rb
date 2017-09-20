@@ -38,15 +38,16 @@ module Shotengai
             end
           end
 
-          def buy_it_immediately snapshots_param, order_params
+          def buy_it_immediately snapshot_param, order_params
             ActiveRecord::Base.transaction do
               order = self.#{collection_name}.create!(order_params)
-              snapshots_param && Shotengai::Series.find(snapshots_param[:shotengai_series_id]).snapshots.create!(
-                  snapshots_param.merge({ 
+              snapshot_param && Shotengai::Series.find(snapshot_param[:shotengai_series_id]).snapshots.create!(
+                  snapshot_param.merge({ 
                     shotengai_order: order 
                   })
                 )
               order
+              
             end
           end
         ")

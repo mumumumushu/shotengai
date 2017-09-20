@@ -211,7 +211,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
               meta: { type: :object },
               incr_snapshot_ids: { type: :array },
             },
-          snapshots: {
+          snapshot: {
             type: :object, properties: {
               shotengai_series_id: { type: :integer },
               count: { type: :integer },
@@ -229,7 +229,7 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
               user_remark: 'user remark ...',
               incr_snapshot_ids: [ @snapshot_2.id ],              
             },
-            snapshots: { 
+            snapshot: { 
               shotengai_series_id: @series_1.id,
               count: 10,
             }
