@@ -39,21 +39,9 @@ module Shotengai
     belongs_to :shotengai_cart, foreign_key: :shotengai_order_id, 
       class_name: 'Shotengai::Cart', optional: true, touch: true
     
-    scope :in_order, ->{ 
-      joins("
-        INNER JOIN shotengai_orders ON 
-          shotengai_snapshots.shotengai_order_id = shotengai_orders.id AND 
-          shotengai_orders.status <> 'cart'
-      ")
-    }
-    scope :in_cart, ->{ 
-      joins("
-        INNER JOIN shotengai_orders ON 
-          shotengai_snapshots.shotengai_order_id = shotengai_orders.id AND 
-          shotengai_orders.status = 'cart'
-      ")
-    }
-
+    scope :in_order, -> { joins(:shotengai_order).where.not(shotengai_orders: { status: 'cart'}) }
+    scope :in_cart, -> { joins(:shotengai_order).where(shotengai_orders: { status: 'cart'}) }    
+    
     class << self
       def inherited subclass
         product_name = /^(.+)Snapshot/.match(subclass.name)[1]
