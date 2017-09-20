@@ -2,7 +2,8 @@ require 'swagger_helper'
 namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_examples: true, tags: ["#{namespace} API", "product_snapshots"] do
   before do
-    @products = create_list(:product, 3)
+    @merchant = create(:merchant)
+    @products = create_list(:product, 3, manager: @merchant)
     @product_1 = @products.first
 
     @series_1 = create(
@@ -37,6 +38,11 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
     parameter :product_id, in: :path, type: :string
     let(:product_series_id) { @series_1.id }
 
+    parameter :manager_type, in: :query, type: :string
+    parameter :manager_id, in: :query, type: :integer
+    let(:manager_id) { @merchant.id }
+    let(:manager_type) { @merchant.class.name }
+
     get(summary: '商家 (某商品系列中) 的已“在订单中”的快照列表') do
       
       parameter :page, in: :query, type: :string
@@ -59,6 +65,11 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
     parameter :order_id, in: :path, type: :string
     let(:order_id) { @order.id }
 
+    parameter :manager_type, in: :query, type: :string
+    parameter :manager_id, in: :query, type: :integer
+    let(:manager_id) { @merchant.id }
+    let(:manager_type) { @merchant.class.name }
+
     get(summary: '商家 (某订单中) 的快照列表') do
       
       parameter :page, in: :query, type: :string
@@ -80,6 +91,11 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
   path "/#{namespace}/product_snapshots/{id}" do
     parameter :id, in: :path, type: :string
     let(:id) { @snapshot_1.id }
+
+    parameter :manager_type, in: :query, type: :string
+    parameter :manager_id, in: :query, type: :integer
+    let(:manager_id) { @merchant.id }
+    let(:manager_type) { @merchant.class.name }
 
     get(summary: '商户 商品快照的详情') do
       produces 'application/json'

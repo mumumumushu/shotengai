@@ -2,7 +2,9 @@ require 'swagger_helper'
 namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, tags: ["#{namespace} API", "order"] do
   before do
-    @products = create_list(:product, 3)
+    @merchant = create(:merchant)
+    
+    @products = create_list(:product, 3, manager: @merchant)
     @product_1 = @products.first
     @series_1 = create(
         :product_series, 
@@ -45,6 +47,11 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
       let(:page) { 1 }
       let(:per_page) { 100 }
 
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
+
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
@@ -62,8 +69,12 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
 
   path "/#{namespace}/orders/{id}" do
     parameter 'id', in: :path, type: :string
-
     let(:id) { @order_1.id }
+
+    parameter :manager_type, in: :query, type: :string
+    parameter :manager_id, in: :query, type: :integer
+    let(:manager_id) { @merchant.id }
+    let(:manager_type) { @merchant.class.name }
 
     get(summary: '商户 订单详情') do
       produces 'application/json'
@@ -106,9 +117,13 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
 
   path "/#{namespace}/orders/{id}/send_out" do
     parameter 'id', in: :path, type: :string
-
     let(:id) { @order_1.id }
 
+    parameter :manager_type, in: :query, type: :string
+    parameter :manager_id, in: :query, type: :integer
+    let(:manager_id) { @merchant.id }
+    let(:manager_type) { @merchant.class.name }
+    
     post(summary: '商户 确认订单开始配送') do
       before { @order_1.pay! }
       produces 'application/json'

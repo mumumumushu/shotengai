@@ -2,10 +2,12 @@ require 'swagger_helper'
 namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/products/:product_id/product_series", type: :request, capture_examples: true, tags: ["#{namespace} API", "product_series"] do
   before do
+    @merchant = create(:merchant)
+
     @clothes = Catalog.create!(name: '衣服')
     @jacket = Catalog.create!(name: '上衣', super_catalog: @clothes)
 
-    @products = create_list(:product, 3)
+    @products = create_list(:product, 3, manager: @merchant)
     @product_1 = @products.first
     @product_1.update(catalog_list: ['衣服'])
     @series_1 = create(
@@ -31,11 +33,19 @@ RSpec.describe "#{namespace}/products/:product_id/product_series", type: :reques
     parameter :product_id, in: :path, type: :string
     let(:product_id) { @product_1.id }
 
+    parameter :manager_type, in: :query, type: :string
+    parameter :manager_id, in: :query, type: :integer
+    let(:manager_id) { @merchant.id }
+    let(:manager_type) { @merchant.class.name }
+
     get(summary: '商家 某商品的 商品系列 列表') do
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
       
       parameter :page, in: :query, type: :string
       parameter :per_page, in: :query, type: :string      
-
       let(:page) { 1 }
       let(:per_page) { 100 }
 
@@ -105,6 +115,11 @@ RSpec.describe "#{namespace}/products/:product_id/product_series", type: :reques
   path "/#{namespace}/product_series/{id}" do
     parameter :id, in: :path, type: :string
     let(:id) { @series_1.id }
+
+    parameter :manager_type, in: :query, type: :string
+    parameter :manager_id, in: :query, type: :integer
+    let(:manager_id) { @merchant.id }
+    let(:manager_type) { @merchant.class.name }
 
     get(summary: '商户 商品系列的详情') do
       produces 'application/json'
