@@ -52,6 +52,8 @@ module Shotengai
           'carts' => '::Order::Cart',
           
         }.each do |key, klass_name|
+          next if @role.eql?('merchant') && key.eal?('carts')
+
           @key, @klass_name = key, klass_name
           template "template_controller.rb",
                    "app/controllers/#{@namespace}/#{@key}_controller.rb"
