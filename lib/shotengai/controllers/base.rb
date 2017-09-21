@@ -4,13 +4,12 @@ module Shotengai
       class << self
         #
         # The base_resources of this controller
-        # ActiveRecord::Relation or ActiveRecord::Base
+        # ActiveRecord::Base only
 
         def base_resources= resources
           class_eval %Q{
             def add_base_resources
-              @base_resources = 
-                ActiveRecord::Relation === #{resources} ? #{resources} : ::#{resources}
+              @base_resources = ::#{resources}
             end
           }
         end
