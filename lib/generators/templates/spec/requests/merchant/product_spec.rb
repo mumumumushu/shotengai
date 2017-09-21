@@ -28,6 +28,7 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
 
       parameter :page, in: :query, type: :string
       parameter :per_page, in: :query, type: :string
+      parameter :status, in: :query, type: :string      
       parameter :catalog_list, in: :query, type: :array
 
       let(:page) { 1 }
@@ -40,8 +41,13 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
       end
 
       response(200, description: 'filter by catalog') do
-
         let(:catalog_list) { @product_1.catalog_list }
+        it { expect(JSON.parse(response.body)['products'].count).to eq(1) }
+      end
+
+      response(200, description: 'filter by status') do
+        before { @product_1.put_on_shelf! }
+        let(:status) { 'on_sale' }
         it { expect(JSON.parse(response.body)['products'].count).to eq(1) }
       end
     end
@@ -57,7 +63,7 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
           product: {
             type: :object, properties: {
               title: { type: :string },
-              default_series_id: { type: :integer },
+              # default_series_id: { type: :integer },
               need_express: { type: :boolean },
               need_time_attr: { type: :boolean },
               cover_image: { type: :string },

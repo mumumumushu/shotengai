@@ -10,9 +10,15 @@ module Shotengai
         end
 
         def index_query resources
-          params[:catalog_list] ? 
-            resources.tagged_with(params[:catalog_list], on: :catalogs) :
-            resources
+          p params
+          p params[:status]
+          (
+            params[:catalog_list] ? 
+              resources.tagged_with(params[:catalog_list], on: :catalogs) :
+              resources
+          ).where(
+            params[:status].blank?.! && { status: params[:status] }
+          )
         end
 
         def put_on_shelf

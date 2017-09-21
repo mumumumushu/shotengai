@@ -35,25 +35,25 @@ module Shotengai
 
     include AASM_DLC
     aasm column: :status do
-      state :no_on, initial: true
+      state :not_on, initial: true
       state :on_sale, :deleted
 
       event :put_on_shelf do
-        transitions from: :no_on, to: :on_sale 
+        transitions from: :not_on, to: :on_sale 
       end
       
       event :sold_out do
-        transitions from: :on_sale, to: :no_on 
+        transitions from: :on_sale, to: :not_on 
       end
       
       event :soft_delete do
-        transitions from: [:on_sale, :no_on], to: :deleted 
+        transitions from: [:on_sale, :not_on], to: :deleted 
       end
     end
 
     def status_zh
       {
-        no_on: '未上架',
+        not_on: '未上架',
         on_sale: '已上架',
         deleted: '已删除'
       }[ status.to_sym ]
