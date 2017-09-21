@@ -49,6 +49,10 @@ module Shotengai
       event :soft_delete do
         transitions from: [:on_sale, :not_on], to: :deleted 
       end
+
+      event :relive do
+        transitions from: :deleted, to: :not_on 
+      end
     end
 
     def status_zh

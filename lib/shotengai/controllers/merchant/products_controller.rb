@@ -5,15 +5,15 @@ module Shotengai
         self.base_resources = Product
         self.template_dir = 'shotengai/merchant/products/'
 
+        skip_before_action :set_resource, only: :batch_event
+
         def default_query resources
           resources.where(@manager && { manager: @manager })
         end
 
         def index_query resources
-          p params
-          p params[:status]
           (
-            params[:catalog_list] ? 
+            params[:catalog_list] ?
               resources.tagged_with(params[:catalog_list], on: :catalogs) :
               resources
           ).where(
@@ -31,9 +31,23 @@ module Shotengai
           respond_with @resource, template: "#{@template_dir}/show", status: 200
         end
 
+        def relive
+          @resource.relive!
+          respond_with @resource, template: "#{@template_dir}/show", status: 200
+        end
+
         def destroy
           @resource.soft_delete!
           head 204
+        end
+
+        def batch_event # params[ids] params[:event]
+          event = (@base_resources.where(nil).klass.aasm.events.map(&:name) & Array[params[:event].to_sym]).first
+          raise ::Shotengai::WebError.new('Invaild event', '-1', 400) unless event
+          ActiveRecord::Base.transaction do
+            default_resources.where(id: params[:ids]).each(&"#{event}!".to_sym)
+          end
+          head 200
         end
 
         private

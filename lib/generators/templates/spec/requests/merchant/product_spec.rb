@@ -118,6 +118,27 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     end
   end
 
+  path "/#{namespace}/products/batch_event" do
+    post(summary: '商户 批量处理商品(put_on_shelf, sold_out, soft_delete, relive)') do
+      parameter :ids, in: :query, type: :string
+      parameter :event, in: :query, type: :string
+      let(:ids) { @products.first(2).map(&:id) }
+      let(:event) { 'put_on_shelf' }
+
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
+      produces 'application/json'
+      consumes 'application/json'
+      response(200, description: 'successful') do
+        it {
+          expect(Product.where(status: 'on_sale').map(&:id).sort).to eq(@products.first(2).map(&:id).sort)
+        }
+      end
+    end
+  end
+
   path "/#{namespace}/products/{id}" do
     parameter 'id', in: :path, type: :string
     let(:id) { @product_1.id }

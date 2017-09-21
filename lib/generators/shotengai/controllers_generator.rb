@@ -87,6 +87,10 @@ module Shotengai
       member do
         post :put_on_shelf
         post :sold_out
+        post :relive
+      end
+      collection do
+        post :batch_event
       end
       resources :#{product}_series
     end

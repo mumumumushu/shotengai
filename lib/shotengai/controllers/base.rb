@@ -9,7 +9,8 @@ module Shotengai
         def base_resources= resources
           class_eval %Q{
             def add_base_resources
-              @base_resources = ::#{resources}
+              @base_resources = 
+                ActiveRecord::Relation === #{resources} ? #{resources} : ::#{resources}
             end
           }
         end
@@ -39,7 +40,7 @@ module Shotengai
       respond_to :json
       
       rescue_from ::Shotengai::WebError do |e|
-        render json: { error: e.message }, status: e.status
+        render json: { error: e.message, code: e.code }, status: e.status
       end
 
       rescue_from ActiveRecord::RecordInvalid do |e|
