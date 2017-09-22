@@ -59,6 +59,8 @@ module Shotengai
         require file_path if File.exist?(file_path)
       end
     end
+
+    delegate :manager, to: :series
     
     # 支付前 信息 delegate to series
     %i{

@@ -28,7 +28,7 @@ module Shotengai
     validate :uniq_spec
     validate :validate_stock
     
-    delegate :title, :detail, :banners, :cover_image, :status, :status_zh, to: :product
+    delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
     
     # where("spec->'$.\"颜色\"' = ?  and spec->'$.\"大小\"' = ?" ,红色,S)
     scope :query_spec_with_product, ->(val, product) { 
