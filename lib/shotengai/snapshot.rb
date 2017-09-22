@@ -35,9 +35,9 @@ module Shotengai
     validate :cannot_edit_if_order_is_paid
 
     belongs_to :shotengai_order, foreign_key: :shotengai_order_id, 
-      class_name: 'Shotengai::Order', optional: true, touch: true
+      class_name: 'Shotengai::Order', optional: true#, touch: true
     belongs_to :shotengai_cart, foreign_key: :shotengai_order_id, 
-      class_name: 'Shotengai::Cart', optional: true, touch: true
+      class_name: 'Shotengai::Cart', optional: true#, touch: true
     
     scope :in_order, -> { joins(:shotengai_order).where.not(shotengai_orders: { status: 'cart'}) }
     scope :in_cart, -> { joins(:shotengai_order).where(shotengai_orders: { status: 'cart'}) }    
@@ -47,8 +47,8 @@ module Shotengai
         product_name = /^(.+)Snapshot/.match(subclass.name)[1]
         series_name = "#{product_name}Series"
         # belongs to Series
-        subclass.belongs_to :series, foreign_key: :shotengai_series_id, class_name: series_name, touch: true
-        subclass.belongs_to series_name.underscore.to_sym, foreign_key: :shotengai_series_id, class_name: series_name, touch: true
+        subclass.belongs_to :series, foreign_key: :shotengai_series_id, class_name: series_name#, touch: true
+        subclass.belongs_to series_name.underscore.to_sym, foreign_key: :shotengai_series_id, class_name: series_name#, touch: true
         # 加载自定义文件
         require_custom_file(product_name) if Rails.root
         super
@@ -61,7 +61,7 @@ module Shotengai
     end
 
     delegate :manager, to: :series
-    
+
     # 支付前 信息 delegate to series
     %i{
         original_price price spec banners 

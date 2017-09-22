@@ -59,7 +59,7 @@ module Shotengai
             class_name: self.name, 
             optional: true, 
             foreign_key: :shotengai_order_id,
-            touch: true,
+            # touch: true,
           )
         end
       end

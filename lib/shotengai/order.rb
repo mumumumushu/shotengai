@@ -31,7 +31,7 @@ module Shotengai
   
   class Order < ActiveRecord::Base
     self.table_name = 'shotengai_orders'
-    belongs_to :buyer, polymorphic: true, optional: true, touch: true
+    belongs_to :buyer, polymorphic: true, optional: true#, touch: true
     
     default_scope { where.not(status: 'cart') } 
     scope :status_is, ->(status) { where(status.blank?.! && { status: status }) }
@@ -179,7 +179,7 @@ module Shotengai
             class_name: self.name, 
             optional: true,
             foreign_key: :shotengai_order_id,
-            touch: true,
+            # touch: true,
           ) 
         end
 
