@@ -35,7 +35,7 @@ module Shotengai
       if val.keys.sort == product.spec.keys.sort 
         keys = []; values = []
         val.map { |k, v| keys << "spec->'$.\"#{k}\"' = ? "; values << v }
-        where(keys.join(' and '), *values)
+        where(product: product).where(keys.join(' and '), *values)
       else
         self.none 
       end

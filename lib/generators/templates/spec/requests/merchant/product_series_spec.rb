@@ -69,8 +69,8 @@ RSpec.describe "#{namespace}/products/:product_id/product_series", type: :reques
               spec: { 
                 type: :object, 
                 properties: {
-                  color: { type: :array },
-                  size: { type: :array },
+                  color: { type: :string },
+                  size: { type: :string },
                 },
               },
               meta: { 
@@ -143,8 +143,8 @@ RSpec.describe "#{namespace}/products/:product_id/product_series", type: :reques
               spec: { 
                 type: :object, 
                 properties: {
-                  color: { type: :array },
-                  size: { type: :array },
+                  color: { type: :string },
+                  size: { type: :string },
                 },
               },
               meta: { 
