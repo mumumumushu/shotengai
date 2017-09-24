@@ -24,7 +24,7 @@ module Shotengai
 
     class << self
       def inherited subclass
-        subclass.has_many :sub_catalogs, class_name: subclass.name, foreign_key: :super_catalog_id
+        subclass.has_many :sub_catalogs, class_name: subclass.name, foreign_key: :super_catalog_id, dependent: :destroy
         subclass.belongs_to :super_catalog, class_name: subclass.name, optional: true#, touch: true  
         # subclass.instance_eval("def klass; #{subclass}; end")
         super
