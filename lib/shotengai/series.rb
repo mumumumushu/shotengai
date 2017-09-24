@@ -7,6 +7,7 @@ module Shotengai
   #  original_price        :decimal(9, 2)
   #  price                 :decimal(9, 2)
   #  stock                 :integer          default(-1)
+  #  state                 :string(255)
   #  spec                  :json
   #  type                  :string(255)
   #  meta                  :json
@@ -40,6 +41,20 @@ module Shotengai
         self.none 
       end
     }
+
+    include AASM_DLC
+    aasm column: :aasm_state do
+      state :alive, initial: true
+      state :deleted
+
+      event :soft_delete do
+        transitions from: :alive, to: :deleted 
+      end
+
+      event :relive do
+        transitions from: :deleted, to: :alive
+      end
+    end
 
     class << self
       def inherited subclass

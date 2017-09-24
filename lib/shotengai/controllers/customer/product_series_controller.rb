@@ -10,7 +10,7 @@ module Shotengai
         remove_actions :create, :update, :destroy
 
         def default_query resources
-          resources.where(
+          resources.alive.where(
             params[:product_id] && { shotengai_product_id: params[:product_id] }
           )
         end

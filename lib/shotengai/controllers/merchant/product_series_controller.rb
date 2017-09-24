@@ -6,11 +6,26 @@ module Shotengai
         self.template_dir = 'shotengai/merchant/series/'
 
         before_action :manager_auth
+        # add_actions :batch_event
 
         def default_query resources
-          resources.where(
+          resources.alive.where(
             params[:product_id] && { shotengai_product_id: params[:product_id] }
           )
+        end
+
+        def destroy
+          @resource.soft_delete!
+          head 204
+        end
+
+        def batch_event # params[ids] params[:event]
+          event = (@base_resources.where(nil).klass.aasm.events.map(&:name) & Array[params[:event].to_sym]).first
+          raise ::Shotengai::WebError.new('Invaild event', '-1', 400) unless event
+          ActiveRecord::Base.transaction do
+            default_resources.where(id: params[:ids]).each(&"#{event}!".to_sym)
+          end
+          head 200
         end
 
         private

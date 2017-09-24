@@ -30,6 +30,21 @@ module Shotengai
         def remove_actions *actions
           actions.each { |name| remove_possible_method name }
         end
+
+        # def add_action *actions
+        #   action_methods = {}
+        #   action_methods[:batch_event] = %Q{
+        #     def batch_event # params[ids] params[:event]
+        #       event = (@base_resources.where(nil).klass.aasm.events.map(&:name) & Array[params[:event].to_sym]).first
+        #       raise ::Shotengai::WebError.new('Invaild event', '-1', 400) unless event
+        #       ActiveRecord::Base.transaction do
+        #         default_resources.where(id: params[:ids]).each(&"#{event}!".to_sym)
+        #       end
+        #       head 200
+        #     end
+        #   }
+        #   actions.each { |action| class_eval(action_methods[action]) }
+        # end
       end
       
       before_action :set_resource, except: [:index, :create]

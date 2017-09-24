@@ -6,6 +6,7 @@ module Shotengai
         self.template_dir = 'shotengai/merchant/products/'
 
         skip_before_action :set_resource, only: :batch_event
+        # add_actions :batch_event
 
         def default_query resources
           resources.where(@manager && { manager: @manager })

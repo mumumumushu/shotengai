@@ -36,6 +36,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.decimal :original_price, precision: 9, scale: 2
       t.decimal :price, precision: 9, scale: 2
       t.integer :stock, default: -1
+      t.string :aasm_state      
       t.json :spec 
       # Single Table Inheritance
       t.string :type
