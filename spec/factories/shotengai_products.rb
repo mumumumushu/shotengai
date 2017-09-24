@@ -39,7 +39,7 @@ FactoryGirl.define do
     need_express true
     # need_time_attr true
     cover_image 'cover_image.image'
-    banners { [ 'image1', 'iamge2' ] }
+    banners { [ 'image1', 'image2' ] }
     detail {
       {
         "使用说明" => "xxxxxxxx...",
@@ -68,7 +68,7 @@ FactoryGirl.define do
     need_express true
     # need_time_attr true
     cover_image 'cover_image.image'
-    banners { [ 'image1', 'iamge2' ] }
+    banners { [ 'image1', 'image2' ] }
     detail {
       {
         "使用说明" => "xxxxxxxx...",

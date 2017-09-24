@@ -782,7 +782,7 @@
                 "cover_image": "cover_image.image",
                 "banners": [
                   "image1",
-                  "iamge2"
+                  "image2"
                 ],
                 "meta": {
                   "series_meta1": "111",
@@ -904,7 +904,7 @@
                 "cover_image": "cover_image.image",
                 "banners": [
                   "image1",
-                  "iamge2"
+                  "image2"
                 ],
                 "spec": {
                   "大小": [
@@ -1285,7 +1285,7 @@
                 "cover_image": "cover_image.image",
                 "banners": [
                   "image1",
-                  "iamge2"
+                  "image2"
                 ],
                 "meta": {
                   "series_meta1": "111",
@@ -1395,7 +1395,7 @@
                 "cover_image": "cover_image.image",
                 "banners": [
                   "image1",
-                  "iamge2"
+                  "image2"
                 ],
                 "meta": {
                   "series_meta1": "111",
@@ -1713,8 +1713,8 @@
                 },
                 "cover_image": "cover_image 1",
                 "banners": [
-                  "iamge 1",
-                  "iamge 2"
+                  "image 1",
+                  "image 2"
                 ],
                 "detail": {
                   "产品参数": "参数 参数...",
@@ -1884,7 +1884,7 @@
                 "cover_image": "cover_image.image",
                 "banners": [
                   "image1",
-                  "iamge2"
+                  "image2"
                 ],
                 "spec": {
                   "颜色": [
@@ -2049,7 +2049,7 @@
                 "cover_image": "cover_image.image",
                 "banners": [
                   "image1",
-                  "iamge2"
+                  "image2"
                 ],
                 "spec": {
                   "大小": [
@@ -2297,7 +2297,7 @@
                 "cover_image": "cover_image.image",
                 "banners": [
                   "image1",
-                  "iamge2"
+                  "image2"
                 ],
                 "spec": {
                   "大小": [
@@ -2411,7 +2411,7 @@
                 "cover_image": "cover_image.image",
                 "banners": [
                   "image1",
-                  "iamge2"
+                  "image2"
                 ],
                 "spec": {
                   "大小": [

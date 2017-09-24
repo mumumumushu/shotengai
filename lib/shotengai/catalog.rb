@@ -72,7 +72,7 @@ module Shotengai
     def tree
       {
         name: name,
-        iamge: iamge,
+        image: image,
         level_type: level_type,
         sub_catalogs: sub_catalogs.map(&:tree)
       }

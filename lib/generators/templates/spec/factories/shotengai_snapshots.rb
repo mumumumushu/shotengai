@@ -37,7 +37,7 @@ FactoryGirl.define do
         "大小" => "S",
       }
     }
-    banners { ['iamge 1', 'iamge 2'] }
+    banners { ['image 1', 'image 2'] }
     cover_image 'cover_image 1'
     detail {
       {
