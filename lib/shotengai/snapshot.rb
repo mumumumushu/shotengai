@@ -74,6 +74,10 @@ module Shotengai
       read_attribute(:meta) || (series.product.meta || {} ).merge(series.meta || {})
     end
 
+    def already_disable
+      series.deleted?
+    end
+
     # 订单支付后 存储当时信息快照
     def copy_info
       # cut_stock
