@@ -43,6 +43,10 @@ module Shotengai
         raise Shotengai::WebError.new('Illegality catalge name chain', '-1', '400')
       end
       
+      def tree
+        where(super_catalog_id: nil).map(&:tree)
+      end
+
       # def input_from_file
       # end
     end
@@ -63,6 +67,15 @@ module Shotengai
 
     def brothers
       super_catalog.sub_catalogs
+    end
+
+    def tree
+      {
+        name: name,
+        iamge: iamge,
+        level_type: level_type,
+        sub_catalogs: sub_catalogs.map(&:tree)
+      }
     end
   end
 end
