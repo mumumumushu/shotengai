@@ -64,6 +64,10 @@ module Shotengai
       # event :soft_delete
     end
 
+    def manager
+      snapshots.first.manager  
+    end
+
     def status_zh
       {
         unpaid: '未支付', 
@@ -99,10 +103,14 @@ module Shotengai
     end
 
     def set_seq
-      timestamp = Time.now.strftime("%Y%m%d-%H%M")
+      self.update!(seq: create_seq)
+    end
+    
+    def create_seq
+      timestamp = Time.now.strftime("%Y%m%d_%H%M")
       no_length = 4
       no = ("%0#{no_length}d" % id).last no_length
-      self.update!(seq: "#{timestamp}-#{no}")
+      "s#{timestamp}_#{no}"
     end
 
     def set_amount
