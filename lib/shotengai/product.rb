@@ -118,7 +118,7 @@ module Shotengai
           # }
 
           scope "#{list_name}_filter".to_sym, ->(catalogs) { 
-            tags = catalogs && catalogs.try(:tag) || catalogs&.map(&:tag)
+            tags = catalogs && catalogs.try(:tag) || catalogs.any? && catalogs&.map(&:tag)
             tags ? tagged_with(tags, on: list_name) : all
           }
 
