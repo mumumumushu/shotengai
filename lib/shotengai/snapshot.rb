@@ -99,11 +99,11 @@ module Shotengai
 
     ###### view
     def total_price
-      revised_amount || count * self.price  
+      (revised_amount || count.to_d * self.price).round(2)
     end
 
     def total_original_price
-      count * original_price
+      (count * original_price).round(2)
     end
 
     def is_in_cart

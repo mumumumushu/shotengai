@@ -2,7 +2,8 @@ require 'swagger_helper'
 namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, tags: ["#{namespace} API", "product"] do
   before do
-    @merchant = create(:merchant)
+    @merchant = Merchant.register "merchant", "password"
+    @auth_token = Merchant.login "merchant", "password"
 
     class Catalog < Shotengai::Catalog; end
     @clothes = Catalog.create!(name: '衣服')
@@ -10,38 +11,32 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
 
     @products = create_list(:product, 3, manager: @merchant)
     @product_1 = @products.first
-    @product_1.update(catalog_list: ['衣服'])
+    @product_1.update(catalog_ids: @clothes.id)
     @series = create(:product_series, product: @product_1)
   end
 
   path "/#{namespace}/products" do
-    parameter :manager_type, in: :query, type: :string
-    parameter :manager_id, in: :query, type: :integer
-    let(:manager_id) { @merchant.id }
-    let(:manager_type) { @merchant.class.name }
-
     get(summary: '商家 商品列表') do
-      parameter :manager_type, in: :query, type: :string
-      parameter :manager_id, in: :query, type: :integer
-      let(:manager_id) { @merchant.id }
-      let(:manager_type) { @merchant.class.name }
+      parameter 'Merchant-Token', in: :header, type: :string
+      let('Merchant-Token') { @auth_token.token }
 
       parameter :page, in: :query, type: :string
       parameter :per_page, in: :query, type: :string
       parameter :status, in: :query, type: :string      
-      parameter :catalog_list, in: :query, type: :array
+      parameter :catalog_ids, in: :query, type: :array
 
       let(:page) { 1 }
-      let(:per_page) { 2 }
+      let(:per_page) { 999 }
 
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
-        it { expect(JSON.parse(response.body)['products'].count).to eq(2) }
+        
+        it { expect(JSON.parse(response.body)['products'].count).to eq(Product.where(manager: @merchant).count) }
       end
 
       response(200, description: 'filter by catalog') do
-        let(:catalog_list) { @product_1.catalog_list }
+        let(:catalog_ids) { [@clothes.id] }
         it { expect(JSON.parse(response.body)['products'].count).to eq(1) }
       end
 
@@ -53,17 +48,15 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     end
 
     post(summary: '管理员新建商品') do
-      parameter :manager_type, in: :query, type: :string
-      parameter :manager_id, in: :query, type: :integer
-      let(:manager_id) { @merchant.id }
-      let(:manager_type) { @merchant.class.name }
+      parameter 'Merchant-Token', in: :header, type: :string
+      let('Merchant-Token') { @auth_token.token }
 
       parameter :product, in: :body, schema: {
         type: :object, properties: {
           product: {
             type: :object, properties: {
               title: { type: :string },
-              # default_series_id: { type: :integer },
+              default_series_id: { type: :integer },
               need_express: { type: :boolean },
               need_time_attr: { type: :boolean },
               cover_image: { type: :string },
@@ -89,7 +82,7 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
                   meta2: { type: :ineteger },
                 },
               },
-              catalog_list: { type: :array }
+              catalog_ids: { type: :array }
             }
           }
         }
@@ -103,12 +96,12 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
           { 
             product:  product_attrs.merge( 
                 default_series_id: @series.id,
-                catalog_list: ['衣服', '上衣'],
+                catalog_ids: [@clothes.id, @jacket.id],
               ) 
           }
         }
         it 'check attrs' do
-         body = JSON.parse(response.body)
+          body = JSON.parse(response.body)
           the_same_values = ['spec', 'banners', 'detail', 'meta', 'title', 'need_express', 'need_time_attr'] # and so on
           expect(product_attrs.values_at the_same_values).to eq(body.values_at the_same_values)
           expect(body['default_series']['id']).to eq(@series.id), 'correct default_series'
@@ -125,10 +118,8 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
       let(:ids) { @products.first(2).map(&:id) }
       let(:event) { 'put_on_shelf' }
 
-      parameter :manager_type, in: :query, type: :string
-      parameter :manager_id, in: :query, type: :integer
-      let(:manager_id) { @merchant.id }
-      let(:manager_type) { @merchant.class.name }
+      parameter 'Merchant-Token', in: :header, type: :string
+      let('Merchant-Token') { @auth_token.token }
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
@@ -143,16 +134,9 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     parameter 'id', in: :path, type: :string
     let(:id) { @product_1.id }
 
-    parameter :manager_type, in: :query, type: :string
-    parameter :manager_id, in: :query, type: :integer
-    let(:manager_id) { @merchant.id }
-    let(:manager_type) { @merchant.class.name }
-
     get(summary: '商户 商品详情') do
-      parameter :manager_type, in: :query, type: :string
-      parameter :manager_id, in: :query, type: :integer
-      let(:manager_id) { @merchant.id }
-      let(:manager_type) { @merchant.class.name }
+      parameter 'Merchant-Token', in: :header, type: :string
+      let('Merchant-Token') { @auth_token.token }
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
@@ -162,10 +146,8 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
       end
     end
     patch(summary: 'update product') do
-      parameter :manager_type, in: :query, type: :string
-      parameter :manager_id, in: :query, type: :integer
-      let(:manager_id) { @merchant.id }
-      let(:manager_type) { @merchant.class.name }
+      parameter 'Merchant-Token', in: :header, type: :string
+      let('Merchant-Token') { @auth_token.token }
 
       produces 'application/json'
       consumes 'application/json'
@@ -201,7 +183,7 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
                   meta2: { type: :ineteger },
                 },
               },
-              catalog_list: { type: :array }
+              catalog_ids: { type: :array }
             }
           }
         }
@@ -213,10 +195,8 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     end
 
     delete(summary: 'delete product') do
-      parameter :manager_type, in: :query, type: :string
-      parameter :manager_id, in: :query, type: :integer
-      let(:manager_id) { @merchant.id }
-      let(:manager_type) { @merchant.class.name }
+      parameter 'Merchant-Token', in: :header, type: :string
+      let('Merchant-Token') { @auth_token.token }
 
       produces 'application/json'
       consumes 'application/json'
@@ -229,16 +209,9 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     parameter 'id', in: :path, type: :string
     let(:id) { @product_1.id }
 
-    parameter :manager_type, in: :query, type: :string
-    parameter :manager_id, in: :query, type: :integer
-    let(:manager_id) { @merchant.id }
-    let(:manager_type) { @merchant.class.name }
-
     post(summary: '商户 上架商品') do
-      parameter :manager_type, in: :query, type: :string
-      parameter :manager_id, in: :query, type: :integer
-      let(:manager_id) { @merchant.id }
-      let(:manager_type) { @merchant.class.name }
+      parameter 'Merchant-Token', in: :header, type: :string
+      let('Merchant-Token') { @auth_token.token }
 
       produces 'application/json'
       consumes 'application/json'
@@ -252,16 +225,9 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     parameter 'id', in: :path, type: :string
     let(:id) { @product_1.id }
 
-    parameter :manager_type, in: :query, type: :string
-    parameter :manager_id, in: :query, type: :integer
-    let(:manager_id) { @merchant.id }
-    let(:manager_type) { @merchant.class.name }
-
     post(summary: '商户 下架商品') do
-      parameter :manager_type, in: :query, type: :string
-      parameter :manager_id, in: :query, type: :integer
-      let(:manager_id) { @merchant.id }
-      let(:manager_type) { @merchant.class.name }
+      parameter 'Merchant-Token', in: :header, type: :string
+      let('Merchant-Token') { @auth_token.token }
       
       before { @product_1.update!(status: 'on_sale') }
       produces 'application/json'

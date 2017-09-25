@@ -13,10 +13,8 @@ module Shotengai
         end
 
         def index_query resources
-          (
-            params[:catalog_list] ?
-              resources.tagged_with(params[:catalog_list], on: :catalogs) :
-              resources
+          resources.catalog_list_filter(
+            ::Catalog.find_by_id(params[:catalog_ids])
           ).where(
             params[:status].blank?.! && { status: params[:status] }
           )
@@ -60,7 +58,7 @@ module Shotengai
             # NOTE: :catalog_list is a default catalog list for template example, maybe should move it to the template controller, but it need add controller template for every controller
             params.require(resource_key).permit(
               :title, :default_series_id, 
-              :need_express, :need_time_attr, :cover_image, catalog_list: [],
+              :need_express, :need_time_attr, :cover_image, catalog_ids: [],
               banners: []
             ).merge(
               { spec: spec, detail: detail, meta: meta }

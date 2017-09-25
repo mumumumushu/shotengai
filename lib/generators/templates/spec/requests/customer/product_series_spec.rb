@@ -1,61 +1,53 @@
 require 'swagger_helper'
 namespace = '<%= @namespace %>'
-RSpec.describe "#{namespace}/products/:product_id/product_series", type: :request, capture_examples: true, tags: ["#{namespace} API", "product_series"] do
+RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, tags: ["#{namespace} API", "product"] do
   before do
+    class Catalog < Shotengai::Catalog; end
+    @clothes = Catalog.create!(name: '衣服')
+    @jacket = Catalog.create!(name: '上衣', super_catalog: @clothes)
+
     @products = create_list(:product, 3)
     @product_1 = @products.first
-    
-    @series_1 = create(
-        :product_series, 
-          product: @product_1,
-          spec: {
-              "颜色" => "白色",
-              "大小" => "S",
-            }
-      )
-    @series_2 = create(
-        :product_series, {
-          product: @product_1,
-          spec: {
-              "颜色" => "黑色",
-              "大小" => "S",
-            }
-          }
-      )
+    @product_1.update(catalog_ids: @clothes.id)
+    @series = create(:product_series, product: @product_1)
   end
 
-  path "/#{namespace}/products/{product_id}/product_series" do
-    parameter :product_id, in: :path, type: :string
-    let(:product_id) { @product_1.id }
+  path "/#{namespace}/products" do
 
-    get(summary: '用户 某商品的 商品系列 列表') do
-      
+    get(summary: '用户 商品列表') do
       parameter :page, in: :query, type: :string
-      parameter :per_page, in: :query, type: :string      
+      parameter :per_page, in: :query, type: :string
+      parameter :catalog_ids, in: :query, type: :array
 
       let(:page) { 1 }
-      let(:per_page) { 100 }
+      let(:per_page) { 999 }
 
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
-        it { 
-          expect(JSON.parse(response.body)['product_series'].count).to eq(@product_1.series.count) 
-        }
+        it { expect(JSON.parse(response.body)['products'].count).to eq(Product.count) }
+      end
+
+      response(200, description: 'filter by catalog') do
+
+        let(:catalog_ids) { [@clothes.id] }
+        it { expect(JSON.parse(response.body)['products'].count).to eq(1) }
       end
     end
   end
 
-  path "/#{namespace}/product_series/{id}" do
-    parameter :id, in: :path, type: :string
+  path "/#{namespace}/products/{id}" do
+    parameter 'id', in: :path, type: :string
 
-    let(:id) { @series_1.id }
+    let(:id) { @product_1.id }
 
-    get(summary: '用户 商品系列的详情') do
+    get(summary: '用户 商品详情') do
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
-        # it { p response.body }
+        it {
+           expect(JSON.parse(response.body)['series'].count).to eq(@product_1.series.count), "correct product's series"
+        }
       end
     end
   end

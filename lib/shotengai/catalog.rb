@@ -47,6 +47,13 @@ module Shotengai
         where(super_catalog_id: nil).map(&:tree)
       end
 
+      def ids_to_tags ids
+        where(id: ids).map(&:tag_chain).reduce(:|)
+      end
+
+      def parse_tag tag
+        tag.split('-').last
+      end
       # def input_from_file
       # end
     end
@@ -57,12 +64,20 @@ module Shotengai
       ary
     end
 
+    def tag
+      "#{self.class.name}-#{id}"  
+    end
+
     def nest_level 
       ancestors.count
     end
 
     def name_chain
       ancestors.map(&:name)
+    end
+
+    def tag_chain
+      ancestors.map(&:tag)      
     end
 
     def brothers
