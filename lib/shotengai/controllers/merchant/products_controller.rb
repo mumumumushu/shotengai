@@ -14,7 +14,7 @@ module Shotengai
 
         def index_query resources
           resources.catalog_list_filter(
-            ::Catalog.find_by_id(params[:catalog_ids])
+            ::Catalog.where(id: params[:catalog_ids])
           ).where(
             params[:status].blank?.! && { status: params[:status] }
           )

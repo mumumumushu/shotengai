@@ -9,9 +9,7 @@ module Shotengai
         skip_before_action :buyer_auth
 
         def index_query resources
-          p params[:catalog_ids]
-          p ::Catalog.find_by_id(params[:catalog_ids])
-          resources.catalog_list_filter(::Catalog.find_by_id(params[:catalog_ids]))
+          resources.catalog_list_filter(::Catalog.where(id: params[:catalog_ids]))
         end
       end
     end
