@@ -4,6 +4,7 @@ class CreateShotengaiCatalogs < ActiveRecord::Migration[5.1]
       t.string :name
       t.string :level_type
       t.string :image
+      t.json :meta
       # STI
       t.string :type
       t.references :super_catalog, index: true
