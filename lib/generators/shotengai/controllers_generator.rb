@@ -91,6 +91,7 @@ module Shotengai
       end
       collection do
         post :batch_event
+        get  :recycle_bin
       end
       resources :#{product}_series
     end
@@ -102,6 +103,10 @@ module Shotengai
     end
     resources :#{product}_series, shallow: true do #, excpet: :index
       resources :#{product}_snapshots, only: [:index, :show, :update]
+      collection do
+        post :batch_event
+        get  :recycle_bin
+      end
     end
   end
   "
@@ -112,7 +117,7 @@ module Shotengai
   "
   namespace :#{@namespace} do        
     resources :#{product.pluralize}, shallow: true, only: [:index, :show] do
-      resources :product_series, only: [:index, :show]
+      resources :#{product}_series, only: [:index, :show]
     end
     resources :#{product}_snapshots, only: [:index, :show]
     # order_cart
