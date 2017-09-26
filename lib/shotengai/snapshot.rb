@@ -39,6 +39,9 @@ module Shotengai
     belongs_to :shotengai_cart, foreign_key: :shotengai_order_id, 
       class_name: 'Shotengai::Cart', optional: true#, touch: true
     
+    belongs_to :manager, polymorphic: true, optional: true
+    before_save :set_manager
+
     scope :in_order, -> { joins(:shotengai_order).where.not(shotengai_orders: { status: 'cart'}) }
     scope :in_cart, -> { joins(:shotengai_order).where(shotengai_orders: { status: 'cart'}) }    
     
@@ -60,8 +63,6 @@ module Shotengai
       end
     end
 
-    delegate :manager, to: :series
-
     # 支付前 信息 delegate to series
     %i{
         original_price price spec banners 
@@ -76,6 +77,10 @@ module Shotengai
 
     def already_disable
       series.deleted?
+    end
+
+    def manager
+      super || series.manager      
     end
 
     # 订单支付后 存储当时信息快照
@@ -137,6 +142,10 @@ module Shotengai
         unless Shotengai::Snapshot.find_by_id(self.id)&.order_status.in?(['unpaid', 'cart', nil])
           errors.add(:id, '订单已支付，禁止修改商品快照。') 
         end
+      end
+
+      def set_manager
+        self.manager = self.series.product.manager
       end
   end
 

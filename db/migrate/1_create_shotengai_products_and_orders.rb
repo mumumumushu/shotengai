@@ -20,14 +20,10 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       # Single Table Inheritance
       t.string :type
       t.json :meta
-      
-      t.integer :manager_id 
-      t.string :manager_type 
 
+      t.references :manager, polymorphic: true, index: true      
       t.timestamps
     end   
-
-    add_index :shotengai_products, [:manager_id, :manager_type]    
     add_index :shotengai_products, :type
   end
   
@@ -43,7 +39,6 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.json :meta
 
       t.references :shotengai_product, foreign_key: true
-
       t.timestamps
     end
     
@@ -66,15 +61,12 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.string :status
       t.string :type
       t.json :meta
-      
-      t.integer :buyer_id 
-      t.string :buyer_type 
-      
+
+      t.references :buyer, polymorphic: true, index: true
       t.timestamps
     end
 
     add_index :shotengai_orders, :type
-    add_index :shotengai_orders, [:buyer_id, :buyer_type]
   end
 
   def create_snapshot
@@ -96,6 +88,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
 
       t.references :shotengai_series, foreign_key: true
       t.references :shotengai_order, foreign_key: true
+      t.references :manager, polymorphic: true, index: true
 
       t.timestamps
     end
