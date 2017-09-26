@@ -7,7 +7,7 @@ module Shotengai
   #  original_price        :decimal(9, 2)
   #  price                 :decimal(9, 2)
   #  stock                 :integer          default(-1)
-  #  state                 :string(255)
+  #  aasm_state            :string(255)
   #  spec                  :json
   #  type                  :string(255)
   #  meta                  :json
@@ -31,6 +31,9 @@ module Shotengai
     
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
     
+    scope :alive, -> { where.not(aasm_state: 'deleted') }
+    scope :recycle_bin, ->{ unscope(where: :aasm_state).deleted.where('updated_at < ?', Time.now - 10.day )}
+
     # where("spec->'$.\"颜色\"' = ?  and spec->'$.\"大小\"' = ?" ,红色,S)
     scope :query_spec_with_product, ->(val, product) { 
       if val.keys.sort == product.spec.keys.sort 
@@ -111,7 +114,7 @@ module Shotengai
       end
 
       def uniq_spec
-        if self.class.query_spec_with_product(self.spec, self.product).where.not(id: self.id).any?
+        if self.class.query_spec_with_product(self.spec, self.product).alive.where.not(id: self.id).any?
           errors.add(:spec, 'Non uniq spec for the product.') 
         end
       end

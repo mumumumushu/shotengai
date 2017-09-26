@@ -5,11 +5,11 @@ module Shotengai
         self.base_resources = Product
         self.template_dir = 'shotengai/merchant/products/'
 
-        skip_before_action :set_resource, only: :batch_event
+        skip_before_action :set_resource, only: [:batch_event, :relive, :recycle_bin]
         # add_actions :batch_event
 
         def default_query resources
-          resources.where(@manager && { manager: @manager })
+          resources.alive.where(@manager && { manager: @manager })
         end
 
         def index_query resources
@@ -31,6 +31,7 @@ module Shotengai
         end
 
         def relive
+          @resource = default_resources.recycle_bin.find(params[:id])
           @resource.relive!
           respond_with @resource, template: "#{@template_dir}/show", status: 200
         end
@@ -43,10 +44,19 @@ module Shotengai
         def batch_event # params[ids] params[:event]
           event = (@base_resources.where(nil).klass.aasm.events.map(&:name) & Array[params[:event].to_sym]).first
           raise ::Shotengai::WebError.new('Invaild event', '-1', 400) unless event
+          # :relive only work for products in recycle_bin
+          resources = event.eql?(:relive) ? default_resources.recycle_bin : default_resources
           ActiveRecord::Base.transaction do
-            default_resources.where(id: params[:ids]).each(&"#{event}!".to_sym)
+            resources.where(id: params[:ids]).each(&"#{event}!".to_sym)
           end
           head 200
+        end
+
+        def recycle_bin
+          page = params[:page] || 1
+          per_page = params[:per_page] || 10
+          @resources = default_resources.recycle_bin.paginate(page: page, per_page: per_page)
+          respond_with @resources, template: "#{@template_dir}/index"
         end
 
         private
