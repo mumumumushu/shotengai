@@ -8,6 +8,10 @@ module Shotengai
         before_action :manager_auth
         remove_actions :create, :destroy
         
+        def default_query resources
+          @manager.orders
+        end
+        
         def index_query resources
           resources.status_is(params[:status])
         end
