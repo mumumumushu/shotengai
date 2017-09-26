@@ -90,6 +90,15 @@ module Shotengai
     def meta
       super || {}
     end
+
+    def spec_output
+      spec.map { |key, val|
+        {
+          key: key,
+          val: val,
+        }
+      }
+    end
     
     private 
       # spec 字段

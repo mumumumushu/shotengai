@@ -71,6 +71,15 @@ module Shotengai
       super || {}
     end
 
+    def spec_output
+      spec.map { |key, val|
+        {
+          key: key,
+          val: val,
+        }
+      }
+    end
+
     class << self
       def series_class
         Shotengai::Series

@@ -46,7 +46,12 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
       consumes 'application/json'
       response(200, description: 'successful') do
         it {
-           expect(JSON.parse(response.body)['series'].count).to eq(@product_1.series.count), "correct product's series"
+          body = JSON.parse(response.body)
+          expect(body['series'].count).to eq(@product_1.series.count), "correct product's series"
+          # check spec_output
+          expect(body['spec']).to eq(
+            [{"key"=>"大小", "val"=>["S", "M", "L"]}, {"key"=>"颜色", "val"=>["黑色", "红色", "白色"]}]
+          )
         }
       end
     end
