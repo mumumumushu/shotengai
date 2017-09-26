@@ -5,13 +5,12 @@ module Shotengai
         self.base_resources = ::Order
         self.template_dir = 'shotengai/merchant/orders/'
         
-        before_action :manager_auth
         remove_actions :create, :destroy
         
         def default_query resources
           @manager.orders
         end
-        
+
         def index_query resources
           resources.status_is(params[:status])
         end

@@ -55,13 +55,13 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
-        it { expect(JSON.parse(response.body)['orders'].count).to eq(3) }
+        it { expect(JSON.parse(response.body)['orders'].count).to eq(1) }
       end
 
       response(200, description: 'filter by status') do
-        before { @orders.last.pay! }
-        let(:status) { 'paid' }
-        it { expect(JSON.parse(response.body)['orders'].count).to eq(1) }
+        before { @order_1.pay! }
+        let(:status) { 'unpaid' }
+        it { expect(JSON.parse(response.body)['orders'].count).to eq(0) }
       end
     end
 

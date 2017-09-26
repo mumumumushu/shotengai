@@ -5,7 +5,6 @@ module Shotengai
         self.base_resources = ProductSeries
         self.template_dir = 'shotengai/merchant/series/'
 
-        before_action :manager_auth
         skip_before_action :set_resource, only: :batch_event
 
         # add_actions :batch_event
