@@ -8,7 +8,7 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
 
     @products = create_list(:product, 3)
     @product_1 = @products.first
-    @product_1.update(catalog_list: ['衣服'])
+    @product_1.update(catalog_ids: @clothes.id)
     @series = create(:product_series, product: @product_1)
   end
 
@@ -17,20 +17,19 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     get(summary: '用户 商品列表') do
       parameter :page, in: :query, type: :string
       parameter :per_page, in: :query, type: :string
-      parameter :catalog_list, in: :query, type: :array
+      parameter :catalog_ids, in: :query, type: :array
 
       let(:page) { 1 }
-      let(:per_page) { 2 }
+      let(:per_page) { 999 }
 
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
-        it { expect(JSON.parse(response.body)['products'].count).to eq(2) }
+        it { expect(JSON.parse(response.body)['products'].count).to eq(Product.count) }
       end
 
       response(200, description: 'filter by catalog') do
-
-        let(:catalog_list) { @product_1.catalog_list }
+        let(:catalog_ids) { [@clothes.id] }
         it { expect(JSON.parse(response.body)['products'].count).to eq(1) }
       end
     end
