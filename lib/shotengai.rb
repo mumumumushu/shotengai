@@ -12,25 +12,27 @@ module Shotengai
   autoload :Catalog,         'shotengai/catalog'
   autoload :AASM_DLC,        'shotengai/aasm_dlc'
   autoload :WebError,        'shotengai/web_error'
+  autoload :JsonColumn,      'shotengai/json_column'
+  autoload :Model,           'shotengai/model'
 
   module Controller
-    autoload :Base, 'shotengai/controllers/base'
+    autoload :Base, 'shotengai/controller/base'
 
     module Merchant
-      autoload :Base,                       'shotengai/controllers/merchant/base'
-      autoload :ProductsController,         'shotengai/controllers/merchant/products_controller'
-      autoload :ProductSnapshotsController, 'shotengai/controllers/merchant/product_snapshots_controller'
-      autoload :ProductSeriesController,    'shotengai/controllers/merchant/product_series_controller'
-      autoload :OrdersController,           'shotengai/controllers/merchant/orders_controller'
+      autoload :Base,                       'shotengai/controller/merchant/base'
+      autoload :ProductsController,         'shotengai/controller/merchant/products_controller'
+      autoload :ProductSnapshotsController, 'shotengai/controller/merchant/product_snapshots_controller'
+      autoload :ProductSeriesController,    'shotengai/controller/merchant/product_series_controller'
+      autoload :OrdersController,           'shotengai/controller/merchant/orders_controller'
     end
     
     module Customer
-      autoload :Base,                       'shotengai/controllers/customer/base'      
-      autoload :ProductsController,         'shotengai/controllers/customer/products_controller'
-      autoload :ProductSnapshotsController, 'shotengai/controllers/customer/product_snapshots_controller'
-      autoload :ProductSeriesController,    'shotengai/controllers/customer/product_series_controller'
-      autoload :OrdersController,           'shotengai/controllers/customer/orders_controller'
-      autoload :CartsController,            'shotengai/controllers/customer/carts_controller'
+      autoload :Base,                       'shotengai/controller/customer/base'      
+      autoload :ProductsController,         'shotengai/controller/customer/products_controller'
+      autoload :ProductSnapshotsController, 'shotengai/controller/customer/product_snapshots_controller'
+      autoload :ProductSeriesController,    'shotengai/controller/customer/product_series_controller'
+      autoload :OrdersController,           'shotengai/controller/customer/orders_controller'
+      autoload :CartsController,            'shotengai/controller/customer/carts_controller'
     end
   end
 end
