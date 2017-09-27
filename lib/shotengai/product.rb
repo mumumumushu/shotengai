@@ -58,6 +58,8 @@ module Shotengai
       end
     end
 
+    scope :alive, -> { where.not(status: 'deleted') }
+    
     def status_zh
       {
         not_on: '未上架',

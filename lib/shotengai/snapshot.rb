@@ -16,15 +16,18 @@ module Shotengai
   #  type                :string(255)
   #  meta                :json
   #  shotengai_series_id :integer
-  #  shotengai_order_id :integer
+  #  shotengai_order_id  :integer
   #  created_at          :datetime         not null
   #  updated_at          :datetime         not null
-  # 
-  #  Indexes
+  #  manager_type        :string(255)
+  #  manager_id          :integer
   #
-  #  index_shotengai_snapshots_on_shotengai_order_id  (shotengai_order_id)
-  #  index_shotengai_snapshots_on_shotengai_series_id  (shotengai_series_id)
-  #  index_shotengai_snapshots_on_type                 (type)
+  # Indexes
+  #
+  #  index_shotengai_snapshots_on_manager_type_and_manager_id  (manager_type,manager_id)
+  #  index_shotengai_snapshots_on_shotengai_order_id           (shotengai_order_id)
+  #  index_shotengai_snapshots_on_shotengai_series_id          (shotengai_series_id)
+  #  index_shotengai_snapshots_on_type                         (type)
   #
 
   class Snapshot < ActiveRecord::Base
@@ -32,8 +35,11 @@ module Shotengai
     validate :check_spec, if: :spec
     validates :count, numericality: { only_integer: true, greater_than: 0 }
 
-    validate :cannot_edit_if_order_is_paid
-
+    validate :cannot_edit, if: :order_was_paid
+    before_destroy :cannot_edit, if: :order_was_paid
+    
+    validate :cannot_edit_or_create, if: :already_disable?
+    
     belongs_to :shotengai_order, foreign_key: :shotengai_order_id, 
       class_name: 'Shotengai::Order', optional: true#, touch: true
     belongs_to :shotengai_cart, foreign_key: :shotengai_order_id, 
@@ -76,7 +82,11 @@ module Shotengai
     end
 
     def already_disable
-      series.deleted?
+      series.deleted? || product.on_sale?.!
+    end
+
+    def order_was_paid
+      Shotengai::Snapshot.find_by_id(self.id)&.order_status.in?(['unpaid', 'cart', nil]).!
     end
 
     def manager
@@ -138,10 +148,12 @@ module Shotengai
       end
 
       # NOTE: Shotengai::Snapshot.find_by_id(self.id) to get the self before changed
-      def cannot_edit_if_order_is_paid
-        unless Shotengai::Snapshot.find_by_id(self.id)&.order_status.in?(['unpaid', 'cart', nil])
-          errors.add(:id, '订单已支付，禁止修改商品快照。') 
-        end
+      def cannot_edit
+        errors.add(:id, '订单已支付，禁止修改商品快照。') 
+      end
+
+      def cannot_edit_or_create
+        error.add(:id, '商品已下架，无法购买。')
       end
 
       def set_manager

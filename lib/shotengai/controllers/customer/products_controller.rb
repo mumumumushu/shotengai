@@ -8,6 +8,10 @@ module Shotengai
         remove_actions :create, :update, :destroy
         skip_before_action :buyer_auth
 
+        def default_query resources
+          resources.alive  
+        end
+
         def index_query resources
           resources.catalog_list_filter(::Catalog.where(id: params[:catalog_ids]))
         end
