@@ -25,11 +25,12 @@ module Shotengai
     self.table_name = 'shotengai_series'
     validates_presence_of :spec
     validate :check_spec_value
+    validate :check_remark
     # Using validates_uniqueness_of do not work if the order of Hash is diff
     validate :uniq_spec
     validate :validate_stock
     
-    hash_columns :spec, :meta
+    hash_columns :spec, :meta, :remark
 
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
     
@@ -84,6 +85,12 @@ module Shotengai
       end
     end
 
+    def initialize *arg
+      super(*arg)
+      self.remark = Hash[product.remark.map { |k, v| [k, true] }]
+      self
+    end
+
     def cut_stock count
       self.stock.eql?(-1) || self.update!(stock: self.stock - count)
     end
@@ -113,6 +120,15 @@ module Shotengai
         illegal_values = {}
         spec.each { |key, value| illegal_values[key] = value unless value.in?(product.spec[key]) }
         errors.add(:spec, "非法的值，#{illegal_values}") unless illegal_values.empty?
+      end
+
+      def check_remark
+        errors.add(:remark, 'remark 必须是个 Hash') unless remark.is_a?(Hash) 
+        # product.remark.keys 包含 remark.keys
+        illegal_key = (remark.keys - product.remark.keys)
+        errors.add(:remark, "非法的关键字, #{illegal_key}") unless illegal_key.empty?        
+        # illegal_values = remark.reject { |k, v| !!v == v }.keys
+        # errors.add(:spec, "非法的值，仅允许布尔值。#{illegal_values}") unless illegal_values.empty?        
       end
 
       def uniq_spec

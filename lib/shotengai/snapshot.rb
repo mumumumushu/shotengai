@@ -32,10 +32,11 @@ module Shotengai
 
   class Snapshot < Shotengai::Model
     self.table_name = 'shotengai_snapshots'
-    validate :check_spec, if: :spec
+    validate :check_spec
+    validate :check_remark
     validates :count, numericality: { only_integer: true, greater_than: 0 }
         
-    hash_columns :spec, :meta, :detail
+    hash_columns :spec, :meta, :detail, :remark
 
     validate :cannot_edit, if: :order_was_paid
     before_destroy :cannot_edit, if: :order_was_paid
@@ -151,6 +152,13 @@ module Shotengai
         illegal_values = {}
         spec.each { |key, value| illegal_values[key] = value unless value.in?(series.product.spec[key]) }
         errors.add(:spec, "非法的值，#{illegal_values}") unless illegal_values.empty?
+      end
+
+      def check_remark
+        errors.add(:remark, 'remark 必须是个 Hash') unless remark.is_a?(Hash) 
+        required_key = series.series.remark.select{ |k, v| v }.keys
+        # remark 可添加多余字段
+        errors.add(:remark, '非法的关键字，或关键字缺失') unless (required_key - remark.keys).empty?        
       end
 
       # NOTE: Shotengai::Snapshot.find_by_id(self.id) to get the self before changed

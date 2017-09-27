@@ -7,14 +7,21 @@ module Shotengai
     class_methods do
       def hash_columns *columns
         columns.each do |column|
-          define_method("#{column}_input=") do |val|
-            val = val.map{ |h| { h[:key] => h[:val] } }.reduce(&:merge)
-            write_attribute(column, val)
-          end
+          # QUESTION: 这样可以避免 send("#{column}="), 合适？
+          class_eval %Q{
+            define_method('#{column}') do 
+              super() || {}
+            end
 
-          define_method("#{column}_output") do
-            read_attribute(column).map {|key, val| { key: key, val: val } }
-          end
+            define_method("#{column}_input=") do |val|
+              parsed_val = val.map{ |h| { (h[:key] || h['key']) => (h[:val] || h['val']) } }.reduce(&:merge)
+              self.#{column} = parsed_val
+            end
+
+            define_method("#{column}_output") do
+              self.#{column}.map {|key, val| { key: key, val: val } }
+            end
+          }
         end
       end
     end
