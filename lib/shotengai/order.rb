@@ -33,7 +33,7 @@ module Shotengai
     self.table_name = 'shotengai_orders'
     belongs_to :buyer, polymorphic: true, optional: true#, touch: true
     
-    default_scope { where.not(status: 'cart') } 
+    default_scope { where.not(status: 'cart').order(created_at: :desc) } 
     scope :status_is, ->(status) { where(status.blank?.! && { status: status }) }
     
     after_create :set_seq
