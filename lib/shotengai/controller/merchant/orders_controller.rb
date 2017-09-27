@@ -23,7 +23,7 @@ module Shotengai
         private
           def resource_params
             params.require(resource_key).permit(
-              :merchant_remark, :mark
+              :mark, manager_remark: [],
             )
           end
           
