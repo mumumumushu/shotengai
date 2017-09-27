@@ -20,6 +20,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       # Single Table Inheritance
       t.string :type
       t.json :meta
+      t.json :remark
 
       t.references :manager, polymorphic: true, index: true      
       t.timestamps
@@ -37,6 +38,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       # Single Table Inheritance
       t.string :type
       t.json :meta
+      t.json :remark      
 
       t.references :shotengai_product, foreign_key: true
       t.timestamps
@@ -85,6 +87,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       # Single Table Inheritance
       t.string :type
       t.json :meta
+      t.json :remark      
 
       t.references :shotengai_series, foreign_key: true
       t.references :shotengai_order, foreign_key: true
