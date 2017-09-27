@@ -101,7 +101,7 @@ RSpec.describe "#{namespace}/product_snapshots", type: :request, capture_example
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
-        it { expect(JSON(response.body)['product_status_zh']).to eq('未上架'), 'check product_status_zh' }
+        it { expect(JSON(response.body)['product_status_zh']).to eq('已上架'), 'check product_status_zh' }
       end
     end
     

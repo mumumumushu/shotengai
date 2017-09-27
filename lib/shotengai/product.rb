@@ -26,10 +26,12 @@ module Shotengai
   #  index_shotengai_products_on_type                         (type)
   #
 
-  class Shotengai::Product < ActiveRecord::Base
+  class Product < Shotengai::Model
     require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'
     
+    hash_columns :spec, :meta, :detail
+
     belongs_to :manager, polymorphic: true, optional: true#, touch: true
     validate :check_spec, if: :spec
     
@@ -74,15 +76,6 @@ module Shotengai
 
     def meta
       super || {}
-    end
-
-    def spec_output
-      spec.map { |key, val|
-        {
-          key: key,
-          val: val,
-        }
-      }
     end
 
     class << self

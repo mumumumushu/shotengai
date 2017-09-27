@@ -21,7 +21,7 @@ module Shotengai
   #  index_shotengai_series_on_type                   (type)
   #
   
-  class Series < ActiveRecord::Base
+  class Series < Shotengai::Model
     self.table_name = 'shotengai_series'
     validates_presence_of :spec
     validate :check_spec_value
@@ -29,6 +29,8 @@ module Shotengai
     validate :uniq_spec
     validate :validate_stock
     
+    hash_columns :spec, :meta
+
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
     
     scope :alive, -> { where.not(aasm_state: 'deleted') }

@@ -30,15 +30,17 @@ module Shotengai
   #  index_shotengai_snapshots_on_type                         (type)
   #
 
-  class Snapshot < ActiveRecord::Base
+  class Snapshot < Shotengai::Model
     self.table_name = 'shotengai_snapshots'
     validate :check_spec, if: :spec
     validates :count, numericality: { only_integer: true, greater_than: 0 }
+        
+    hash_columns :spec, :meta, :detail
 
     validate :cannot_edit, if: :order_was_paid
     before_destroy :cannot_edit, if: :order_was_paid
     
-    validate :cannot_edit_or_create, if: :already_disable?
+    validate :cannot_edit_or_create, if: :already_disable
     
     belongs_to :shotengai_order, foreign_key: :shotengai_order_id, 
       class_name: 'Shotengai::Order', optional: true#, touch: true
@@ -93,6 +95,10 @@ module Shotengai
       super || series.manager      
     end
 
+    def product
+      series.product
+    end
+
     # 订单支付后 存储当时信息快照
     def copy_info
       # cut_stock
@@ -104,7 +110,7 @@ module Shotengai
         banners: series.banners,
         cover_image: series.cover_image,
         detail: series.detail,
-        meta: (series.product.meta || {} ).merge(series.meta || {})
+        meta: (product.meta || {} ).merge(series.meta || {})
       )
     end
 
@@ -153,7 +159,7 @@ module Shotengai
       end
 
       def cannot_edit_or_create
-        error.add(:id, '商品已下架，无法购买。')
+        errors.add(:id, '商品已下架，无法购买。')
       end
 
       def set_manager

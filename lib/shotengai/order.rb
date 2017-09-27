@@ -29,7 +29,7 @@ module Shotengai
   #  index_shotengai_orders_on_type                     (type)
   #
   
-  class Order < ActiveRecord::Base
+  class Order < Shotengai::Model
     self.table_name = 'shotengai_orders'
     belongs_to :buyer, polymorphic: true, optional: true#, touch: true
     
@@ -37,6 +37,8 @@ module Shotengai
     scope :status_is, ->(status) { where(status.blank?.! && { status: status }) }
     
     after_create :set_seq
+
+    hash_columns :spec, :meta
 
     include AASM_DLC
     aasm column: :status do

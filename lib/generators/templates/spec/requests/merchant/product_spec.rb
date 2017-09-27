@@ -2,8 +2,7 @@ require 'swagger_helper'
 namespace = '<%= @namespace %>'
 RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, tags: ["#{namespace} API", "product"] do
   before do
-    @merchant = Merchant.register "merchant", "password"
-    @auth_token = Merchant.login "merchant", "password"
+    @merchant = create(:merchant)
 
     class Catalog < Shotengai::Catalog; end
     @clothes = Catalog.create!(name: '衣服')
@@ -17,8 +16,10 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
 
   path "/#{namespace}/products" do
     get(summary: '商家 商品列表') do
-      parameter 'Merchant-Token', in: :header, type: :string
-      let('Merchant-Token') { @auth_token.token }
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
 
       parameter :page, in: :query, type: :string
       parameter :per_page, in: :query, type: :string
@@ -41,15 +42,17 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
       end
 
       response(200, description: 'filter by status') do
-        before { @product_1.put_on_shelf! }
-        let(:status) { 'on_sale' }
+        before { @product_1.sold_out! }
+        let(:status) { 'not_on' }
         it { expect(JSON.parse(response.body)['products'].count).to eq(1) }
       end
     end
 
     post(summary: '管理员新建商品') do
-      parameter 'Merchant-Token', in: :header, type: :string
-      let('Merchant-Token') { @auth_token.token }
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
 
       parameter :product, in: :body, schema: {
         type: :object, properties: {
@@ -116,15 +119,17 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
       parameter :ids, in: :query, type: :string
       parameter :event, in: :query, type: :string
       let(:ids) { @products.first(2).map(&:id) }
-      let(:event) { 'put_on_shelf' }
+      let(:event) { 'sold_out' }
 
-      parameter 'Merchant-Token', in: :header, type: :string
-      let('Merchant-Token') { @auth_token.token }
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
         it {
-          expect(Product.where(status: 'on_sale').map(&:id).sort).to eq(@products.first(2).map(&:id).sort)
+          expect(Product.where(manager: @merchant).not_on.map(&:id).sort).to eq(@products.first(2).map(&:id).sort)
         }
       end
     end
@@ -135,8 +140,10 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     let(:id) { @product_1.id }
 
     get(summary: '商户 商品详情') do
-      parameter 'Merchant-Token', in: :header, type: :string
-      let('Merchant-Token') { @auth_token.token }
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
@@ -146,8 +153,10 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
       end
     end
     patch(summary: 'update product') do
-      parameter 'Merchant-Token', in: :header, type: :string
-      let('Merchant-Token') { @auth_token.token }
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
 
       produces 'application/json'
       consumes 'application/json'
@@ -195,8 +204,10 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     end
 
     delete(summary: 'delete product') do
-      parameter 'Merchant-Token', in: :header, type: :string
-      let('Merchant-Token') { @auth_token.token }
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
 
       produces 'application/json'
       consumes 'application/json'
@@ -210,13 +221,15 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     let(:id) { @product_1.id }
 
     post(summary: '商户 上架商品') do
-      parameter 'Merchant-Token', in: :header, type: :string
-      let('Merchant-Token') { @auth_token.token }
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
 
       produces 'application/json'
       consumes 'application/json'
       response(200, description: 'successful') do
-        # it { p response.body }
+        before { @product_1.sold_out! }
       end
     end
   end
@@ -226,8 +239,10 @@ RSpec.describe "#{namespace}/products", type: :request, capture_examples: true, 
     let(:id) { @product_1.id }
 
     post(summary: '商户 下架商品') do
-      parameter 'Merchant-Token', in: :header, type: :string
-      let('Merchant-Token') { @auth_token.token }
+      parameter :manager_type, in: :query, type: :string
+      parameter :manager_id, in: :query, type: :integer
+      let(:manager_id) { @merchant.id }
+      let(:manager_type) { @merchant.class.name }
       
       before { @product_1.update!(status: 'on_sale') }
       produces 'application/json'

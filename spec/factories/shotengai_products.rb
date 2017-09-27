@@ -26,9 +26,9 @@
 #
 
 FactoryGirl.define do
-  factory :test_good, class: 'TestGood' do
+  factory :product, class: 'Product' do
     title 'Test Product Title'
-    # status
+    status 'on_sale'
     spec {
       {
         "颜色" => ["黑色", "红色", "白色"],
@@ -39,36 +39,7 @@ FactoryGirl.define do
     need_express true
     # need_time_attr true
     cover_image 'cover_image.image'
-    banners { [ 'image1', 'image2' ] }
-    detail {
-      {
-        "使用说明" => "xxxxxxxx...",
-        "产品参数" => "参数 参数..."
-      }
-    }
-    # type "
-    meta {
-      {
-        "meta1" => "111",
-        "meta2" => "222",
-      }
-    }
-  end
-
-  factory :other_good, class: 'OtherGood' do
-    title 'Test Product Title'
-    # status
-    spec {
-      {
-        "颜色" => ["黑色", "红色", "白色"],
-        "大小" => ["S", "M", "L"],
-      }
-    }
-    # default_series_id ''
-    need_express true
-    # need_time_attr true
-    cover_image 'cover_image.image'
-    banners { [ 'image1', 'image2' ] }
+    banners { [ 'image1', 'iamge2' ] }
     detail {
       {
         "使用说明" => "xxxxxxxx...",
