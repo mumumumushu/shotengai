@@ -85,12 +85,6 @@ module Shotengai
       end
     end
 
-    def initialize *arg
-      super(*arg)
-      self.remark = Hash[product.remark.map { |k, v| [k, true] }]
-      self
-    end
-
     def cut_stock count
       self.stock.eql?(-1) || self.update!(stock: self.stock - count)
     end
@@ -101,15 +95,6 @@ module Shotengai
 
     def meta
       super || {}
-    end
-
-    def spec_output
-      spec.map { |key, val|
-        {
-          key: key,
-          val: val,
-        }
-      }
     end
     
     private 
@@ -127,8 +112,6 @@ module Shotengai
         # product.remark.keys 包含 remark.keys
         illegal_key = (remark.keys - product.remark.keys)
         errors.add(:remark, "非法的关键字, #{illegal_key}") unless illegal_key.empty?        
-        # illegal_values = remark.reject { |k, v| !!v == v }.keys
-        # errors.add(:spec, "非法的值，仅允许布尔值。#{illegal_values}") unless illegal_values.empty?        
       end
 
       def uniq_spec

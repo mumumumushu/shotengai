@@ -24,7 +24,7 @@ module Shotengai
 
           def snapshot_params
             params.require(:snapshot).permit(
-              :shotengai_series_id, :count
+              :shotengai_series_id, :count, remark_input: [:key, :val]
             )
           end
 

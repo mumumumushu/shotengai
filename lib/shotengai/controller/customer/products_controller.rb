@@ -9,7 +9,7 @@ module Shotengai
         skip_before_action :buyer_auth
 
         def default_query resources
-          resources.alive  
+          resources.on_sale  
         end
 
         def index_query resources

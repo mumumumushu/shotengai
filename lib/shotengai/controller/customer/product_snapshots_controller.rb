@@ -31,7 +31,7 @@ module Shotengai
         private
           def resource_params
             params.require(resource_key).permit(
-              :count, :shotengai_series_id
+              :count, :shotengai_series_id, remark_input: [:key, :val]
             )
           end
 
