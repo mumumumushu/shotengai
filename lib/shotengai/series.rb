@@ -28,7 +28,6 @@ module Shotengai
     validate :check_remark
     # Using validates_uniqueness_of do not work if the order of Hash is diff
     validate :uniq_spec
-    validate :validate_stock
     
     hash_columns :spec, :meta, :remark
 
@@ -86,7 +85,9 @@ module Shotengai
     end
 
     def cut_stock count
-      self.stock.eql?(-1) || self.update!(stock: self.stock - count)
+      return true if self.stock.eql?(-1)
+      raise Shotengai::WebError.new('该商品系列库存不足.', -1, 400) unless (stock = self.stock - count) >=0
+      self.update!(stock: stock)
     end
 
     def original_price
@@ -118,10 +119,6 @@ module Shotengai
         if self.class.query_spec_with_product(self.spec, self.product).alive.where.not(id: self.id).any?
           errors.add(:spec, 'Non uniq spec for the product.') 
         end
-      end
-
-      def validate_stock
-        errors.add(:stock, '该商品系列库存不足.') unless self.stock_was.eql?(-1) || self.stock >=0
       end
   end
 end

@@ -20,6 +20,9 @@ RSpec.describe 'Shotengai Models' do
     ActiveRecord::Migration[5.1].subclasses.each do |migrate|
       migrate.migrate(:up)
     end
+    class ApplicationRecord < ActiveRecord::Base
+      self.abstract_class = true
+    end
   end
 
   describe 'Product & Order' do
