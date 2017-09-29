@@ -80,8 +80,21 @@ module Shotengai
       define_method(column) { read_attribute(column) || self.series.send(column) }
     end
 
+
+    def full_meta
+      read_attribute(:meta) || {}
+    end
+
+    def full_meta= val
+      write_attribute(:meta, val)
+    end
+
     def meta
-      read_attribute(:meta) || (series.product.meta || {} ).merge(series.meta || {})
+      full_meta['snapshot'] || {}
+    end
+
+    def meta= val
+      self.full_meta = full_meta.merge('snapshot' => val)
     end
 
     def already_disable
@@ -111,7 +124,11 @@ module Shotengai
         banners: series.banners,
         cover_image: series.cover_image,
         detail: series.detail,
-        meta: (product.meta || {} ).merge(series.meta || {})
+        full_meta: { 
+          product: product.meta,
+          series: series.meta, 
+          snapshot: meta,
+        }
       )
     end
 
@@ -137,12 +154,6 @@ module Shotengai
     
     def order_status; shotengai_order&.status end
     def order_status_zh; shotengai_order&.status_zh end
-
-    ######
-    
-    def meta
-      super || {}
-    end
 
     private 
       # spec 字段

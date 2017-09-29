@@ -211,12 +211,12 @@ RSpec.describe "#{namespace}/orders", type: :request, capture_examples: true, ta
               meta: { type: :object },
               incr_snapshot_ids: { type: :array },
             },
+          }
           snapshot: {
             type: :object, properties: {
               shotengai_series_id: { type: :integer },
               count: { type: :integer },
             }
-          }
           }
         }
       }
