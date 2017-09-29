@@ -29,7 +29,7 @@ module Shotengai
     # Using validates_uniqueness_of do not work if the order of Hash is diff
     validate :uniq_spec
     
-    hash_columns :spec, :meta, :remark
+    custom_hash_columns :spec, :remark
 
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
     

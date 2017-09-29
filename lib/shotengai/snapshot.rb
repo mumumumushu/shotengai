@@ -36,7 +36,7 @@ module Shotengai
     validate :check_remark
     validates :count, numericality: { only_integer: true, greater_than: 0 }
         
-    hash_columns :spec, :meta, :detail, :remark
+    custom_hash_columns :spec, :meta, :detail, :remark
 
     validate :cannot_edit, if: :order_was_paid
     before_destroy :cannot_edit, if: :order_was_paid

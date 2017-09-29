@@ -62,19 +62,20 @@ module Shotengai
         private
           def resource_params 
             # QUESTION: need these ?
-            spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)
+            # spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)
+            spec_input = params.require(resource_key).fetch(:spec_input, nil)&.map(&:permit!)
+            remark_input = params.require(resource_key).fetch(:remark_input, nil)&.map(&:permit!)
             detail = params.require(resource_key).fetch(:detail, nil).try(:permit!)
             meta = params.require(resource_key).fetch(:meta, nil).try(:permit!)
-            remark = params.require(resource_key).fetch(:remark, nil).try(:permit!)
             # NOTE: :catalog_list is a default catalog list for template example, maybe should move it to the template controller, but it need add controller template for every controller
             params.require(resource_key).permit(
               :title, :default_series_id, 
               :need_express, :need_time_attr, :cover_image, catalog_ids: [],
               banners: [], 
-              spec_input: [:key, val: []], detail_input: [:key, :val], 
-              meta_input: [:key, :val], remark_input: [:key, :val]
+              # spec_input: [:key, val: []],
+              # remark_input: [:key, :val],
             ).merge(
-              { spec: spec, detail: detail, meta: meta, remark: remark }
+              { spec_input: spec_input, remark_input: remark_input, detail: detail, meta: meta }
             )
           end
       end

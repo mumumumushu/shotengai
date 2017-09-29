@@ -12,6 +12,7 @@ module Shotengai
             params[:product_id] && { shotengai_product_id: params[:product_id] }
           )
         end
+
         def recycle_bin
           page = params[:page] || 1
           per_page = params[:per_page] || 10
@@ -38,12 +39,14 @@ module Shotengai
 
         private
           def resource_params 
-            spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)
+            spec_input = params.require(resource_key).fetch(:spec_input, nil)&.map(&:permit!)
             meta = params.require(resource_key).fetch(:meta, nil).try(:permit!)
+            # ????????!!!!!, spec_input: [:key, :val] 一样的输出值 却在test报错？？？
+            # QUESTION: WARNING:  文档bug吧？？？？？
             params.require(resource_key).permit(
-              :original_price, :price, :stock
+              :original_price, :price, :stock#, spec_input: [:key, :val]
             ).merge(
-              { spec: spec, meta: meta }
+              { spec_input: spec_input, meta: meta }
             )
           end
 
