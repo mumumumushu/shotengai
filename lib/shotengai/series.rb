@@ -24,6 +24,8 @@ module Shotengai
   class Series < Shotengai::Model
     self.table_name = 'shotengai_series'
     validates_presence_of :spec
+    validates_presence_of :price
+    
     validate :check_spec_value
     validate :check_remark
     # Using validates_uniqueness_of do not work if the order of Hash is diff
