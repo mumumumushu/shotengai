@@ -93,6 +93,14 @@ module Shotengai
       full_meta['snapshot'] || {}
     end
 
+    def product_meta
+      full_meta['product']
+    end
+
+    def series_meta
+      full_meta['series']
+    end
+
     def meta= val
       self.full_meta = full_meta.merge('snapshot' => val)
     end

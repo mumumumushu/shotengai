@@ -19,6 +19,7 @@ module Shotengai
   #  manager_type      :string(255)
   #  created_at        :datetime         not null
   #  updated_at        :datetime         not null
+  #  remark            :json
   #
   # Indexes
   #
@@ -133,8 +134,16 @@ module Shotengai
             send("#{list_name}=", catalog_class.ids_to_tags(ids))
           }
 
+          define_method("#{tag_name}_ids") {
+            send(list_name).map(&:id)
+          }
+
+          define_method("#{tag_name}_names") {
+            send(list_name).map(&:name)
+          }
+
           define_method(list_name) {
-            catalog_class.where(id: super().map { |tag| Shotengai::Catalog.parse_tag(tag) }).select(:name).map(&:name)
+            catalog_class.where(id: super().map { |tag| Shotengai::Catalog.parse_tag(tag) })
           }
         end
 
