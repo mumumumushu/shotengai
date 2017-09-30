@@ -36,6 +36,7 @@ module Shotengai
     belongs_to :manager, polymorphic: true, optional: true#, touch: true
     validate :check_spec, if: :spec
     
+    default_scope { order(created_at: :desc) }
     scope :alive, -> { where.not(status: 'deleted') }
     scope :recycle_bin, ->{ unscope(where: :status).deleted.where('updated_at > ?', Time.now - 10.day )}
 
