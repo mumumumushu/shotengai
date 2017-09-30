@@ -170,7 +170,7 @@ module Shotengai
         errors.add(:spec, 'spec 必须是个 Hash') unless spec.is_a?(Hash) 
         errors.add(:spec, '非法的关键字，或关键字缺失') unless (series.product.spec.keys - spec.keys).empty?
         illegal_values = {}
-        spec.each { |key, value| illegal_values[key] = value unless value.in?(series.product.spec[key]) }
+        spec.each { |key, value| illegal_values[key] = value unless value.in?(Array(series.product.spec[key])) }
         errors.add(:spec, "非法的值，#{illegal_values}") unless illegal_values.empty?
       end
 
