@@ -40,14 +40,15 @@ module Shotengai
         private
           def resource_params
             params[resource_key] && params.require(resource_key).permit(
-              :address, :customer_remark, 
+              :address, :customer_remark, :need_express, :
               incr_snapshot_ids: [], gone_snapshot_ids: []
             )
           end
 
           def snapshot_params
             params[:snapshot] && params.require(:snapshot).permit(
-              :shotengai_series_id, :count
+              :shotengai_series_id, :count, 
+              :delivery_way, :delivery_cost, :customer_remark,
             )
           end
 
