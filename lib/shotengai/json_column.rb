@@ -24,6 +24,10 @@ module Shotengai
           }
         end
       end
+      
+      def hash_column
+        # like meta, detail these json using for code development  
+      end
     end
   end
 end

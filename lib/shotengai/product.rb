@@ -31,8 +31,8 @@ module Shotengai
     require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'
     
-    custom_hash_columns :spec, :remark
-
+    custom_hash_columns :spec, :remark, :info
+    
     belongs_to :manager, polymorphic: true, optional: true#, touch: true
     validate :check_spec, if: :spec
     

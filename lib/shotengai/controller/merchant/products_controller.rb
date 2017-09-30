@@ -65,6 +65,7 @@ module Shotengai
             # spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)
             spec_input = params.require(resource_key).fetch(:spec_input, nil)&.map(&:permit!)
             remark_input = params.require(resource_key).fetch(:remark_input, nil)&.map(&:permit!)
+            info_input = params.require(resource_key).fetch(:info_input, nil)&.map(&:permit!)
             detail = params.require(resource_key).fetch(:detail, nil).try(:permit!)
             meta = params.require(resource_key).fetch(:meta, nil).try(:permit!)
             # NOTE: :catalog_list is a default catalog list for template example, maybe should move it to the template controller, but it need add controller template for every controller
@@ -75,7 +76,10 @@ module Shotengai
               # spec_input: [:key, val: []],
               # remark_input: [:key, :val],
             ).merge(
-              { spec_input: spec_input, remark_input: remark_input, detail: detail, meta: meta }
+              { 
+                spec_input: spec_input, remark_input: remark_input, info_input: info_input,
+                detail: detail, meta: meta 
+              }
             )
           end
       end

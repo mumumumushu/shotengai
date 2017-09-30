@@ -36,7 +36,7 @@ module Shotengai
     validate :check_remark
     validates :count, numericality: { only_integer: true, greater_than: 0 }
         
-    custom_hash_columns :spec, :remark
+    custom_hash_columns :spec, :info, :remark
 
     validate :cannot_edit, if: :order_was_paid
     before_destroy :cannot_edit, if: :order_was_paid
@@ -129,6 +129,7 @@ module Shotengai
         original_price: series.original_price,
         price: series.price,
         spec: series.spec,
+        info: series.info,
         banners: series.banners,
         cover_image: series.cover_image,
         detail: series.detail,
