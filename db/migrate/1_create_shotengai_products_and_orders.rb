@@ -51,7 +51,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
   def create_order
     create_table :shotengai_orders do |t|
       t.string :seq
-      t.string :address
+      t.json :address
       t.decimal :amount, precision: 9, scale: 2      
       t.datetime :pay_time 
       t.datetime :delivery_time

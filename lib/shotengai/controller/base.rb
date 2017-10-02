@@ -48,7 +48,6 @@ module Shotengai
       end
       
       before_action :set_resource, except: [:index, :create]
-      respond_to :json
       
       # TODO: could not catch the exception
       respond_to :json
