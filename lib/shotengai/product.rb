@@ -147,10 +147,6 @@ module Shotengai
             catalog_class.where(id: super().map { |tag| Shotengai::Catalog.parse_tag(tag) })
           }
         end
-
-        # instance_eval do
-        #   define_method(:)
-        # end
       end
     end
 
