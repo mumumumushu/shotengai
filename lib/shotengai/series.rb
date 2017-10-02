@@ -23,14 +23,16 @@ module Shotengai
   
   class Series < Shotengai::Model
     self.table_name = 'shotengai_series'
-    validates_presence_of :spec
+    validates_presence_of :spec, unless: :product_spec_empty?
     validates_presence_of :price
     
-    validate :check_spec_value
-    validate :check_remark
+    validate :check_spec_value, unless: :product_spec_empty?
     # Using validates_uniqueness_of do not work if the order of Hash is diff
-    validate :uniq_spec
-    
+    validate :uniq_spec, unless: :product_spec_empty?
+    validate :only_one_series, if: :product_spec_empty?
+
+    validate :check_remark
+
     custom_hash_columns :spec, :remark, :info
 
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
@@ -102,6 +104,10 @@ module Shotengai
     
     private 
       # spec 字段
+      def product_spec_empty?
+        product.spec.empty?
+      end
+      
       def check_spec_value
         errors.add(:spec, 'spec 必须是个 Hash') unless spec.is_a?(Hash) 
         errors.add(:spec, '非法的关键字，或关键字缺失') unless (product.spec.keys - spec.keys).empty?
@@ -110,17 +116,21 @@ module Shotengai
         errors.add(:spec, "非法的值，#{illegal_values}") unless illegal_values.empty?
       end
 
+      def uniq_spec
+        if self.class.query_spec_with_product(self.spec, self.product).alive.where.not(id: self.id).any?
+          errors.add(:spec, 'Non uniq spec for the product.') 
+        end
+      end
+
+      def only_one_series
+        errors.add(:spec, "无规格系列仅允许存在一项") unless product.series.empty?
+      end
+
       def check_remark
         errors.add(:remark, 'remark 必须是个 Hash') unless remark.is_a?(Hash) 
         # product.remark.keys 包含 remark.keys
         illegal_key = (remark.keys - product.remark.keys)
         errors.add(:remark, "非法的关键字, #{illegal_key}") unless illegal_key.empty?        
-      end
-
-      def uniq_spec
-        if self.class.query_spec_with_product(self.spec, self.product).alive.where.not(id: self.id).any?
-          errors.add(:spec, 'Non uniq spec for the product.') 
-        end
       end
   end
 end

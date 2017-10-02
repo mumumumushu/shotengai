@@ -32,7 +32,7 @@ module Shotengai
 
   class Snapshot < Shotengai::Model
     self.table_name = 'shotengai_snapshots'
-    validate :check_spec
+    validate :check_spec, unless: :product_spec_empty?
     validate :check_remark
     validates :count, numericality: { only_integer: true, greater_than: 0 }
         
@@ -166,6 +166,10 @@ module Shotengai
 
     private 
       # spec 字段
+      def product_spec_empty?
+        product.spec.empty?
+      end
+
       def check_spec
         errors.add(:spec, 'spec 必须是个 Hash') unless spec.is_a?(Hash) 
         errors.add(:spec, '非法的关键字，或关键字缺失') unless (series.product.spec.keys - spec.keys).empty?
