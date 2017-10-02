@@ -180,10 +180,11 @@ module Shotengai
 
       def check_remark
         errors.add(:remark, 'remark 必须是个 Hash') unless remark.is_a?(Hash) 
-        nullable_key = series.remark.select{ |k, v| v }.keys
-        required_key = product.remark.keys - nullable_key
+        nullable_keys = series.remark.select{ |k, v| v }.keys
+        required_keys = product.remark.keys - nullable_keys
+        absent_keys = required_keys - remark.keys
         # remark 可添加多余字段
-        errors.add(:remark, '非法的关键字，或关键字缺失') unless (required_key - remark.keys).empty?
+        errors.add(:remark, "必填remark值为空， #{absent_keys}") unless absent_keys.empty?
       end
 
       # NOTE: Shotengai::Snapshot.find_by_id(self.id) to get the self before changed

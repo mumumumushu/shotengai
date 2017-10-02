@@ -22,9 +22,10 @@ module Shotengai
 
         private
           def resource_params
+            remark_input = params.require(resource_key).fetch(:remark_input, nil)&.map(&:permit!)
             params.require(resource_key).permit(
               :revised_amount
-            )
+            ).merge({ remark_input: remark_input })
           end
 
           def edit_only_unpaid
