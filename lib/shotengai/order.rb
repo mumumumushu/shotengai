@@ -77,6 +77,7 @@ module Shotengai
         delivering: '运送中', 
         received: '已收货', 
         evaluated: '已评价',
+        canceled: '已取消',
       }[ status.to_sym ]
     end
 
