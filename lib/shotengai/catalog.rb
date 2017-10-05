@@ -24,7 +24,7 @@ module Shotengai
     self.table_name = 'shotengai_catalogs'
     validates_presence_of :name
 
-    after_save :set_nested_level
+    before_save :set_nested_level
     
     class << self
       def inherited subclass
@@ -99,7 +99,7 @@ module Shotengai
 
     private 
       def set_nested_level
-        self.update_column(:nested_level, self.ancestors.count)
+        self.nested_level = self.ancestors.count
       end
   end
 end
