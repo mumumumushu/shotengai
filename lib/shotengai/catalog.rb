@@ -7,11 +7,12 @@ module Shotengai
   #  name             :string(255)
   #  level_type       :string(255)
   #  image            :string(255)
-  #  meta              :json
   #  type             :string(255)
   #  super_catalog_id :integer
   #  created_at       :datetime         not null
   #  updated_at       :datetime         not null
+  #  meta             :json
+  #  nested_level     :integer
   #
   # Indexes
   #
@@ -23,6 +24,8 @@ module Shotengai
     self.table_name = 'shotengai_catalogs'
     validates_presence_of :name
 
+    after_save :set_nested_level
+    
     class << self
       def inherited subclass
         subclass.has_many :sub_catalogs, class_name: subclass.name, foreign_key: :super_catalog_id, dependent: :destroy
@@ -53,7 +56,7 @@ module Shotengai
       end
 
       def parse_tag tag
-        tag.split('-').last
+        tag
       end
       # def input_from_file
       # end
@@ -66,12 +69,12 @@ module Shotengai
     end
 
     def tag
-      "#{self.class.name}-#{id}"  
+      "#{id}"  
     end
 
-    def nest_level 
-      ancestors.count
-    end
+    # def nest_level 
+    #   ancestors.count
+    # end
 
     def name_chain
       ancestors.map(&:name)
@@ -93,5 +96,10 @@ module Shotengai
         sub_catalogs: sub_catalogs.map(&:tree)
       }
     end
+
+    private 
+      def set_nested_level
+        self.update_column(:nested_level, self.ancestors.count)
+      end
   end
 end

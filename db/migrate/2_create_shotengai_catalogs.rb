@@ -4,6 +4,7 @@ class CreateShotengaiCatalogs < ActiveRecord::Migration[5.1]
       t.string :name
       t.string :level_type
       t.string :image
+      t.integer :nested_level
       t.json :meta
       # STI
       t.string :type
