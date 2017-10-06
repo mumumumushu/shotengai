@@ -144,7 +144,7 @@ module Shotengai
           }
 
           define_method(list_name) {
-            catalog_class.where(id: super().map { |tag| Shotengai::Catalog.parse_tag(tag) }).order(:nested_level)
+            catalog_class.unscope(:order).where(id: super().map { |tag| Shotengai::Catalog.parse_tag(tag) }).order(:nested_level)
           }
         end
       end
