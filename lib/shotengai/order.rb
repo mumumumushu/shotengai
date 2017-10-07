@@ -94,19 +94,20 @@ module Shotengai
     end
 
     def set_pay_time
-      self.update!(pay_time: Time.now)
+      self.pay_time = Time.now
     end
 
     def set_delivery_time
-      update!(delivery_time: Time.now)
+      self.delivery_time = Time.now
     end
 
     def set_receipt_time
-      update!(receipt_time: Time.now)
+      self.receipt_time = Time.now
     end
 
     def set_seq
-      self.update!(seq: create_seq)
+      # self.update_without_callbacks!(seq: create_seq)
+      self.seq = create_seq
     end
     
     def create_seq
@@ -117,7 +118,7 @@ module Shotengai
     end
 
     def set_amount
-      self.update!(amount: (product_amount + delivery_cost).round(2))
+      self.amount = (product_amount + delivery_cost).round(2)
     end
     
     def amount
