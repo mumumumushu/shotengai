@@ -71,7 +71,7 @@ module Shotengai
     end
 
     def default_series
-      Shotengai::Series.find_by_id(default_series_id) || series.first
+      Shotengai::Series.alive.find_by_id(default_series_id) || series.alive.first
     end
 
     def meta
