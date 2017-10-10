@@ -61,8 +61,6 @@ module Shotengai
         transitions from: :deleted, to: :not_on 
       end
     end
-
-    scope :alive, -> { where.not(status: 'deleted') }
     
     def status_zh
       {

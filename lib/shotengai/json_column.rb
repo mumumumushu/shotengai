@@ -28,6 +28,35 @@ module Shotengai
       def hash_column
         # like meta, detail these json using for code development  
       end
+
+      def column_has_children column, options
+        ArgumentError.new("Please give #{column} one child at least.") unless options[:children]
+        children_names = options[:children].map(&:to_s)
+        self_name = options[:as] || self.model_name.singular
+        class_eval %Q{
+          define_method('full_#{column}') do
+            read_attribute(:#{column}) || {}
+          end
+
+          define_method('full_#{column}=') do |val|
+            write_attribute(:#{column}, val)
+          end
+
+          define_method('#{column}') do
+            full_#{column}['#{self_name}'] || {}
+          end
+
+          define_method('#{column}=') do |val|
+            self.full_#{column} = full_#{column}.merge('snapshot' => val)
+          end
+
+          #{children_names}.each do |child|
+            define_method(\"\#{child}_#{column}\") do
+              full_#{column}[child]
+            end
+          end
+        }
+      end
     end
   end
 end

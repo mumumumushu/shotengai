@@ -37,6 +37,8 @@ module Shotengai
     validates :count, numericality: { only_integer: true, greater_than: 0 }
         
     custom_hash_columns :spec, :info, :remark
+    column_has_children :meta, children: ['product', 'snapshot'], as: :snapshot
+    column_has_children :info, children: ['product', 'snapshot'], as: :snapshot
 
     validate :cannot_edit, if: :order_was_paid
     before_destroy :cannot_edit, if: :order_was_paid
@@ -80,31 +82,6 @@ module Shotengai
       define_method(column) { read_attribute(column) || self.series.send(column) }
     end
 
-
-    def full_meta
-      read_attribute(:meta) || {}
-    end
-
-    def full_meta= val
-      write_attribute(:meta, val)
-    end
-
-    def meta
-      full_meta['snapshot'] || {}
-    end
-
-    def product_meta
-      full_meta['product']
-    end
-
-    def series_meta
-      full_meta['series']
-    end
-
-    def meta= val
-      self.full_meta = full_meta.merge('snapshot' => val)
-    end
-
     def already_disable
       series.deleted? || product.on_sale?.!
     end
@@ -137,6 +114,11 @@ module Shotengai
           product: product.meta,
           series: series.meta, 
           snapshot: meta,
+        },
+        full_info: { 
+          product: product.info,
+          series: series.info, 
+          snapshot: info,
         }
       )
     end
