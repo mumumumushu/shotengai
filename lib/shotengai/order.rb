@@ -94,19 +94,19 @@ module Shotengai
     end
 
     def set_pay_time
-      self.update!(pay_time: Time.now)
+      update_column(:pay_time, Time.now)
     end
 
     def set_delivery_time
-      update!(delivery_time: Time.now)
+      update_column(:delivery_time, Time.now)
     end
 
     def set_receipt_time
-      update!(receipt_time: Time.now)
+      update_column(:receipt_time, Time.now)
     end
 
     def set_seq
-      self.update!(seq: create_seq)
+      update_column(:seq, create_seq)
     end
     
     def create_seq

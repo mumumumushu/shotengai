@@ -4,6 +4,7 @@ module Shotengai
     def self.included(base)
       add_event_callbacks
       base.include AASM
+      # base.extend Shotengai::AASM_DLC::ClassMethods
     end
 
     def self.add_event_callbacks
@@ -45,5 +46,20 @@ module Shotengai
 
       end
     end
+
+    # module ClassMethods
+    #   def aasm *arg, &block
+    #     super(*arg, &block)
+    #     # @aasm[:default].instance_eval(&@aasm_patch) if @aasm_patch # new DSL        
+    #     # @aasm_patch = nil
+    #     # p '-------'
+    #     # sleep 1
+    #     # @aasm[:default]
+    #   end
+
+    #   def add_aasm_patch &block
+    #     @aasm[:default].instance_eval(&@block)
+    #   end
+    # end
   end
 end
