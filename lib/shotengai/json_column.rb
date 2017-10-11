@@ -16,6 +16,7 @@ module Shotengai
             define_method("#{column}_input=") do |val|
               parsed_val = val && val.map{ |h| { (h[:key] || h['key']) => (h[:val] || h['val']) } }.reduce(&:merge)
               self.#{column} = parsed_val
+              self.#{column}_will_change!
             end
 
             define_method("#{column}_output") do
