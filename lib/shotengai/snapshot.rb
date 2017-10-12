@@ -37,8 +37,8 @@ module Shotengai
     validates :count, numericality: { only_integer: true, greater_than: 0 }
         
     custom_hash_columns :spec, :info, :remark
-    column_has_children :meta, children: ['product', 'snapshot'], as: :snapshot
-    column_has_children :info, children: ['product', 'snapshot'], as: :snapshot
+    column_has_children :meta, children: ['product', 'series'], as: :snapshot
+    column_has_children :info, children: ['series'], as: :snapshot
 
     validate :cannot_edit, if: :order_was_paid
     before_destroy :cannot_edit, if: :order_was_paid
@@ -106,7 +106,6 @@ module Shotengai
         original_price: series.original_price,
         price: series.price,
         spec: series.spec,
-        info: series.info,
         banners: series.banners,
         cover_image: series.cover_image,
         detail: series.detail,
@@ -116,7 +115,6 @@ module Shotengai
           snapshot: meta,
         },
         full_info: { 
-          product: product.info,
           series: series.info, 
           snapshot: info,
         }
