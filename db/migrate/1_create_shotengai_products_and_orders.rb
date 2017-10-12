@@ -10,7 +10,6 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
     create_table :shotengai_products do |t|
       t.string :title
       t.string :status
-      t.json :spec
       t.integer :default_series_id
       t.boolean :need_express
       t.boolean :need_time_attr
@@ -20,7 +19,10 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       # Single Table Inheritance
       t.string :type
       t.json :meta
-      t.json :remark
+
+      t.json :spec_template
+      t.json :remark_template
+      t.json :info_template
 
       t.references :manager, polymorphic: true, index: true      
       t.timestamps
@@ -34,12 +36,12 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.decimal :price, precision: 9, scale: 2
       t.integer :stock, default: -1
       t.string :aasm_state      
-      t.json :spec 
       # Single Table Inheritance
       t.string :type
       t.json :meta
-      t.json :remark      
-      t.json :info      
+      t.json :spec_value
+      t.json :remark_value
+      t.json :info_value     
 
       t.references :shotengai_product, foreign_key: true
       t.timestamps
@@ -81,15 +83,15 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.decimal :revised_amount, precision: 9, scale: 2
          
       t.integer :count
-      t.json :spec 
       t.json :banners
       t.string :cover_image
       t.json :detail
       # Single Table Inheritance
       t.string :type
       t.json :meta
-      t.json :remark      
-      t.json :info      
+      t.json :spec_value       
+      t.json :remark_value      
+      t.json :info_value      
 
       t.references :shotengai_series, foreign_key: true
       t.references :shotengai_order, foreign_key: true
