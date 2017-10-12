@@ -61,8 +61,8 @@ module Shotengai
         product_name = /^(.+)Snapshot/.match(subclass.name)[1]
         series_name = "#{product_name}Series"
         # belongs to Series
-        subclass.belongs_to :series, foreign_key: :shotengai_series_id, class_name: series_name#, touch: true
-        subclass.belongs_to series_name.underscore.to_sym, foreign_key: :shotengai_series_id, class_name: series_name#, touch: true
+        subclass.belongs_to :series, foreign_key: :shotengai_series_id, class_name: series_name, touch: true
+        subclass.belongs_to series_name.underscore.to_sym, foreign_key: :shotengai_series_id, class_name: series_name, touch: true
         # 加载自定义文件
         require_custom_file(product_name) if Rails.root
         super
