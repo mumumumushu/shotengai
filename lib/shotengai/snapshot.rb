@@ -9,7 +9,7 @@ module Shotengai
   #  price               :decimal(9, 2)
   #  revised_amount      :decimal(9, 2)
   #  count               :integer
-  #  spec                :json
+  #  spec_value          :json
   #  banners             :json
   #  cover_image         :string(255)
   #  detail              :json
@@ -21,6 +21,8 @@ module Shotengai
   #  updated_at          :datetime         not null
   #  manager_type        :string(255)
   #  manager_id          :integer
+  #  remark_value        :json
+  #  info_value          :json
   #
   # Indexes
   #

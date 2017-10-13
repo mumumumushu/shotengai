@@ -6,7 +6,7 @@ module Shotengai
   #  id                :integer          not null, primary key
   #  title             :string(255)
   #  status            :string(255)
-  #  spec              :json
+  #  spec_template     :json
   #  default_series_id :integer
   #  need_express      :boolean
   #  need_time_attr    :boolean
@@ -19,7 +19,8 @@ module Shotengai
   #  manager_type      :string(255)
   #  created_at        :datetime         not null
   #  updated_at        :datetime         not null
-  #  remark            :json
+  #  remark_template   :json
+  #  info_template     :json
   #
   # Indexes
   #

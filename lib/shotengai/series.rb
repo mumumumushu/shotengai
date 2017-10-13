@@ -3,24 +3,26 @@ module Shotengai
   #
   # Table name: shotengai_series
   #
-  #  id                    :integer          not null, primary key
-  #  original_price        :decimal(9, 2)
-  #  price                 :decimal(9, 2)
-  #  stock                 :integer          default(-1)
-  #  aasm_state            :string(255)
-  #  spec                  :json
-  #  type                  :string(255)
-  #  meta                  :json
+  #  id                   :integer          not null, primary key
+  #  original_price       :decimal(9, 2)
+  #  price                :decimal(9, 2)
+  #  stock                :integer          default(-1)
+  #  spec_value           :json
+  #  type                 :string(255)
+  #  meta                 :json
   #  shotengai_product_id :integer
-  #  created_at            :datetime         not null
-  #  updated_at            :datetime         not null
+  #  created_at           :datetime         not null
+  #  updated_at           :datetime         not null
+  #  aasm_state           :string(255)
+  #  remark_value         :json
+  #  info_value           :json
   #
   # Indexes
   #
   #  index_shotengai_series_on_shotengai_product_id  (shotengai_product_id)
-  #  index_shotengai_series_on_type                   (type)
+  #  index_shotengai_series_on_type                  (type)
   #
-  
+    
   class Series < Shotengai::Model
     self.table_name = 'shotengai_series'
     validates_presence_of :spec_value, unless: :spec_template_empty?
