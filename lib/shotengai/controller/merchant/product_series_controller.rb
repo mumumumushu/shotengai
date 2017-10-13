@@ -39,15 +39,19 @@ module Shotengai
 
         private
           def resource_params 
-            spec_input = params.require(resource_key).fetch(:spec_input, nil)&.map(&:permit!)
-            info_input = params.require(resource_key).fetch(:info_input, nil)&.map(&:permit!)
+            spec_value = params.require(resource_key).fetch(:spec_value, nil)&.map(&:permit!)
+            info_value = params.require(resource_key).fetch(:info_value, nil)&.map(&:permit!)
+            remark_value = params.require(resource_key).fetch(:remark_value, nil)&.map(&:permit!)
             meta = params.require(resource_key).fetch(:meta, nil).try(:permit!)
-            # ????????!!!!!, spec_input: [:key, :val] 一样的输出值 却在test报错？？？
+            # ????????!!!!!, spec_value: [:key, :val] 一样的输出值 却在test报错？？？
             # QUESTION: WARNING:  文档bug吧？？？？？
             params.require(resource_key).permit(
-              :original_price, :price, :stock#, spec_input: [:key, :val]
+              :original_price, :price, :stock#, spec_value: [:key, :val]
             ).merge(
-              { spec_input: spec_input, info_input: info_input, meta: meta }
+              { 
+                spec_value: spec_value, info_value: info_value, remark_value: remark_value, 
+                meta: meta 
+              }
             )
           end
 

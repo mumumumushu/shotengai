@@ -63,9 +63,9 @@ module Shotengai
           def resource_params 
             # QUESTION: need these ?
             # spec = params.require(resource_key).fetch(:spec, nil).try(:permit!)
-            spec_input = params.require(resource_key).fetch(:spec_input, nil)&.map(&:permit!)
-            remark_input = params.require(resource_key).fetch(:remark_input, nil)&.map(&:permit!)
-            info_input = params.require(resource_key).fetch(:info_input, nil)&.map(&:permit!)
+            spec_template = params.require(resource_key).fetch(:spec_template, nil)&.map(&:permit!)
+            remark_template = params.require(resource_key).fetch(:remark_template, nil)&.map(&:permit!)
+            info_template = params.require(resource_key).fetch(:info_template, nil)&.map(&:permit!)
             detail = params.require(resource_key).fetch(:detail, nil).try(:permit!)
             meta = params.require(resource_key).fetch(:meta, nil).try(:permit!)
             # NOTE: :catalog_list is a default catalog list for template example, maybe should move it to the template controller, but it need add controller template for every controller
@@ -73,11 +73,12 @@ module Shotengai
               :title, :default_series_id, 
               :need_express, :need_time_attr, :cover_image, catalog_ids: [],
               banners: [], 
-              # spec_input: [:key, val: []],
-              # remark_input: [:key, :val],
+              # spec_template: [:key, val: []],
+              # remark_template: [:key, :val],
             ).merge(
               { 
-                spec_input: spec_input, remark_input: remark_input, info_input: info_input,
+                spec_template: spec_template, remark_template: remark_template, 
+                info_template: info_template,
                 detail: detail, meta: meta 
               }
             )
