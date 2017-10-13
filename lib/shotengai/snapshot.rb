@@ -32,13 +32,14 @@ module Shotengai
 
   class Snapshot < Shotengai::Model
     self.table_name = 'shotengai_snapshots'
-    validate :check_spec, unless: :product_spec_empty?
-    validate :check_remark
+    validate :check_spec_value
+    validate :check_remark_value
     validates :count, numericality: { only_integer: true, greater_than: 0 }
-        
-    custom_hash_columns :spec, :info, :remark
+  
+    generate_hash_value_column_for [:spec, :info, :remark], delegate_template_to: :series
+
     column_has_children :meta, children: ['product', 'series'], as: :snapshot
-    column_has_children :info, children: ['series'], as: :snapshot
+    column_has_children :info_value, children: ['series'], as: :snapshot
 
     validate :cannot_edit, if: :order_was_paid
     before_destroy :cannot_edit, if: :order_was_paid
@@ -79,7 +80,7 @@ module Shotengai
         original_price price spec banners 
         cover_image detail title
       }.each do |column|
-      define_method(column) { read_attribute(column) || self.series.send(column) }
+      define_method(column) { super || self.series.send(column) }
     end
 
     def already_disable
@@ -105,7 +106,7 @@ module Shotengai
         title: series.title,
         original_price: series.original_price,
         price: series.price,
-        spec: series.spec,
+        spec_value: series.spec_value,
         banners: series.banners,
         cover_image: series.cover_image,
         detail: series.detail,
@@ -114,9 +115,9 @@ module Shotengai
           series: series.meta, 
           snapshot: meta,
         },
-        full_info: { 
-          series: series.info, 
-          snapshot: info,
+        full_info_value: { 
+          series: series.info_value, 
+          snapshot: info_value,
         }
       )
     end
@@ -146,25 +147,17 @@ module Shotengai
 
     private 
       # spec 字段
-      def product_spec_empty?
-        product.spec.empty?
+
+      def check_spec_value
+        errors.add(:spec_value, 'spec 与 所给系列不符。') unless spec_value == series.spec_value
       end
 
-      def check_spec
-        errors.add(:spec, 'spec 必须是个 Hash') unless spec.is_a?(Hash) 
-        errors.add(:spec, '非法的关键字，或关键字缺失') unless (series.product.spec.keys - spec.keys).empty?
-        illegal_values = {}
-        spec.each { |key, value| illegal_values[key] = value unless value.in?(Array(series.product.spec[key])) }
-        errors.add(:spec, "非法的值，#{illegal_values}") unless illegal_values.empty?
-      end
-
-      def check_remark
-        errors.add(:remark, 'remark 必须是个 Hash') unless remark.is_a?(Hash) 
-        nullable_keys = series.remark.select{ |k, v| v }.keys
-        required_keys = product.remark.keys - nullable_keys
+      def check_remark_value
+        nullable_keys = series.remark_value.select{ |k, v| v }.keys
+        required_keys = product.remark_template.keys - nullable_keys
         absent_keys = required_keys - remark.keys
         # remark 可添加多余字段
-        errors.add(:remark, "必填remark值为空， #{absent_keys}") unless absent_keys.empty?
+        errors.add(:remark_value, "必填remark值为空， #{absent_keys}") unless absent_keys.empty?
       end
 
       # NOTE: Shotengai::Snapshot.find_by_id(self.id) to get the self before changed

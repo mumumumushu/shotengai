@@ -111,8 +111,8 @@ RSpec.describe 'Shotengai Models' do
 
       it 'methods' do
         expect(@good.default_series).to eq(@series)
-        # scope :query_spec_with_product
-        expect(TestGoodSeries.query_spec_with_product(@series.spec, @series.product).first).to eq(@series)
+        # scope :query_spec_value_with_product
+        expect(TestGoodSeries.query_spec_value_with_product(@series.spec, @series.product).first).to eq(@series)
       end
     end
 

@@ -57,6 +57,11 @@ module Shotengai
 
               }
             end
+
+            def #{name}_value= val
+              raise Shotengai::WebError.new('#{name}_val 必须是个 Hash'), -1 , 401) unless val.nil? || Hash === val
+              super(val)              
+            end
           }
         end
       end
@@ -79,6 +84,7 @@ module Shotengai
           end
 
           define_method('#{column}=') do |val|
+            val = super(val)
             self.full_#{column} = full_#{column}.merge('snapshot' => val)
           end
 

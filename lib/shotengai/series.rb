@@ -23,26 +23,26 @@ module Shotengai
   
   class Series < Shotengai::Model
     self.table_name = 'shotengai_series'
-    validates_presence_of :spec, unless: :product_spec_empty?
+    validates_presence_of :spec_value, unless: :product_spec_template_empty?
     validates_presence_of :price
     
-    validate :check_spec_value, unless: :product_spec_empty?
+    validate :check_spec_value, unless: :product_spec_template_empty?
     # Using validates_uniqueness_of do not work if the order of Hash is diff
-    validate :uniq_spec, unless: :product_spec_empty?
-    validate :only_one_series, if: :product_spec_empty?
+    validate :uniq_spec_value, unless: :product_spec_template_empty?
+    validate :only_one_series, if: :product_spec_template_empty?
 
-    validate :check_remark
+    validate :check_remark_value
 
-    custom_hash_columns :spec, :remark, :info
+    generate_hash_value_column_for [:spec, :info, :remark], delegate_template_to: :product
 
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
-    
+
     scope :alive, -> { where.not(aasm_state: 'deleted') }
     scope :recycle_bin, ->{ unscope(where: :aasm_state).deleted.where('updated_at < ?', Time.now - 10.day )}
 
     # where("spec->'$.\"颜色\"' = ?  and spec->'$.\"大小\"' = ?" ,红色,S)
-    scope :query_spec_with_product, ->(val, product) { 
-      if val.keys.sort == product.spec.keys.sort 
+    scope :query_spec_value_with_product, ->(val, product) { 
+      if val.keys.sort == product.spec_template.keys.sort 
         keys = []; values = []
         val.map { |k, v| keys << "spec->'$.\"#{k}\"' = ? "; values << v }
         where(product: product).where(keys.join(' and '), *values)
@@ -104,33 +104,33 @@ module Shotengai
     
     private 
       # spec 字段
-      def product_spec_empty?
-        product.spec.empty?
+      def product_spec_template_empty?
+        product.spec_template.empty?
       end
       
       def check_spec_value
-        errors.add(:spec, 'spec 必须是个 Hash') unless spec.is_a?(Hash) 
-        errors.add(:spec, '非法的关键字，或关键字缺失') unless (product.spec.keys - spec.keys).empty?
+        errors.add(:spec_value, 'spec_value 必须是个 Hash') unless spec_value.is_a?(Hash) 
+        errors.add(:spec_value, '非法的关键字，或关键字缺失') unless (product.spec_value.keys - spec_value.keys).empty?
         illegal_values = {}
-        spec.each { |key, value| illegal_values[key] = value unless value.in?(product.spec[key]) }
-        errors.add(:spec, "非法的值，#{illegal_values}") unless illegal_values.empty?
+        spec_value.each { |key, value| illegal_values[key] = value unless value.in?(product.spec_template.val_at(key)) }
+        errors.add(:spec_value, "非法的值，#{illegal_values}") unless illegal_values.empty?
       end
 
-      def uniq_spec
-        if self.class.query_spec_with_product(self.spec, self.product).alive.where.not(id: self.id).any?
-          errors.add(:spec, 'Non uniq spec for the product.') 
+      def uniq_spec_value
+        if self.class.query_spec_value_with_product(self.spec_value, self.product).alive.where.not(id: self.id).any?
+          errors.add(:spec_value, 'Non uniq spec_value for the product.') 
         end
       end
 
       def only_one_series
-        errors.add(:spec, "无规格系列仅允许存在一项") unless product.series.empty?
+        errors.add(:spec_value, "无规格系列仅允许存在一项") unless product.series.empty?
       end
 
       def check_remark
-        errors.add(:remark, 'remark 必须是个 Hash') unless remark.is_a?(Hash) 
-        # product.remark.keys 包含 remark.keys
-        illegal_key = (remark.keys - product.remark.keys)
-        errors.add(:remark, "非法的关键字, #{illegal_key}") unless illegal_key.empty?        
+        errors.add(:remark_value, 'remark_value 必须是个 Hash') unless remark_value.is_a?(Hash) 
+        # product.remark_value.keys 包含 remark_value.keys
+        illegal_key = (remark_value.keys - product.remark_template.keys)
+        errors.add(:remark_value, "非法的关键字, #{illegal_key}") unless illegal_key.empty?        
       end
   end
 end

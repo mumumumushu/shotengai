@@ -31,10 +31,9 @@ module Shotengai
     require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'
     
-    custom_hash_columns :spec, :remark, :info
-    
+    generate_hash_template_column_for [:spec, :info, :remark]
+
     belongs_to :manager, polymorphic: true, optional: true#, touch: true
-    validate :check_spec, if: :spec
     
     default_scope { order(created_at: :desc) }
     scope :alive, -> { where.not(status: 'deleted') }
@@ -147,12 +146,5 @@ module Shotengai
         end
       end
     end
-
-    private
-      # spec 字段
-      def check_spec
-        raise Shotengai::WebError.new('spec 必须是个 Hash', '-1', 400) unless spec.is_a?(Hash)
-        spec.values { |val| raise Shotengai::WebError.new('值必须为 Array', '-1', 400) unless val.is_a?(Array) }
-      end
   end
 end
