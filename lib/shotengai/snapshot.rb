@@ -33,10 +33,10 @@ module Shotengai
   class Snapshot < Shotengai::Model
     self.table_name = 'shotengai_snapshots'
     validate :check_spec_value
-    validate :check_remark_value
+    validate :check_remark_value, unless: :remark_template_empty?
     validates :count, numericality: { only_integer: true, greater_than: 0 }
   
-    generate_hash_value_column_for [:spec, :info, :remark], delegate_template_to: :series
+    generate_hash_value_column_for :spec, :info, :remark, delegate_template_to: :series
 
     column_has_children :meta, children: ['product', 'series'], as: :snapshot
     column_has_children :info_value, children: ['series'], as: :snapshot
@@ -77,10 +77,10 @@ module Shotengai
 
     # 支付前 信息 delegate to series
     %i{
-        original_price price spec banners 
+        original_price price spec_value banners 
         cover_image detail title
       }.each do |column|
-      define_method(column) { super || self.series.send(column) }
+      define_method(column) { super() || self.series.send(column) }
     end
 
     def already_disable
@@ -149,7 +149,11 @@ module Shotengai
       # spec 字段
 
       def check_spec_value
-        errors.add(:spec_value, 'spec 与 所给系列不符。') unless spec_value == series.spec_value
+        errors.add(:spec_value, 'spec 与 所给系列不符。') unless spec_value.nil? || spec_value == series.spec_value
+      end
+
+      def remark_template_empty?
+        remark_template.empty? && remark_value.nil? # 当且仅当二者都为空才跳过验证
       end
 
       def check_remark_value

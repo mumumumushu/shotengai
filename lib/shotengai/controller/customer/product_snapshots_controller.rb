@@ -30,8 +30,8 @@ module Shotengai
 
         private
           def resource_params
-            remark_value = params.require(resource_key).fetch(:remark_value, nil)&.map(&:permit!)
-            info_value = params.require(resource_key).fetch(:info_value, nil)&.map(&:permit!)
+            remark_value = params.require(resource_key).fetch(:remark_value, nil)&.permit!
+            info_value = params.require(resource_key).fetch(:info_value, nil)&.permit!
             params.require(resource_key).permit(
               :count, :shotengai_series_id
             ).merge({ remark_value: remark_value, info_value: info_value })

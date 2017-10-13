@@ -13,6 +13,7 @@ module Shotengai
   autoload :AASM_DLC,        'shotengai/aasm_dlc'
   autoload :WebError,        'shotengai/web_error'
   autoload :JsonColumn,      'shotengai/json_column'
+  autoload :Harray,          'shotengai/harray'
   autoload :Model,           'shotengai/model'
 
   module Controller

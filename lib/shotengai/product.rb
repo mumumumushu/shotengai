@@ -31,7 +31,7 @@ module Shotengai
     require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'
     
-    generate_hash_template_column_for [:spec, :info, :remark]
+    generate_hash_template_column_for :spec, :info, :remark
 
     belongs_to :manager, polymorphic: true, optional: true#, touch: true
     

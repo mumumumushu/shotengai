@@ -31,25 +31,25 @@ module Shotengai
         # like meta, detail these json using for code development  
       end
 
-      def generate_hash_template_column_for names
+      def generate_hash_template_column_for *names
         names.each do |name|
           class_eval %Q{
-            def #{name}_value
-              Shotengai::Harray.new(super())
+            def #{name}_template
+              Shotengai::Harray.new(super() || [])
             end
 
-            def #{name}_value= val
-              raise Shotengai::WebError.new('#{name}_val 必须是个 Array'), -1 , 401) unless val.nil? || Array === val
+            def #{name}_template= val
+              raise Shotengai::WebError.new('#{name}_val 必须是个 Array', -1 , 401) unless val.nil? || Array === val
               super(val)
             end
           }
         end
       end
 
-      def generate_hash_value_column_for names, options={}
+      def generate_hash_value_column_for *names, delegate_template_to: nil
         names.each do |name|
           class_eval %Q{
-            delegate :#{name}_template, to: :#{options[:delegate_template_to]} if self.respond_to?(#{options[:delegate_template_to]})
+            delegate :#{name}_template, to: :#{delegate_template_to}
             def #{name}
               {
                 template: self.#{name}_template,
@@ -59,7 +59,7 @@ module Shotengai
             end
 
             def #{name}_value= val
-              raise Shotengai::WebError.new('#{name}_val 必须是个 Hash'), -1 , 401) unless val.nil? || Hash === val
+              raise Shotengai::WebError.new('#{name}_val 必须是个 Hash', -1 , 401) unless val.nil? || Hash === val
               super(val)              
             end
           }

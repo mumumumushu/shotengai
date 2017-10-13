@@ -23,17 +23,19 @@ module Shotengai
   
   class Series < Shotengai::Model
     self.table_name = 'shotengai_series'
-    validates_presence_of :spec_value, unless: :product_spec_template_empty?
+    validates_presence_of :spec_value, unless: :spec_template_empty?
     validates_presence_of :price
     
-    validate :check_spec_value, unless: :product_spec_template_empty?
-    # Using validates_uniqueness_of do not work if the order of Hash is diff
-    validate :uniq_spec_value, unless: :product_spec_template_empty?
-    validate :only_one_series, if: :product_spec_template_empty?
+    # validate spec_value
+    validate :check_spec_value, unless: :spec_template_empty?
+    ## Using validates_uniqueness_of do not work if the order of Hash is diff
+    validate :uniq_spec_value, unless: :spec_template_empty?
+    validate :only_one_series, if: :spec_template_empty?
+    
+    # validate remark
+    validate :check_remark_value, unless: :remark_template_empty?
 
-    validate :check_remark_value
-
-    generate_hash_value_column_for [:spec, :info, :remark], delegate_template_to: :product
+    generate_hash_value_column_for :spec, :info, :remark, delegate_template_to: :product
 
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
 
@@ -44,7 +46,7 @@ module Shotengai
     scope :query_spec_value_with_product, ->(val, product) { 
       if val.keys.sort == product.spec_template.keys.sort 
         keys = []; values = []
-        val.map { |k, v| keys << "spec->'$.\"#{k}\"' = ? "; values << v }
+        val.map { |k, v| keys << "spec_value->'$.\"#{k}\"' = ? "; values << v }
         where(product: product).where(keys.join(' and '), *values)
       else
         self.none 
@@ -104,15 +106,19 @@ module Shotengai
     
     private 
       # spec 字段
-      def product_spec_template_empty?
-        product.spec_template.empty?
+      def spec_template_empty?
+        spec_template.empty? && spec_value.nil? # 当且仅当二者都为空才跳过验证
+      end
+
+      def remark_template_empty?
+        remark_template.empty? && remark_value.nil? # 当且仅当二者都为空才跳过验证
       end
       
       def check_spec_value
         errors.add(:spec_value, 'spec_value 必须是个 Hash') unless spec_value.is_a?(Hash) 
-        errors.add(:spec_value, '非法的关键字，或关键字缺失') unless (product.spec_value.keys - spec_value.keys).empty?
+        errors.add(:spec_value, '非法的关键字，或关键字缺失') unless (product.spec_template.keys - spec_value.keys).empty?
         illegal_values = {}
-        spec_value.each { |key, value| illegal_values[key] = value unless value.in?(product.spec_template.val_at(key)) }
+        spec_value.each { |key, value| illegal_values[key] = value unless value.in?(product.spec_template.val_at(key) || []) }
         errors.add(:spec_value, "非法的值，#{illegal_values}") unless illegal_values.empty?
       end
 
@@ -126,10 +132,10 @@ module Shotengai
         errors.add(:spec_value, "无规格系列仅允许存在一项") unless product.series.empty?
       end
 
-      def check_remark
+      def check_remark_value
         errors.add(:remark_value, 'remark_value 必须是个 Hash') unless remark_value.is_a?(Hash) 
         # product.remark_value.keys 包含 remark_value.keys
-        illegal_key = (remark_value.keys - product.remark_template.keys)
+        illegal_key = (remark_value.keys - product.remark_template&.keys)
         errors.add(:remark_value, "非法的关键字, #{illegal_key}") unless illegal_key.empty?        
       end
   end

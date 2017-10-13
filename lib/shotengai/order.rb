@@ -38,8 +38,6 @@ module Shotengai
     
     after_create :set_seq
 
-    custom_hash_columns :spec
-
     include AASM_DLC
     aasm column: :status do
       state :unpaid, initial: true

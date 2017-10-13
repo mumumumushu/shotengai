@@ -9,7 +9,8 @@ module Shotengai
     end
 
     def val_at key
-      self.bsearch { |obj| obj['key'].eql?(key) }&.[]('val')
+      self.each { |obj| return obj['val'] if obj['key'].eql?(key) }
+      nil
     end
   end
 end

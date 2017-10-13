@@ -23,9 +23,10 @@ module Shotengai
           end
 
           def snapshot_params
+            remark_value = params.fetch(:snapshot).fetch(:remark_input, nil)&.permit!
             params.require(:snapshot).permit(
-              :shotengai_series_id, :count, remark_input: [:key, :val]
-            )
+              :shotengai_series_id, :count
+            ).merge(remark_value: remark_value)
           end
 
           def edit_only_unpaid
