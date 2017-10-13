@@ -52,9 +52,8 @@ module Shotengai
             delegate :#{name}_template, to: :#{delegate_template_to}
             def #{name}
               {
-                template: self.#{name}_template,
+                template: self.#{name}_template.map { |x| x['key'] },
                 value: self.#{name}_value,
-
               }
             end
 
