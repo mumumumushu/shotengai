@@ -2,18 +2,23 @@ module Shotengai
   class Harray < Array
     class << self
       def encode hash
-        Harray.new(
-          hash.map {|key, val| { 'key' => key, 'val' => val } }
+        Harray.new( 
+          if hash.is_a?(Hash) 
+            hash.map {|key, val| { 'key' => key, 'val' => val } } 
+          else
+            Array(hash)
+          end
         )
       end
 
       def decode harray
-        harray && Harray.new(harray).decode
+        Harray.encode(harray).decode
       end
     end
 
-    # def initialize
+    # def initialize *arg, &block
     #   # Add some validations
+        # BUT HOW?
     # end
 
     def keys

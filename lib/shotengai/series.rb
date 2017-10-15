@@ -40,7 +40,7 @@ module Shotengai
     harray_accessor :info_template, :detail_info_template
     harray_accessor :spec_value, :remark_value, decode: true
     
-    template_with_value_getters :info, value_in_template: true
+    template_with_value_getters :info, :detail_info, value_in_template: true
     template_with_value_getters :spec, :remark, delegate_template_to: :product
     
     # full_info_template: { optional: d, detail: detail_info_template }

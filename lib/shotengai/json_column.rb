@@ -11,7 +11,7 @@ module Shotengai
           class_eval %Q{
             def #{column}= val
               raise Shotengai::WebError.new('#{column} 必须是个 Array', -1 , 401) unless val.nil? || Array === val
-              super(#{decode} ? Harray.decode(val) : val)
+              super(#{decode} ? Shotengai::Harray.decode(val) : val)
             end
           }
         end
@@ -38,7 +38,7 @@ module Shotengai
         class_eval %Q{
           def #{key}
             {
-              template: #{template},
+              template: Shotengai::Harray.encode(#{template}).keys,
               value: #{value},
             }
           end
@@ -51,7 +51,7 @@ module Shotengai
         end
 
         keys.each do |key| 
-          value = value_in_template ? "#{key}_template.decode" : "#{key}_value"
+          value = value_in_template ? "Shotengai::Harray.decode(#{key}_template)" : "#{key}_value"
           self.template_with_value key, value: value
         end
       end
@@ -69,11 +69,11 @@ module Shotengai
             raise Shotengai::WebError.new('#{chimera} 必须是个 Hash', -1 , 401) unless val.nil? || Hash === val
             write_attribute(:#{column}, val)
           end
-
+          # TODO: WARNING: 这里也 没有继承 之前方法的解析
           def #{column}_before_implant 
             #{column}
           end
-
+          # WARNING: 默认值为 {}
           define_method('#{column}') do
             #{chimera}['#{as}'] || {}
           end
