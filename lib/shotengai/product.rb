@@ -30,8 +30,6 @@ module Shotengai
   class Product < Shotengai::Model
     require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'
-    
-    # generate_hash_template_column_for :spec, :remark
 
     harray_accessor :spec_template, :remark_template
     template_with_value_getters :spec, :remark, value_in_template: true

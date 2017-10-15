@@ -39,11 +39,10 @@ module Shotengai
     
     harray_accessor :info_template, :detail_info_template
     harray_accessor :spec_value, :remark_value, decode: true
+    
     template_with_value_getters :info, value_in_template: true
     template_with_value_getters :spec, :remark, delegate_template_to: :product
     
-    # info_template
-    # generate_hash_template_column_for :info
     # full_info_template: { optional: d, detail: detail_info_template }
     column_has_implants :info_template, implants: ['detail'], as: 'optional'
 
