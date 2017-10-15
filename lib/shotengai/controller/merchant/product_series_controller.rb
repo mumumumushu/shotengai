@@ -39,9 +39,10 @@ module Shotengai
 
         private
           def resource_params 
-            spec_value = params.require(resource_key).fetch(:spec_value, nil)&.permit!
-            info_value = params.require(resource_key).fetch(:info_value, nil)&.permit!
-            remark_value = params.require(resource_key).fetch(:remark_value, nil)&.permit!
+            spec_value = params.require(resource_key).fetch(:spec_value, nil)&.map(&:permit!)
+            info_template = params.require(resource_key).fetch(:info_template, nil)&.map(&:permit!)
+            detail_info_template = params.require(resource_key).fetch(:detail_info_template, nil)&.map(&:permit!)
+            remark_value = params.require(resource_key).fetch(:remark_value, nil)&.map(&:permit!)
             meta = params.require(resource_key).fetch(:meta, nil)&.permit!
             # ????????!!!!!, spec_value: [:key, :val] 一样的输出值 却在test报错？？？
             # QUESTION: WARNING:  文档bug吧？？？？？
@@ -49,7 +50,8 @@ module Shotengai
               :original_price, :price, :stock#, spec_value: [:key, :val]
             ).merge(
               { 
-                spec_value: spec_value, info_value: info_value, remark_value: remark_value, 
+                spec_value: spec_value, info_template: info_template, remark_value: remark_value, 
+                detail_info_template: detail_info_template,
                 meta: meta 
               }
             )

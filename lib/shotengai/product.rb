@@ -20,7 +20,6 @@ module Shotengai
   #  created_at        :datetime         not null
   #  updated_at        :datetime         not null
   #  remark_template   :json
-  #  info_template     :json
   #
   # Indexes
   #
@@ -32,10 +31,13 @@ module Shotengai
     require 'acts-as-taggable-on'
     self.table_name = 'shotengai_products'
     
-    generate_hash_template_column_for :spec, :info, :remark
+    # generate_hash_template_column_for :spec, :remark
+
+    harray_accessor :spec_template, :remark_template
+    template_with_value_getters :spec, :remark, value_in_template: true
 
     belongs_to :manager, polymorphic: true, optional: true#, touch: true
-    
+
     default_scope { order(created_at: :desc) }
     scope :alive, -> { where.not(status: 'deleted') }
     scope :recycle_bin, ->{ unscope(where: :status).deleted.where('updated_at > ?', Time.now - 10.day )}

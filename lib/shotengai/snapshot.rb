@@ -38,10 +38,11 @@ module Shotengai
     validate :check_remark_value, unless: :remark_template_empty?
     validates :count, numericality: { only_integer: true, greater_than: 0 }
   
-    generate_hash_value_column_for :spec, :info, :remark, delegate_template_to: :series
+    # generate_hash_value_column_for :spec, :info, :remark, delegate_template_to: :series
+    template_with_value_getters :spec, :remark, :info, delegate_template_to: :series
 
-    column_has_children :meta, children: ['product', 'series'], as: :snapshot
-    column_has_children :info_value, children: ['series'], as: :snapshot
+    column_has_implants :meta, implants: ['product', 'series'], as: :snapshot
+    column_has_implants :info_value, implants: ['detail'], as: :snapshot
 
     validate :cannot_edit, if: :order_was_paid
     before_destroy :cannot_edit, if: :order_was_paid
@@ -112,15 +113,11 @@ module Shotengai
         banners: series.banners,
         cover_image: series.cover_image,
         detail: series.detail,
-        full_meta: { 
-          product: product.meta,
-          series: series.meta, 
-          snapshot: meta,
-        },
-        full_info_value: { 
-          series: series.info_value, 
-          snapshot: info_value,
-        }
+        product_meta: product.meta,
+        series_meta: series.meta, 
+        meta: meta,
+        detail_info_value: series.detail_info_template,
+        info_value: info_value,
       )
     end
 
@@ -159,7 +156,7 @@ module Shotengai
       end
 
       def check_remark_value
-        nullable_keys = series.remark_value.select{ |k, v| v }.keys
+        nullable_keys = series.remark_value.decode.select{ |k, v| v }.keys
         required_keys = product.remark_template.keys - nullable_keys
         absent_keys = required_keys - remark.keys
         # remark 可添加多余字段
