@@ -22,7 +22,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
 
       t.json :spec_template
       t.json :remark_template
-      t.json :info_template
+      # t.json :info_template
 
       t.references :manager, polymorphic: true, index: true      
       t.timestamps
@@ -41,7 +41,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.json :meta
       t.json :spec_value
       t.json :remark_value
-      t.json :info_value     
+      t.json :info_template
 
       t.references :shotengai_product, foreign_key: true
       t.timestamps
