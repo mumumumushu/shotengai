@@ -37,9 +37,10 @@ module Shotengai
       def template_with_value key, value: "#{key}_value", template: "#{key}_template"
         class_eval %Q{
           def #{key}
+            val = #{value}.is_a?(Harray) ? value.decode : value
             {
               template: Shotengai::Harray.encode(#{template}).keys,
-              value: #{value},
+              value: val,
             }
           end
         }
