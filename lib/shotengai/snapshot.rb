@@ -90,7 +90,7 @@ module Shotengai
     # 将未支付时的 detail_info_value 指派给 series.detail_info_template
     # 'detail' 为 上方 column_has_implants 所指定的对应嵌入物（implants）
     def detail_info_value
-      full_info_value['detail'] || series.detail_info_template.decode
+      full_info_value['detail'] || Shotengai::Harray.decode(series.detail_info_template)
     end
 
     def already_disable
