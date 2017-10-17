@@ -150,7 +150,7 @@ module Shotengai
         #   end
 
         def resource_params
-          params.require(resource_key).permit!
+          params.require(resource_key)
         end
     end
   end
