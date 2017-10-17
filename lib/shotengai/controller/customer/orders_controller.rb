@@ -47,8 +47,8 @@ module Shotengai
           end
 
           def snapshot_params
-            remark_value = params.fetch(:snapshot).fetch(:remark_input, nil)&.permit!
-            info_value = params.fetch(:snapshot).fetch(:info_input, nil)&.permit!
+            remark_value = params.fetch(:snapshot).fetch(:remark_value, nil)&.permit!
+            info_value = params.fetch(:snapshot).fetch(:info_value, nil)&.permit!
             params.fetch(:snapshot).permit(
               :shotengai_series_id, :count, 
             ).merge(remark_value: remark_value, info_value: info_value)
