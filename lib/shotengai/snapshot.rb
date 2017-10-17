@@ -79,10 +79,17 @@ module Shotengai
 
     # 支付前 信息 delegate to series
     %i{
-        original_price price spec_value banners 
-        cover_image detail title
+        title  cover_image banners detail 
+        original_price price 
+        spec_value 
       }.each do |column|
       define_method(column) { super() || self.series.send(column) }
+    end
+
+    # 重写 JsonColumn 中 column_has_implants 所生成的 detail_info_value 方法，
+    # 将未支付时的 detail_info_value 指派给 series.detail_info_template
+    def detail_info_value
+      full_info_value['detail'] || series.detail_info_template.decode
     end
 
     def already_disable
@@ -115,7 +122,7 @@ module Shotengai
         product_meta: product.meta,
         series_meta: series.meta, 
         meta: meta,
-        detail_info_value: series.detail_info_template,
+        detail_info_value: series.detail_info_template.decode,
         info_value: info_value,
       )
     end
