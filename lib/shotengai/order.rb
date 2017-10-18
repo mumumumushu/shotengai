@@ -64,6 +64,18 @@ module Shotengai
       # event :soft_delete
     end
 
+    def before_pay
+      raise Shotengai::WebError.new('订单已过期 ，无法支付，请重新提交订单。', -1, 400) if cannot_pay
+    end
+
+    def cannot_pay
+      Time.now > pay_deadline 
+    end
+
+    def pay_deadline
+      created_at + 15.minutes
+    end
+
     def manager
       snapshots.first.manager  
     end
