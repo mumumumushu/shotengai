@@ -123,7 +123,7 @@ module Shotengai
         product_meta: product.meta,
         series_meta: series.meta, 
         meta: meta,
-        detail_info_value: series.detail_info_template.decode,
+        detail_info_value: Shotengai::Harray.decode(series.detail_info_template),
         info_value: info_value,
       )
     end

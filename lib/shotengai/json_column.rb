@@ -74,6 +74,7 @@ module Shotengai
           def #{column}_before_implant 
             #{column}
           end
+          # TODO: WARNING: 这里也 没有继承 之前方法的解析
           # WARNING: 默认值为 {}
           define_method('#{column}') do
             #{chimera}['#{as}'] || {}
