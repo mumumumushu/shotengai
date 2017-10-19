@@ -38,8 +38,10 @@ module Shotengai
     validate :check_remark_value, unless: :remark_template_empty?
     validates :count, numericality: { only_integer: true, greater_than: 0 }
   
-    template_with_value_getters :spec, :remark, :info, :detail_info, delegate_template_to: :series
+    harray_accessor :spec_value, decode: true
 
+    template_with_value_getters :spec, :remark, :info, :detail_info, delegate_template_to: :series
+    
     column_has_implants :meta, implants: ['product', 'series'], as: :snapshot
     column_has_implants :info_value, implants: ['detail'], as: :snapshot
 
