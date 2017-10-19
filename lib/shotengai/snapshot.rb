@@ -157,8 +157,6 @@ module Shotengai
       # spec 字段
 
       def check_spec_value
-        p spec_value
-        p series.spec_value
         errors.add(:spec_value, 'spec 与 所给系列不符。') unless spec_value.nil? || spec_value.keys == series.spec_value.keys
       end
 
