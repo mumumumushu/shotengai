@@ -167,7 +167,7 @@ module Shotengai
       def check_remark_value
         nullable_keys = (series.remark_value.decode || {}).select{ |k, v| v }&.keys
         required_keys = product.remark_template.keys - nullable_keys
-        absent_keys = required_keys - remark.keys
+        absent_keys = required_keys - remark_value.keys
         # remark 可添加多余字段
         errors.add(:remark_value, "必填remark值为空， #{absent_keys}") unless absent_keys.empty?
       end
