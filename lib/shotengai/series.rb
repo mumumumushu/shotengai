@@ -36,7 +36,7 @@ module Shotengai
     
     # validate remark
     validate :check_remark_value, unless: :remark_template_empty?
-    
+[{"key"=>"其他", "val"=>"true"}]
     harray_accessor :info_template, :detail_info_template
     harray_accessor :spec_value, :remark_value, decode: true
     
@@ -139,7 +139,7 @@ module Shotengai
       end
 
       def only_one_series
-        errors.add(:spec_value, "无规格系列仅允许存在一项") unless product.series.empty?
+        errors.add(:spec_value, "无规格系列仅允许存在一项") unless (product.series - [self]).empty?
       end
 
       def check_remark_value
