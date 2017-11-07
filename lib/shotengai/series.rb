@@ -36,7 +36,7 @@ module Shotengai
     
     # validate remark
     validate :check_remark_value, unless: :remark_template_empty?
-[{"key"=>"其他", "val"=>"true"}]
+
     harray_accessor :info_template, :detail_info_template
     harray_accessor :spec_value, :remark_value, decode: true
     

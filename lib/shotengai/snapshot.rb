@@ -113,7 +113,6 @@ module Shotengai
 
     # 订单支付后 存储当时信息快照
     def copy_info
-      # cut_stock
       self.update!(
         title: series.title,
         original_price: series.original_price,

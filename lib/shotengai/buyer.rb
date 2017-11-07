@@ -38,6 +38,7 @@ module Shotengai
             end
           end
 
+          # Create snapshot from series.snapshots to make sure the right class of snapshot
           def buy_it_immediately snapshot_param, order_params
             ActiveRecord::Base.transaction do
               order = self.#{collection_name}.create!(order_params)
