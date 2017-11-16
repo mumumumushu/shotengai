@@ -74,7 +74,7 @@ module Shotengai
       Shotengai::Series.alive.find_by_id(default_series_id) || series.alive.first
     end
 
-    def series_with_spec val
+    def series_with_spec_value val
       series_class.query_spec_value_with_product(val, self)
     end
 
