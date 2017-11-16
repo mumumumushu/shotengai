@@ -74,10 +74,6 @@ module Shotengai
       Shotengai::Series.alive.find_by_id(default_series_id) || series.alive.first
     end
 
-    def series_with_spec_value val, eql=true
-      series_class.query_spec_value_with_product(val, self, eql)
-    end
-
     def meta
       super || {}
     end
@@ -149,6 +145,10 @@ module Shotengai
             catalog_class.unscope(:order).where(id: super().map { |tag| Shotengai::Catalog.parse_tag(tag) }).order(:nested_level)
           }
         end
+      end
+
+      def series_with_spec_value val, eql: true
+        series_class.query_spec_value_with_product(val, self, eql: eql)
       end
     end
   end
