@@ -58,7 +58,7 @@ module Shotengai
       if val.keys.sort == product.spec_template.keys.sort 
         keys = []; values = []; 
         proc = Proc.new { |k, v| keys << "spec_value->'$.\"#{k}\"' = ? "; values << v }
-        val === Harray ? val.hash_map(&proc) : val.map(&proc)
+        Shotengai::Harray === val ? val.hash_map(&proc) : val.map(&proc)
         where(product: product).where(keys.join(' and '), *values)
       else
         self.none 
