@@ -79,7 +79,7 @@ module Shotengai
     end
 
     def series_with_spec_value val, eql: true
-      series_class.query_spec_value_with_product(val, self, eql: eql)
+      self.class.series_class.query_spec_value_with_product(val, self, eql: eql)
     end
 
     class << self
