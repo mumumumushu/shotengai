@@ -55,7 +55,7 @@ module Shotengai
 
     # where("spec->'$.\"颜色\"' = ?  and spec->'$.\"大小\"' = ?" ,红色,S)
     scope :query_spec_value_with_product, ->(val, product, eql=true) { 
-      if val.keys.sort == product.spec_template.keys.sort || (!.eql && (val.keys - product.spec_template.keys).empty?)
+      if val.keys.sort == product.spec_template.keys.sort || (eql.! && (val.keys - product.spec_template.keys).empty?)
         keys = []; values = []; 
         proc = Proc.new { |k, v| keys << "spec_value->'$.\"#{k}\"' = ? "; values << v }
         Shotengai::Harray === val ? val.hash_map(&proc) : val.map(&proc)
