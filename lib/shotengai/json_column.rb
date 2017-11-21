@@ -34,26 +34,34 @@ module Shotengai
         harray_setter *columns, decode: decode
       end
 
-      def template_with_value key, value: "#{key}_value", template: "#{key}_template"
+      def template_with_value key, value: "#{key}_value", template: "#{key}_template", trans: nil, trans_to: :en
+        trans_result = trans.is_a?(Hash) ? %Q{
+          #{trans_to}_value: val.reduce({}) do |o, obj| 
+            trans = #{trans}
+            val = obj[1].is_a?(Array) ? obj[1].map{ |x| trans[x] } : trans[ obj[1] ]
+            o.merge( obj[0] => val )
+          end
+        } : {}
+        
         class_eval %Q{
           def #{key}
             val = #{value}.is_a?(Harray) ? #{value}.decode : #{value}
             {
               template: Shotengai::Harray.encode(#{template}).keys,
               value: val,
-            }
+            }.merge(#{trans_result})
           end
         }
       end
 
-      def template_with_value_getters *keys, value_in_template: false, delegate_template_to: nil
+      def template_with_value_getters *keys, value_in_template: false, delegate_template_to: nil, trans: nil, trans_to: :en
         if delegate_template_to
           self.delegate(*keys.map { |key| "#{key}_template" }, to: delegate_template_to)
         end
 
         keys.each do |key| 
           value = value_in_template ? "Shotengai::Harray.decode(#{key}_template)" : "#{key}_value"
-          self.template_with_value key, value: value
+          self.template_with_value key, value: value, trans: trans, trans_to: trans_to
         end
       end
 
