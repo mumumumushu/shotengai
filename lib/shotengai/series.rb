@@ -50,6 +50,9 @@ module Shotengai
     
     delegate :title, :detail, :banners, :cover_image, :status, :status_zh, :manager, to: :product
 
+    belongs_to :shotengai_product, foreign_key: :shotengai_product_id, 
+      class_name: 'Shotengai::Product'#, touch: true
+
     scope :alive, -> { where.not(aasm_state: 'deleted') }
     scope :recycle_bin, ->{ unscope(where: :aasm_state).deleted.where('updated_at < ?', Time.now - 10.day )}
 

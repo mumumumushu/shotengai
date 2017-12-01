@@ -54,7 +54,9 @@ module Shotengai
       class_name: 'Shotengai::Order', optional: true#, touch: true
     belongs_to :shotengai_cart, foreign_key: :shotengai_order_id, 
       class_name: 'Shotengai::Cart', optional: true#, touch: true
-    
+    belongs_to :shotengai_series, foreign_key: :shotengai_series_id, 
+      class_name: 'Shotengai::Series'#, touch: true
+
     belongs_to :manager, polymorphic: true, optional: true
     before_save :set_manager
 
