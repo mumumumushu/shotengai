@@ -109,9 +109,11 @@ module Shotengai
         }
       end
 
-      # TODO:ORNOT:
-      def hash_column
-        # like meta, detail these json using for code development  
+      def meta_column column, default: nil, trans: Proc.new(&:itself)
+        # json column using for code development
+        define_method(:meta) { super() || {} }
+        define_method(column) { trans.call(meta[column.to_s] || default) }
+        define_method("#{column}=") { |val| self.meta = meta.merge(column.to_s => val) }
       end
 
          # def custom_hash_columns columns, options={}
