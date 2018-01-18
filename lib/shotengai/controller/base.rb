@@ -18,6 +18,9 @@ module Shotengai
         # The view template dir
         # respond_with @products, template: "#{self.class.template_dir}/index"
 
+        # Use method instead of instance variable in order to 
+        #  let the value could be delegated to superclass when you do not set the subclass value.
+        # 确保可继承 且 多个子类间不影响(类变量会出现)
         def template_dir= template_dir
           class_eval %Q{
             def add_template_dir

@@ -11,7 +11,7 @@ class CreateShotengaiProductsAndOrders < ActiveRecord::Migration[5.1]
       t.string :title
       t.string :status
       t.integer :default_series_id
-      t.boolean :need_express
+      t.integer :express_way
       t.boolean :need_time_attr
       t.string :cover_image
       t.json :banners

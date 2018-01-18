@@ -1,5 +1,5 @@
 json.extract! product, :id, :title, :status, :status_zh, 
-  :need_express, :need_time_attr, 
+  :express_way, :need_time_attr, 
   :cover_image, :banners, :detail, :meta
 json.spec product.spec_output
 # TODO: NOTE: catalog_list is only vaild in the template example

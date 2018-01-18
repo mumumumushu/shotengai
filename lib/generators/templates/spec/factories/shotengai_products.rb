@@ -36,7 +36,7 @@ FactoryGirl.define do
       }
     }
     # default_series_id ''
-    need_express true
+    express_way 'no_need'
     # need_time_attr true
     cover_image 'cover_image.image'
     banners { [ 'image1', 'image2' ] }

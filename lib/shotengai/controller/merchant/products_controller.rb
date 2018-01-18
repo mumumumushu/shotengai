@@ -70,7 +70,7 @@ module Shotengai
             # NOTE: :catalog_list is a default catalog list for template example, maybe should move it to the template controller, but it need add controller template for every controller
             params.require(resource_key).permit(
               :title, :default_series_id, 
-              :need_express, :need_time_attr, :cover_image, catalog_ids: [],
+              :express_way, :need_time_attr, :cover_image, catalog_ids: [],
               banners: [], 
               # spec_template: [:key, val: []],
               # remark_template: [:key, :val],

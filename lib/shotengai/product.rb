@@ -8,7 +8,6 @@ module Shotengai
   #  status            :string(255)
   #  spec_template     :json
   #  default_series_id :integer
-  #  need_express      :boolean
   #  need_time_attr    :boolean
   #  cover_image       :string(255)
   #  banners           :json
@@ -20,6 +19,7 @@ module Shotengai
   #  created_at        :datetime         not null
   #  updated_at        :datetime         not null
   #  remark_template   :json
+  #  express_way       :integer
   #
   # Indexes
   #
@@ -69,6 +69,14 @@ module Shotengai
         deleted: '已删除'
       }[ status.to_sym ]
     end
+
+    enum express_way: {
+      no_need: 0,
+      delivery: 1,
+      pick_up: 2,
+      both: 3,
+      custom: 4
+    }
 
     def default_series
       Shotengai::Series.alive.find_by_id(default_series_id) || series.alive.first
