@@ -36,7 +36,7 @@ module Shotengai
 
       def template_with_value key, value: "#{key}_value", template: "#{key}_template", trans: nil, trans_to: :en
         trans_result = trans.is_a?(Hash) ? %Q{
-          #{trans_to}_value: val.reduce({}) do |o, obj| 
+          #{trans_to}_value: val&.reduce({}) do |o, obj| 
             trans = #{trans}
             val = obj[1].is_a?(Array) ? obj[1].map{ |x| trans[x] } : trans[ obj[1] ]
             o.merge( obj[0] => val )
