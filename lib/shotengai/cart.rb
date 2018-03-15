@@ -47,7 +47,9 @@ module Shotengai
         # 所有snapshot
         has_many :snapshots, -> { 
             where(type: good_classes.map { |good_class| "#{good_class.name}Snapshot" }) 
-          }, class_name: 'Shotengai::Snapshot', foreign_key: :shotengai_order_id
+        # WARNING: NOTE: Use class_name: 'Shotengai::Snapshot' here, so that cannot use methods created by inherited
+        # Change all snapshot.series to snapshot.shotengai_series or HOW?
+        }, class_name: 'Shotengai::Snapshot', foreign_key: :shotengai_order_id
 
         good_classes.each do |klass| 
           # cart has many good_class_snapshot.collection

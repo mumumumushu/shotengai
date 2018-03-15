@@ -40,7 +40,7 @@ module Shotengai
   
     harray_accessor :spec_value, decode: true
 
-    template_with_value_getters :spec, :remark, :info, :detail_info, delegate_template_to: :series
+    template_with_value_getters :spec, :remark, :info, :detail_info, delegate_template_to: :shotengai_series
     
     column_has_implants :meta, implants: ['product', 'series'], as: :snapshot
     column_has_implants :info_value, implants: ['detail'], as: :snapshot
@@ -83,22 +83,22 @@ module Shotengai
 
     # 支付前 信息 delegate to series
     %i{
-        title  cover_image banners detail 
+        title cover_image banners detail 
         original_price price 
         spec_value 
       }.each do |column|
-      define_method(column) { super() || self.series.send(column) }
+      define_method(column) { super() || shotengai_series.send(column) }
     end
 
     # 重写 JsonColumn 中 column_has_implants 所生成的 detail_info_value 方法，
     # 将未支付时的 detail_info_value 指派给 series.detail_info_template
     # 'detail' 为 上方 column_has_implants 所指定的对应嵌入物（implants）
     def detail_info_value
-      full_info_value['detail'] || Shotengai::Harray.decode(series.detail_info_template)
+      full_info_value['detail'] || Shotengai::Harray.decode(shotengai_series.detail_info_template)
     end
 
     def already_disable
-      series.deleted? || product.on_sale?.!
+      shotengai_series.deleted? || product.on_sale?.!
     end
 
     def order_was_paid
@@ -106,33 +106,33 @@ module Shotengai
     end
 
     def manager
-      super || series.manager      
+      super || shotengai_series.manager      
     end
 
     def product
-      series.product
+      shotengai_series.product
     end
 
     # 订单支付后 存储当时信息快照
     def copy_info
       self.update!(
-        title: series.title,
-        original_price: series.original_price,
-        price: series.price,
-        spec_value: series.spec_value,
-        banners: series.banners,
-        cover_image: series.cover_image,
-        detail: series.detail,
+        title: shotengai_series.title,
+        original_price: shotengai_series.original_price,
+        price: shotengai_series.price,
+        spec_value: shotengai_series.spec_value,
+        banners: shotengai_series.banners,
+        cover_image: shotengai_series.cover_image,
+        detail: shotengai_series.detail,
         product_meta: product.meta,
-        series_meta: series.meta, 
+        series_meta: shotengai_series.meta, 
         meta: meta,
-        detail_info_value: Shotengai::Harray.decode(series.detail_info_template),
+        detail_info_value: Shotengai::Harray.decode(shotengai_series.detail_info_template),
         info_value: info_value,
       )
     end
 
     def cut_stock
-      self.series.cut_stock(self.count)
+      shotengai_series.cut_stock(self.count)
     end
 
     ###### view
@@ -148,8 +148,8 @@ module Shotengai
       shotengai_cart&.status == 'cart'
     end
 
-    def product_status; series.status end
-    def product_status_zh; series.status_zh end
+    def product_status; shotengai_series.status end
+    def product_status_zh; shotengai_series.status_zh end
     
     def order_status; shotengai_order&.status end
     def order_status_zh; shotengai_order&.status_zh end
@@ -158,7 +158,7 @@ module Shotengai
       # spec 字段
 
       def check_spec_value
-        errors.add(:spec_value, 'spec 与 所给系列不符。') unless spec_value.nil? || spec_value.keys == series.spec_value.keys
+        errors.add(:spec_value, 'spec 与 所给系列不符。') unless spec_value.nil? || spec_value.keys == shotengai_series.spec_value.keys
       end
 
       def remark_template_empty?
@@ -166,7 +166,7 @@ module Shotengai
       end
 
       def check_remark_value
-        required_keys = (series.remark_value.decode || {}).select{ |k, v| v }&.keys
+        required_keys = (shotengai_series.remark_value.decode || {}).select{ |k, v| v }&.keys
         absent_keys = required_keys - (remark_value || {}).keys
         # remark 可添加多余字段
         errors.add(:remark_value, "必填remark值为空， #{absent_keys}") unless absent_keys.empty?
@@ -182,7 +182,7 @@ module Shotengai
       end
 
       def set_manager
-        self.manager = self.series.product.manager
+        self.manager = shotengai_series.product.manager
       end
   end
 
