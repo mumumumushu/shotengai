@@ -8,7 +8,7 @@ module Shotengai
         remove_actions :create, :destroy
         
         def default_query resources
-          @manager.orders
+          resources.manager_is(@manager)
         end
 
         def index_query resources

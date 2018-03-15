@@ -35,7 +35,12 @@ module Shotengai
     
     default_scope { where.not(status: 'cart').order(updated_at: :desc) } 
     scope :status_is, ->(status) { where(status.blank?.! && { status: status }) }
-    
+
+    scope :manager_is, ->(manager) {
+      joins(:snapshots).where(
+        shotengai_snapshots: { manager_id: manager.id, manager_type: manager.class.name }
+      ).distinct
+    }
     after_create :set_seq
 
     include AASM_DLC
