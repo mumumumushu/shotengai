@@ -185,6 +185,7 @@ module Shotengai
         super
       end
 
+      # beause relation :snapshots has many types, so do not use order.snapshot to create or init a obj
       def can_buy *good_class_names
         good_classes = good_class_names.map(&:constantize)
         # 所有snapshot

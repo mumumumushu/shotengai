@@ -159,7 +159,7 @@ module Shotengai
       # spec 字段
 
       def check_spec_value
-        errors.add(:spec_value, 'spec 与 所给系列不符。') unless spec_value.nil? || spec_value.keys == shotengai_series.spec_value.keys
+        errors.add(:spec_value, 'spec 与 所给系列不符。') unless spec_value.nil? || spec_value.keys.sort == shotengai_series.spec_value.keys.sort
       end
 
       def remark_template_empty?
