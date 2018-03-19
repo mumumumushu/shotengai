@@ -150,6 +150,8 @@ module Shotengai
         end
         
         def paginate resources, page: , per_page:
+          @current_page = page
+          
           if skip_paginate?(page, per_page)
             @total_page = 1
             return resources
