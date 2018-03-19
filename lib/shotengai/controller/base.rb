@@ -150,7 +150,12 @@ module Shotengai
         end
         
         def paginate resources, page: , per_page:
-          return resources if skip_paginate?(page, per_page)
+          if skip_paginate?(page, per_page)
+            @total_page = 1
+            return resources
+          end
+          
+          @total_page = (resources.count / per_page) + 1
           # page start with 1
           if resources.is_a?(Array)
             resources[(page - 1) * per_page ... page * per_page] || []
