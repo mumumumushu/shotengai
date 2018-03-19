@@ -75,8 +75,8 @@ module Shotengai
       def index
         page = params[:page] || 1
         per_page = params[:per_page] || 10
-        # @resources = index_resources.paginate(page: page, per_page: per_page)
-        @resources = paginate(index_resources, page: page, per_page: per_page)
+        @resources = index_resources.paginate(page: page, per_page: per_page)
+        # @resources = paginate(index_resources, page: page, per_page: per_page)
         respond_with @resources, template: "#{@template_dir}/index"
       end
 
